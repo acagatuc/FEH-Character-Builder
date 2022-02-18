@@ -1,0 +1,33 @@
+.App {
+  text-align: left;
+  display: inline;
+  width: 100%;
+}
+
+.App-header {
+  background-color: #282c34;
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: left;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+div.noMargin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+@font-face {
+  font-family: "nintendoP_Skip-D_003";
+  src: url("./fonts/nintendoPSkip-D003.eot");
+  src: url("./fonts/nintendoPSkip-D003.eot?#iefix") format("embedded-opentype"),
+    url("./fonts/nintendoPSkip-D003.woff2") format("woff2"),
+    url("./fonts/nintendoPSkip-D003.woff") format("woff"),
+    url("./fonts/nintendoPSkip-D003.ttf") format("truetype"),
+    url("./fonts/nintendoPSkip-D003.svg#nintendoPSkip-D003") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}

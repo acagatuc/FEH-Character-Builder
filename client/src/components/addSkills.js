@@ -82,15 +82,19 @@ const styles = {
 async function createASkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 311) {
+  while (index < 413) {
     // create skill json
     const data = {
       name: skills.data[index][1],
-      img: skills.data[index][2],
-      description: skills.data[index][3],
+      description: skills.data[index][2],
+      sp: skills.data[index][3],
       visibleStats: skills.data[index][4],
       unique: skills.data[index][5],
-      restrictions: skills.data[index][6],
+      img: skills.data[index][6],
+      maxSkill: skills.data[index][7],
+      heroesList: skills.data[index][8],
+      movementRestrictions: skills.data[index][9],
+      weaponRestrictions: skills.data[index][10],
     };
     if (skills.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -107,16 +111,22 @@ async function createASkills(skills) {
     index += 1;
   }
 }
-
 async function createBSkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 394) {
+  while (index < 600) {
     // create skill json
     const data = {
       name: skills.data[index][1],
-      img: skills.data[index][2],
-      description: skills.data[index][3],
+      description: skills.data[index][2],
+      sp: skills.data[index][3],
+      visibleStats: skills.data[index][4],
+      unique: skills.data[index][5],
+      img: skills.data[index][6],
+      maxSkill: skills.data[index][7],
+      heroesList: skills.data[index][8],
+      movementRestrictions: skills.data[index][9],
+      weaponRestrictions: skills.data[index][10],
     };
     if (skills.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -137,12 +147,19 @@ async function createBSkills(skills) {
 async function createCSkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 439) {
+  while (index < 700) {
     // create skill json
     const data = {
       name: skills.data[index][1],
-      img: skills.data[index][2],
-      description: skills.data[index][3],
+      description: skills.data[index][2],
+      sp: skills.data[index][3],
+      visibleStats: skills.data[index][4],
+      unique: skills.data[index][5],
+      img: skills.data[index][6],
+      maxSkill: skills.data[index][7],
+      heroesList: skills.data[index][8],
+      movementRestrictions: skills.data[index][9],
+      weaponRestrictions: skills.data[index][10],
     };
     if (skills.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -233,7 +250,6 @@ async function createRefines(weapons) {
       type: weapons.data[index][3],
       uniqueRefine: weapons.data[index][4],
       genericRefine: weapons.data[index][5],
-      img: weapons.data[index][6],
     };
     if (weapons.data[index][1] !== "") {
       console.log("adding " + data.heroesList + " to database");
@@ -261,9 +277,9 @@ async function createAssists(assists) {
       description: assists.data[index][2],
       sp: assists.data[index][3],
       maxSkill: assists.data[index][4],
-      staffOnly: assists.data[index][5],
-      unique: assists.data[index][6],
-      heroesList: assists.data[index][7],
+      unique: assists.data[index][5],
+      heroesList: assists.data[index][6],
+      weaponRestrictions: assists.data[index][7],
     };
     if (assists.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -290,11 +306,11 @@ async function createSpecials(specials) {
       name: specials.data[index][1],
       description: specials.data[index][2],
       sp: specials.data[index][3],
-      cd: specials.data[4],
+      cd: specials.data[index][4],
       maxSkill: specials.data[index][5],
-      staffOnly: specials.data[index][6],
-      unique: specials.data[index][7],
-      heroesList: specials.data[index][8],
+      unique: specials.data[index][6],
+      heroesList: specials.data[index][7],
+      weaponRestrictions: specials.data[index][8],
     };
     if (specials.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");

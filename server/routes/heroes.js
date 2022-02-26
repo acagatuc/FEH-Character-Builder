@@ -27,10 +27,16 @@ heroRoutes.route("/Heroes/add").post(function (req, response) {
     res: req.body.res,
     superboon: req.body.superboon,
     superbane: req.body.superbane,
-    skills: req.body.skills,
+    weapons: req.body.weapons,
+    assists: req.body.assists,
+    specials: req.body.specials,
+    passives: req.body.passives,
     recommended: req.body.recommended,
     hero_type: req.body.hero_type,
     single_name: req.body.single_name,
+    EVA: req.body.eVA,
+    JVA: req.body.jVA,
+    Artist: req.body.Artist,
   };
   db_connect.collection("Heroes").insertOne(myobj, function (err, res) {
     if (err) throw err;

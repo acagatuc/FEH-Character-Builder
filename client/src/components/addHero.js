@@ -82,7 +82,7 @@ const styles = {
 async function createNewHeroes(heroes) {
   var index = 1; //to ignore header
 
-  while (index < 765) {
+  while (index < 775) {
     // create hero json
     const data = {
       name: heroes.data[index][1],
@@ -96,10 +96,16 @@ async function createNewHeroes(heroes) {
       res: heroes.data[index][9],
       superboon: heroes.data[index][10],
       superbane: heroes.data[index][11],
-      skills: heroes.data[index][12],
-      recommended: heroes.data[index][13],
-      hero_type: heroes.data[index][14],
-      single_name: heroes.data[index][15],
+      weapons: heroes.data[index][12],
+      assists: heroes.data[index][13],
+      specials: heroes.data[index][14],
+      passives: heroes.data[index][15],
+      recommended: heroes.data[index][16],
+      hero_type: heroes.data[index][17],
+      single_name: heroes.data[index][18],
+      eVA: heroes.data[index][19],
+      jVA: heroes.data[index][20],
+      Artist: heroes.data[index][21],
     };
     if (heroes.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");

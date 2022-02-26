@@ -52,21 +52,9 @@ skillRoutes.route("/GenericWeapons/:id/:name").get(async function (req, res) {
     .collection("PrefWeapons")
     .find({ heroesList: { $regex: "," + name + "," } })
     .toArray();
+
   eh.forEach((element) => toSend.push(element));
 
-  toSend.sort(function (a, b) {
-    var nameA = a.name; // ignore upper and lowercase
-    var nameB = b.name; // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-
-    // names must be equal
-    return 0;
-  });
   res.json(toSend);
 });
 
@@ -131,7 +119,6 @@ skillRoutes.route("/Refines/add").post(function (req, response) {
     type: req.body.type,
     uniqueRefine: req.body.uniqueRefine,
     genericRefine: req.body.genericRefine,
-    img: req.body.img,
   };
   db_connect.collection("Refines").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -168,15 +155,29 @@ skillRoutes.route("/GenericWeapons/add").post(function (req, response) {
   });
 });
 // This section will help you get a list of all the Assist skills.
-skillRoutes.route("/Assist/:type").get(function (req, res) {
+skillRoutes.route("/Assist/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
   let db_connect = dbo.getDb();
-  db_connect
+  var toSend = await db_connect
     .collection("Assist")
-    .find({ staffOnly: req.params.type, maxSkill: "TRUE", unique: "FALSE" })
-    .toArray(function (err, result) {
-      if (err) throw err;
-      res.json(result);
-    });
+    .find({
+      maxSkill: "TRUE",
+      weaponRestrictions: { $regex: w },
+    })
+    .toArray();
+  var name = req.params.name;
+  if (req.params.name.includes("(") || req.params.name.includes(")")) {
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+  }
+  var eh = await db_connect
+    .collection("Assist")
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
+
+  eh.forEach((element) => toSend.push(element));
+
+  res.json(toSend);
 });
 
 skillRoutes.route("/Assist/add").post(function (req, response) {
@@ -186,9 +187,9 @@ skillRoutes.route("/Assist/add").post(function (req, response) {
     description: req.body.description,
     sp: req.body.sp,
     maxSkill: req.body.maxSkill,
-    staffOnly: req.body.staffOnly,
     unique: req.body.unique,
-    heroList: req.body.heroesList,
+    heroesList: req.body.heroesList,
+    weaponRestrictions: req.body.weaponRestrictions,
   };
   db_connect.collection("Assist").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -197,40 +198,29 @@ skillRoutes.route("/Assist/add").post(function (req, response) {
 });
 
 // This section will help you get a list of all the Special skills.
-skillRoutes.route("/Specials/:name").get(async function (req, res) {
+skillRoutes.route("/Specials/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
   let db_connect = dbo.getDb();
   var toSend = await db_connect
     .collection("Specials")
-    .find({ unique: "FALSE", maxSkill: "TRUE" })
+    .find({
+      maxSkill: "TRUE",
+      weaponRestrictions: { $regex: w },
+    })
     .toArray();
-  var eh = req.params.name;
+  var name = req.params.name;
   if (req.params.name.includes("(") || req.params.name.includes(")")) {
-    eh = req.params.name.replace(/[()]/g, "");
-    eh = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
   }
-  // will have to change for heroes that can learn different iterations of weapons(i.e. lucina)
-  // add a column that details which heroes can wield unique weapons, then search by the name of the hero?
-  // add another url parameter and use .find({heroName: {$regex : "*,req.params.heroName,*"}})
-  var personalSkill = await db_connect
+
+  var eh = await db_connect
     .collection("Specials")
-    .findOne({ heroList: { $regex: "," + eh + "," } });
-  if (personalSkill) {
-    toSend.push(personalSkill);
-  }
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
 
-  toSend.sort(function (a, b) {
-    var nameA = a.name; // ignore upper and lowercase
-    var nameB = b.name; // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
+  eh.forEach((element) => toSend.push(element));
 
-    // names must be equal
-    return 0;
-  });
   res.json(toSend);
 });
 
@@ -240,11 +230,11 @@ skillRoutes.route("/Specials/add").post(function (req, response) {
     name: req.body.name,
     description: req.body.description,
     sp: req.body.sp,
-    maxSkill: req.body.maxSkill,
-    staffOnly: req.body.staffOnly,
-    unique: req.body.unique,
-    heroList: req.body.heroesList,
     cd: req.body.cd,
+    maxSkill: req.body.maxSkill,
+    unique: req.body.unique,
+    heroesList: req.body.heroesList,
+    weaponRestrictions: req.body.weaponRestrictions,
   };
   db_connect.collection("Specials").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -253,15 +243,87 @@ skillRoutes.route("/Specials/add").post(function (req, response) {
 });
 
 // This section will help you get a list of all the A_Slot skills.
-skillRoutes.route("/A_Slot").get(function (req, res) {
+skillRoutes.route("/A_Slot/:move/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
   let db_connect = dbo.getDb();
-  db_connect
+  var toSend = await db_connect
     .collection("A_Slot")
-    .find({})
-    .toArray(function (err, result) {
-      if (err) throw err;
-      res.json(result);
-    });
+    .find({
+      maxSkill: "TRUE",
+      movementRestrictions: { $regex: req.params.move },
+      weaponRestrictions: { $regex: w },
+    })
+    .toArray();
+  var name = req.params.name;
+  if (req.params.name.includes("(") || req.params.name.includes(")")) {
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+  }
+
+  var eh = await db_connect
+    .collection("A_Slot")
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
+
+  eh.forEach((element) => toSend.push(element));
+
+  res.json(toSend);
+});
+
+// This section will help you get a list of all the A_Slot skills.
+skillRoutes.route("/B_Slot/:move/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
+  let db_connect = dbo.getDb();
+  var toSend = await db_connect
+    .collection("B_Slot")
+    .find({
+      maxSkill: "TRUE",
+      movementRestrictions: { $regex: req.params.move },
+      weaponRestrictions: { $regex: w },
+    })
+    .toArray();
+  var name = req.params.name;
+  if (req.params.name.includes("(") || req.params.name.includes(")")) {
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+  }
+
+  var eh = await db_connect
+    .collection("B_Slot")
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
+
+  eh.forEach((element) => toSend.push(element));
+
+  res.json(toSend);
+});
+
+// This section will help you get a list of all the A_Slot skills.
+skillRoutes.route("/C_Slot/:move/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
+  let db_connect = dbo.getDb();
+  var toSend = await db_connect
+    .collection("C_Slot")
+    .find({
+      maxSkill: "TRUE",
+      movementRestrictions: { $regex: req.params.move },
+      weaponRestrictions: { $regex: w },
+    })
+    .toArray();
+  var name = req.params.name;
+  if (req.params.name.includes("(") || req.params.name.includes(")")) {
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+  }
+
+  var eh = await db_connect
+    .collection("C_Slot")
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
+
+  eh.forEach((element) => toSend.push(element));
+
+  res.json(toSend);
 });
 
 // This section will help you get a list of all the B_Slot skills.
@@ -316,10 +378,15 @@ skillRoutes.route("/A_Slot/add").post(function (req, response) {
   console.log(db_connect);
   let myobj = {
     name: req.body.name,
-    img: req.body.img,
     description: req.body.description,
+    sp: req.body.sp,
     visibleStats: req.body.visibleStats,
     unique: req.body.unique,
+    img: req.body.img,
+    maxSkill: req.body.maxSkill,
+    heroesList: req.body.heroesList,
+    movementRestrictions: req.body.movementRestrictions,
+    weaponRestrictions: req.body.weaponRestrictions,
   };
   db_connect.collection("A_Slot").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -333,8 +400,15 @@ skillRoutes.route("/B_Slot/add").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
     name: req.body.name,
-    img: req.body.img,
     description: req.body.description,
+    sp: req.body.sp,
+    visibleStats: req.body.visibleStats,
+    unique: req.body.unique,
+    img: req.body.img,
+    maxSkill: req.body.maxSkill,
+    heroesList: req.body.heroesList,
+    movementRestrictions: req.body.movementRestrictions,
+    weaponRestrictions: req.body.weaponRestrictions,
   };
   db_connect.collection("B_Slot").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -348,8 +422,15 @@ skillRoutes.route("/C_Slot/add").post(function (req, response) {
   let db_connect = dbo.getDb();
   let myobj = {
     name: req.body.name,
-    img: req.body.img,
     description: req.body.description,
+    sp: req.body.sp,
+    visibleStats: req.body.visibleStats,
+    unique: req.body.unique,
+    img: req.body.img,
+    maxSkill: req.body.maxSkill,
+    heroesList: req.body.heroesList,
+    movementRestrictions: req.body.movementRestrictions,
+    weaponRestrictions: req.body.weaponRestrictions,
   };
   db_connect.collection("C_Slot").insertOne(myobj, function (err, res) {
     if (err) throw err;

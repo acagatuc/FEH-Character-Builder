@@ -31,7 +31,12 @@ class SkillsSpecial extends React.Component {
   }
 
   componentDidUpdate() {
-    this.getOptions(`http://localhost:5000/Specials/` + this.props.hero.name);
+    this.getOptions(
+      `http://localhost:5000/Specials/` +
+        this.props.hero.weapon_type +
+        "/" +
+        this.props.hero.name
+    );
   }
 
   handleChangeS(s) {

@@ -21,9 +21,12 @@ class HeroList extends React.Component {
   }
 
   render() {
-    let options = this.state.heroList.map(function (hero) {
-      return { value: hero, label: hero.name };
-    });
+    const options = []
+      .concat(this.state.heroList)
+      .sort((a, b) => (a.name > b.name ? 1 : -1))
+      .map(function (hero) {
+        return { value: hero, label: hero.name };
+      });
 
     return (
       <div>

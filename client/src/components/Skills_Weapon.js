@@ -1,12 +1,15 @@
 import React from "react";
 import Select from "react-select";
+import { Container, Col, Row } from "react-bootstrap";
 
 class SkillsWeapon extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       weapons: [],
+      selectedWeapon: "",
       refines: [],
+      selectedRefine: "",
       length: 0,
       disabled: true,
     };
@@ -31,6 +34,9 @@ class SkillsWeapon extends React.Component {
     if (this.props.hero.name !== nextProps.hero.name) {
       this.setState({
         disabled: true,
+        selectedWeapon: { value: 0, label: "Select..." },
+        selectedRefine: { value: 0, label: "Select..." },
+        refines: [],
       });
       return true;
     } else {
@@ -40,18 +46,19 @@ class SkillsWeapon extends React.Component {
 
   componentDidUpdate() {
     var wt = this.props.hero.weapon_type;
+    var eh = "";
     if (
       this.props.hero.weapon_type.includes("Beast") ||
       this.props.hero.weapon_type.includes("Dragon")
     ) {
-      var eh = this.props.hero.weapon_type.split(" ");
+      eh = this.props.hero.weapon_type.split(" ");
       wt = eh[1];
     }
     if (
       this.props.hero.weapon_type.includes("Dagger") ||
       this.props.hero.weapon_type.includes("Bow")
     ) {
-      var eh = this.props.hero.weapon_type.split(" ");
+      eh = this.props.hero.weapon_type.split(" ");
       wt = eh[1] + "s";
     }
     this.getOptions(
@@ -68,6 +75,7 @@ class SkillsWeapon extends React.Component {
     this.setState(
       {
         disabled: !boolean,
+        selectedWeapon: w,
       },
       function () {}
     );
@@ -76,6 +84,12 @@ class SkillsWeapon extends React.Component {
   }
 
   handleChangeR(index) {
+    this.setState(
+      {
+        selectedRefine: index,
+      },
+      function () {}
+    );
     var tempStats = [0, 0, 0, 0, 0];
     var grs = this.state.refines.genericRefine.split(",").map(Number);
     if (index.value === 0) {
@@ -93,22 +107,21 @@ class SkillsWeapon extends React.Component {
       tempStats[0] = grs[0];
       tempStats[4] = grs[4];
     }
-    this.props.onChangeR(tempStats, this.state.refines);
+    this.props.onChangeR(tempStats, this.state.refines, index.value);
     this.forceUpdate();
   }
 
   async getOptions(url) {
     await fetch(url)
       .then((res) => res.json())
-      .then((data) =>
-        this.setState({ weapons: data, length: data.length }, function () {})
-      );
+      .then((data) => this.setState({ weapons: data, length: data.length }));
   }
 
   async getRefines(w) {
     await fetch(`http://localhost:5000/Refines/` + w.value.name)
       .then((res) => res.json())
       .then((data) => this.setState({ refines: data }));
+    this.forceUpdate();
   }
 
   render() {
@@ -116,11 +129,11 @@ class SkillsWeapon extends React.Component {
       option: (styles, { data, isFocused, isSelected }) => {
         return {
           ...styles,
-          backgroundColor:
-            data.label === this.props.hero.heroSkills[0] ||
-            data.label === this.props.hero.heroSkills[1]
-              ? "green"
-              : "pink",
+          backgroundColor: this.props.hero.heroSkills.weapon.includes(
+            data.label
+          )
+            ? "green"
+            : "pink",
           color: "black",
           "&:hover": {
             // Overwrittes the different states of border
@@ -130,48 +143,75 @@ class SkillsWeapon extends React.Component {
       },
     };
 
-    let weaponOptions = this.state.weapons.map(function (skill) {
-      return { value: skill, label: skill.name };
-    });
+    const weaponOptions = []
+      .concat(this.state.weapons)
+      .sort((a, b) => (a.name > b.name ? 1 : -1))
+      .map(function (skill) {
+        return { value: skill, label: skill.name };
+      });
 
     var refineOptions = [];
-    if (this.state.refines) {
-      if (this.state.refines.uniqueRefine === null) {
+    if (this.state.refines && this.state.selectedWeapon) {
+      if (this.props.hero.weapon_type === "Gray Staff") {
+        if (this.state.refines.uniqueRefine === "") {
+          refineOptions = [
+            { value: "dazzling", label: "Dazzling Staff" },
+            { value: "wrathful", label: "Wrathful Staff" },
+          ];
+        } else {
+          refineOptions = [
+            {
+              value: this.state.selectedWeapon.value.name,
+              label: "+Unique Effect: " + this.state.selectedWeapon.value.name,
+            },
+          ];
+        }
+      } else if (this.state.refines.uniqueRefine === "") {
         refineOptions = [
-          { value: 1, label: "+Atk" },
-          { value: 2, label: "+Spd" },
-          { value: 3, label: "+Def" },
-          { value: 4, label: "+Res" },
+          { value: "atk_refine", label: "+Atk" },
+          { value: "spd_refine", label: "+Spd" },
+          { value: "def_refine", label: "+Def" },
+          { value: "res_refine", label: "+Res" },
         ];
       } else {
         refineOptions = [
-          { value: 0, label: "+Unique Effect: " + this.state.refines.name },
-          { value: 1, label: "+Atk" },
-          { value: 2, label: "+Spd" },
-          { value: 3, label: "+Def" },
-          { value: 4, label: "+Res" },
+          {
+            value: this.state.selectedWeapon.value.name,
+            label: "+Unique Effect: " + this.state.selectedWeapon.value.name,
+          },
+          { value: "atk_refine", label: "+Atk" },
+          { value: "spd_refine", label: "+Spd" },
+          { value: "def_refine", label: "+Def" },
+          { value: "res_refine", label: "+Res" },
         ];
       }
     }
+
     // This following section will display the table with the records of individuals.
     return (
       <div>
-        Weapon:
-        <Select
-          name="weapon-select"
-          styles={weaponStyles}
-          onChange={this.handleChangeW}
-          options={weaponOptions}
-          isDisabled={!this.props.hero.exists}
-        />
-        <input type="checkbox" />
-        Refine:
-        <Select
-          name="weapon-select"
-          onChange={this.handleChangeR}
-          options={refineOptions}
-          isDisabled={this.state.disabled}
-        />
+        Weapon/Refine:
+        <Row>
+          <Col style={{ padding: "2px" }}>
+            <Select
+              name="weapon-select"
+              styles={weaponStyles}
+              value={this.state.selectedWeapon}
+              onChange={this.handleChangeW}
+              options={weaponOptions}
+              isDisabled={!this.props.hero.exists}
+            />
+          </Col>
+          <Col style={{ padding: "2px" }}>
+            <Select
+              name="weapon-select"
+              onChange={this.handleChangeR}
+              value={this.state.selectedRefine}
+              options={refineOptions}
+              isDisabled={this.state.disabled}
+            />
+          </Col>
+        </Row>
       </div>
     );
   }

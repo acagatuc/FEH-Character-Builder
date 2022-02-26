@@ -14,6 +14,7 @@ import SkillsA from "./Skills_A.js";
 import SkillsB from "./Skills_B.js";
 import SkillsC from "./Skills_C.js";
 import SkillsS from "./Skills_S.js";
+import BlessingComponent from "./BlessingComponent.js";
 import TabsComponent from "./TabsComponent.js";
 
 class DisplayHeroes extends React.Component {
@@ -30,11 +31,19 @@ class DisplayHeroes extends React.Component {
         def: [],
         res: [],
         totalStats: [],
-        heroSkills: [],
+        heroSkills: {
+          weapon: [],
+          assist: [],
+          special: [],
+          passives: [],
+        },
         weapon_type: "",
         move_type: "",
         character_type: "",
         merges: 0,
+        blessing: "",
+        eVA: "",
+        artist: "",
         exists: false,
       },
       skills: {
@@ -95,6 +104,7 @@ class DisplayHeroes extends React.Component {
       mergedStats: [0, 0, 0, 0, 0], // stats to add to the totals based on merges
       flowerStats: [0, 0, 0, 0, 0],
       mergeOrder: [],
+      image: "",
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -112,6 +122,7 @@ class DisplayHeroes extends React.Component {
     this.changeBSkill = this.changeBSkill.bind(this);
     this.changeCSkill = this.changeCSkill.bind(this);
     this.changeSSkill = this.changeSSkill.bind(this);
+    this.changeBlessing = this.changeBlessing.bind(this);
   }
 
   handleChange(a) {
@@ -170,6 +181,16 @@ class DisplayHeroes extends React.Component {
         tempArray2.push("white");
       }
 
+      var blessing = "";
+      if (
+        a.value.hero_type !== "normal" ||
+        a.value.hero_type !== "harmonic" ||
+        a.value.hero_type !== "duo" ||
+        a.value.hero_type !== "ascended"
+      ) {
+        blessing = a.value.hero_type;
+      }
+
       this.setState(
         {
           levels: {
@@ -187,11 +208,19 @@ class DisplayHeroes extends React.Component {
             def: a.value.def.split(",").map(Number),
             res: a.value.res.split(",").map(Number),
             totalStats: [0, 0, 0, 0, 0],
-            heroSkills: a.value.skills.split(","),
+            heroSkills: {
+              weapon: a.value.weapons.split(","),
+              assist: a.value.assists.split(","),
+              special: a.value.specials.split(","),
+              passives: a.value.passives.split(","),
+            },
             weapon_type: a.value.weapon_type,
             move_type: a.value.move_type,
             character_type: a.value.hero_type,
             merges: this.state.hero.merges,
+            blessing: blessing,
+            eVA: a.value.EVA,
+            artist: a.value.Artist.split(",")[0],
             exists: true,
           },
           skills: {
@@ -442,32 +471,37 @@ class DisplayHeroes extends React.Component {
       this.state.mergedStats[0] +
       this.state.flowerStats[0] +
       this.state.skills.weapon.visibleStats[0] +
-      this.state.skills.refine.stats[0];
+      this.state.skills.refine.stats[0] +
+      this.state.skills.aSkill.visibleStats[0];
     tempArray[1] =
       this.state.hero.atk[this.state.heroLevel + this.state.levels.array[1]] +
       this.state.mergedStats[1] +
       this.state.flowerStats[1] +
       this.state.skills.weapon.might +
       this.state.skills.weapon.visibleStats[1] +
-      this.state.skills.refine.stats[1];
+      this.state.skills.refine.stats[1] +
+      this.state.skills.aSkill.visibleStats[1];
     tempArray[2] =
       this.state.hero.spd[this.state.heroLevel + this.state.levels.array[2]] +
       this.state.mergedStats[2] +
       this.state.flowerStats[2] +
       this.state.skills.weapon.visibleStats[2] +
-      this.state.skills.refine.stats[2];
+      this.state.skills.refine.stats[2] +
+      this.state.skills.aSkill.visibleStats[2];
     tempArray[3] =
       this.state.hero.def[this.state.heroLevel + this.state.levels.array[3]] +
       this.state.mergedStats[3] +
       this.state.flowerStats[3] +
       this.state.skills.weapon.visibleStats[3] +
-      this.state.skills.refine.stats[3];
+      this.state.skills.refine.stats[3] +
+      this.state.skills.aSkill.visibleStats[3];
     tempArray[4] =
       this.state.hero.res[this.state.heroLevel + this.state.levels.array[4]] +
       this.state.mergedStats[4] +
       this.state.flowerStats[4] +
       this.state.skills.weapon.visibleStats[4] +
-      this.state.skills.refine.stats[4];
+      this.state.skills.refine.stats[4] +
+      this.state.skills.aSkill.visibleStats[4];
     this.setState({
       hero: {
         ...this.state.hero,
@@ -491,7 +525,7 @@ class DisplayHeroes extends React.Component {
       this.addStats
     );
   }
-  changeRefine(stats, r) {
+  changeRefine(stats, r, url) {
     this.setState(
       {
         skills: {
@@ -500,6 +534,7 @@ class DisplayHeroes extends React.Component {
             name: r.name,
             description: r.description,
             stats: stats,
+            img: "https://fehskills.s3.amazonaws.com/" + url + ".png",
           },
         },
       },
@@ -507,93 +542,138 @@ class DisplayHeroes extends React.Component {
     );
   }
   changeAssist(a) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        assist: a.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          assist: a.value,
+        },
       },
-    });
+      this.addStats
+    );
   }
   changeSpecial(s) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        special: s.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          special: s.value,
+        },
       },
-    });
+      this.addStats
+    );
   }
   changeASkill(a) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        aSkill: a.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          aSkill: {
+            name: a.value.name,
+            description: a.value.description,
+            visibleStats: a.value.visibleStats.split(",").map(Number),
+          },
+        },
       },
-    });
+      this.addStats
+    );
   }
   changeBSkill(b) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        bSkill: b.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          bSkill: {
+            name: b.value.name,
+            description: b.value.description,
+            visibleStats: b.value.visibleStats.split(",").map(Number),
+          },
+        },
       },
-    });
+      this.addStats
+    );
   }
   changeCSkill(c) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        cSkill: c.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          cSkill: {
+            name: c.value.name,
+            description: c.value.description,
+            visibleStats: c.value.visibleStats.split(",").map(Number),
+          },
+        },
       },
-    });
+      this.addStats
+    );
   }
   changeSSkill(s) {
-    this.setState({
-      skills: {
-        ...this.state.skills,
-        sSkill: s.value,
+    this.setState(
+      {
+        skills: {
+          ...this.state.skills,
+          sSkill: s.value,
+        },
       },
-    });
+      this.addStats
+    );
+  }
+  changeBlessing(b) {
+    this.setState(
+      {
+        hero: {
+          ...this.state.hero,
+          blessing: b.value,
+        },
+      },
+      this.addStats
+    );
   }
 
   render() {
-    function importAll(r) {
-      let images = {};
-      r.keys().forEach((item, index) => {
-        images[item.replace("./", "")] = r(item);
-      });
-      return images;
-    }
-
-    const images = importAll(
-      require.context("../img", false, /\.(png|jpe?g|svg)$/)
-    );
-
-    if (!this.state.levels.array) {
-      return <div> yeah this happens </div>;
-    }
-
     // This following section will display the entire-ish webpage
     return (
       <div>
         <Container className="noMargin">
           <Row>
-            <Col>
+            <Col style={{ padding: "0px" }}>
               <HeroCanvas
                 name={this.state.hero.single_name}
                 title={this.state.hero.title}
                 merges={this.state.hero.merges}
                 stats={this.state.hero.totalStats}
                 skills={this.state.skills}
-                image={images[`${this.state.hero.name}.png`]}
-                background={images[`bg_normal.png`]}
-                ui={images[`updated ui.png`]}
-                weapon={images[`Weapon.png`]}
-                assist={images[`Assist.png`]}
-                special={images[`Special.png`]}
-              ></HeroCanvas>
+                va={this.state.hero.eVA}
+                art={this.state.hero.artist}
+                image={
+                  "https://fehportraits.s3.amazonaws.com/" +
+                  this.state.hero.name +
+                  ".png"
+                }
+                background={
+                  "https://fehportraits.s3.amazonaws.com/bg_normal.png"
+                }
+                ui={"https://fehportraits.s3.amazonaws.com/updated ui.png"}
+                move_type={
+                  "https://fehskills.s3.amazonaws.com/" +
+                  this.state.hero.move_type +
+                  ".png"
+                }
+                weapon_type={
+                  "https://fehskills.s3.amazonaws.com/" +
+                  this.state.hero.weapon_type.toLowerCase() +
+                  ".png"
+                }
+                blessing={
+                  "https://fehskills.s3.amazonaws.com/" +
+                  this.state.hero.blessing +
+                  ".png"
+                }
+              />
             </Col>
-            <Col>
-              <h3>Base Stats:</h3>
+            <Col style={{ margin: "5px" }}>
+              <h3 style={{ marginLeft: "-8px" }}>Base Stats:</h3>
               <Row>
                 <label
                   style={{
@@ -658,8 +738,6 @@ class DisplayHeroes extends React.Component {
                 </Col>
               </Row>
               <h3>Skills:</h3>
-            </Col>
-            <Col md={3}>
               <SkillsWeapon
                 hero={this.state.hero}
                 onChangeW={this.changeWeapon}
@@ -678,6 +756,13 @@ class DisplayHeroes extends React.Component {
               <SkillsB hero={this.state.hero} onChange={this.changeBSkill} />
               <SkillsC hero={this.state.hero} onChange={this.changeCSkill} />
               <SkillsS hero={this.state.hero} onChange={this.changeSSkill} />
+            </Col>
+            <Col md={3}>
+              <BlessingComponent
+                exists={this.state.hero.exists}
+                name={this.state.hero.name}
+                onChange={this.changeBlessing}
+              />
               <TabsComponent />
             </Col>
           </Row>

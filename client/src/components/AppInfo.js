@@ -27,7 +27,8 @@ const AppInfo = ({ image }) => {
           <Modal.Title>Modal heading</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This is where I will put more information and a link to my github
+          This is where I will put more information and a link to my github link
+          to github: https://github.com/acagatuc/FEH-Character-Builder
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>

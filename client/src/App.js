@@ -5,7 +5,6 @@ import "./App.css";
 // We use Route in order to define the different routes of our application
 import { Route, Routes } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import infoImg from "./img/infoIcon.png";
 
 // We import all the components we need in our app
 import AddSkills from "./components/addSkills.js";
@@ -26,7 +25,9 @@ const App = () => {
       <header className="App-header">
         <h2>
           Welcome to the FEH Character Builder
-          <AppInfo image={infoImg} />
+          <AppInfo
+            image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"}
+          />
         </h2>
       </header>
       <DisplayHeroes />

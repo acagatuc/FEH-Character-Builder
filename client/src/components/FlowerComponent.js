@@ -27,7 +27,7 @@ class FlowerComponent extends React.Component {
 
   handleDragonflowers(e) {
     this.setState({
-      flowerCount: e.value,
+      flowerCount: e,
     });
     var tempArray = [0, 0, 0, 0, 0];
     var index = 0;
@@ -36,13 +36,14 @@ class FlowerComponent extends React.Component {
       index++;
     }
     this.props.onChange(tempArray);
+    this.forceUpdate();
   }
 
   render(props) {
     const colorStyles = {
       control: (base, state) => ({
         ...base,
-        background: "purple",
+        background: "#e18bf0",
         // match with the menu
         borderRadius: 4,
         // Overwrittes the different states of border

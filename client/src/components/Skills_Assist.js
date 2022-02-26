@@ -33,11 +33,9 @@ class SkillsAssist extends React.Component {
 
   componentDidUpdate() {
     //include more error checking here for later, i might just have one skill component that dictates the rest
-    var weaponType = "FALSE";
-    if (this.props.hero.weapon_type === "Gray Staff") {
-      weaponType = "TRUE";
-    }
-    this.getOptions(this.props.url + weaponType);
+    this.getOptions(
+      this.props.url + this.props.hero.weapon_type + "/" + this.props.hero.name
+    );
   }
 
   handleChangeA(a) {

@@ -128,9 +128,7 @@ skillRoutes.route("/Refines/add").post(function (req, response) {
 
 skillRoutes.route("/Refines/:name").get(async function (req, res) {
   let db_connect = dbo.getDb();
-  var array = await db_connect
-    .collection("Refines")
-    .findOne({ name: req.params.name });
+  var array = await db_connect.collection("Refines").findOne({ name: req.params.name });
 
   res.json(array);
 });
@@ -138,7 +136,6 @@ skillRoutes.route("/Refines/:name").get(async function (req, res) {
 // This section will help you create a new record.
 skillRoutes.route("/GenericWeapons/add").post(function (req, response) {
   let db_connect = dbo.getDb();
-  console.log(db_connect);
   let myobj = {
     name: req.body.name,
     description: req.body.description,
@@ -155,7 +152,7 @@ skillRoutes.route("/GenericWeapons/add").post(function (req, response) {
   });
 });
 // This section will help you get a list of all the Assist skills.
-skillRoutes.route("/Assist/:weapon/:name").get(async function (req, res) {
+skillRoutes.route("/Assist/:move/:weapon/:name").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
   let db_connect = dbo.getDb();
   var toSend = await db_connect
@@ -198,14 +195,19 @@ skillRoutes.route("/Assist/add").post(function (req, response) {
 });
 
 // This section will help you get a list of all the Special skills.
-skillRoutes.route("/Specials/:weapon/:name").get(async function (req, res) {
+skillRoutes.route("/Specials/:move/:weapon/:name").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
+  var m = req.params.move.toLowerCase();
+  if (m === "armored") {
+    m = "armor";
+  }
   let db_connect = dbo.getDb();
   var toSend = await db_connect
     .collection("Specials")
     .find({
       maxSkill: "TRUE",
       weaponRestrictions: { $regex: w },
+      movementRestrictions: { $regex: m },
     })
     .toArray();
   var name = req.params.name;
@@ -235,6 +237,7 @@ skillRoutes.route("/Specials/add").post(function (req, response) {
     unique: req.body.unique,
     heroesList: req.body.heroesList,
     weaponRestrictions: req.body.weaponRestrictions,
+    movementRestrictions: req.body.movementRestrictions,
   };
   db_connect.collection("Specials").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -245,12 +248,16 @@ skillRoutes.route("/Specials/add").post(function (req, response) {
 // This section will help you get a list of all the A_Slot skills.
 skillRoutes.route("/A_Slot/:move/:weapon/:name").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
+  var m = req.params.move.toLowerCase();
+  if (m === "armored") {
+    m = "armor";
+  }
   let db_connect = dbo.getDb();
   var toSend = await db_connect
     .collection("A_Slot")
     .find({
       maxSkill: "TRUE",
-      movementRestrictions: { $regex: req.params.move },
+      movementRestrictions: { $regex: m },
       weaponRestrictions: { $regex: w },
     })
     .toArray();
@@ -273,12 +280,16 @@ skillRoutes.route("/A_Slot/:move/:weapon/:name").get(async function (req, res) {
 // This section will help you get a list of all the A_Slot skills.
 skillRoutes.route("/B_Slot/:move/:weapon/:name").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
+  var m = req.params.move.toLowerCase();
+  if (m === "armored") {
+    m = "armor";
+  }
   let db_connect = dbo.getDb();
   var toSend = await db_connect
     .collection("B_Slot")
     .find({
       maxSkill: "TRUE",
-      movementRestrictions: { $regex: req.params.move },
+      movementRestrictions: { $regex: m },
       weaponRestrictions: { $regex: w },
     })
     .toArray();
@@ -298,15 +309,19 @@ skillRoutes.route("/B_Slot/:move/:weapon/:name").get(async function (req, res) {
   res.json(toSend);
 });
 
-// This section will help you get a list of all the A_Slot skills.
+// This section will help you get a list of all the C_Slot skills.
 skillRoutes.route("/C_Slot/:move/:weapon/:name").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
+  var m = req.params.move.toLowerCase();
+  if (m === "armored") {
+    m = "armor";
+  }
   let db_connect = dbo.getDb();
   var toSend = await db_connect
     .collection("C_Slot")
     .find({
       maxSkill: "TRUE",
-      movementRestrictions: { $regex: req.params.move },
+      movementRestrictions: { $regex: m },
       weaponRestrictions: { $regex: w },
     })
     .toArray();
@@ -318,6 +333,38 @@ skillRoutes.route("/C_Slot/:move/:weapon/:name").get(async function (req, res) {
 
   var eh = await db_connect
     .collection("C_Slot")
+    .find({ heroesList: { $regex: "," + name + "," } })
+    .toArray();
+
+  eh.forEach((element) => toSend.push(element));
+
+  res.json(toSend);
+});
+
+// This section will help you get a list of all the S_Slot skills.
+skillRoutes.route("/S_Slot/:move/:weapon/:name").get(async function (req, res) {
+  var w = req.params.weapon.toLowerCase();
+  var m = req.params.move.toLowerCase();
+  if (m === "armored") {
+    m = "armor";
+  }
+  let db_connect = dbo.getDb();
+  var toSend = await db_connect
+    .collection("S_Slot")
+    .find({
+      maxSkill: "TRUE",
+      movementRestrictions: { $regex: m },
+      weaponRestrictions: { $regex: w },
+    })
+    .toArray();
+  var name = req.params.name;
+  if (req.params.name.includes("(") || req.params.name.includes(")")) {
+    name = req.params.name.replace(/[()]/g, "");
+    name = req.params.name.replace(/[()]/g, "");
+  }
+
+  var eh = await db_connect
+    .collection("S_Slot")
     .find({ heroesList: { $regex: "," + name + "," } })
     .toArray();
 
@@ -375,7 +422,6 @@ skillRoutes.route("/A_Slot/:id").get(function (req, res) {
 // This section will help you create a new record.
 skillRoutes.route("/A_Slot/add").post(function (req, response) {
   let db_connect = dbo.getDb();
-  console.log(db_connect);
   let myobj = {
     name: req.body.name,
     description: req.body.description,
@@ -396,7 +442,6 @@ skillRoutes.route("/A_Slot/add").post(function (req, response) {
 
 // This section will help you create a new record.
 skillRoutes.route("/B_Slot/add").post(function (req, response) {
-  console.log(req);
   let db_connect = dbo.getDb();
   let myobj = {
     name: req.body.name,
@@ -418,7 +463,6 @@ skillRoutes.route("/B_Slot/add").post(function (req, response) {
 
 // This section will help you create a new record.
 skillRoutes.route("/C_Slot/add").post(function (req, response) {
-  console.log(req);
   let db_connect = dbo.getDb();
   let myobj = {
     name: req.body.name,
@@ -449,13 +493,11 @@ skillRoutes.route("/A_Slot/:id").post(function (req, response) {
       person_level: req.body.person_level,
     },
   };
-  db_connect
-    .collection("A_Slot")
-    .updateOne(myquery, newvalues, function (err, res) {
-      if (err) throw err;
-      console.log("1 document updated");
-      response.json(res);
-    });
+  db_connect.collection("A_Slot").updateOne(myquery, newvalues, function (err, res) {
+    if (err) throw err;
+    console.log("1 document updated");
+    response.json(res);
+  });
 });
 
 module.exports = skillRoutes;

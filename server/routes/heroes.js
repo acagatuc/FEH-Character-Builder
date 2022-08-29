@@ -37,6 +37,7 @@ heroRoutes.route("/Heroes/add").post(function (req, response) {
     EVA: req.body.eVA,
     JVA: req.body.jVA,
     Artist: req.body.Artist,
+    dragonflowers: req.body.dragonflowers,
   };
   db_connect.collection("Heroes").insertOne(myobj, function (err, res) {
     if (err) throw err;
@@ -49,6 +50,31 @@ heroRoutes.route("/Heroes").get(function (req, res) {
   db_connect
     .collection("Heroes")
     .find({})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+heroRoutes.route("/LegendaryMythic/add").post(function (req, response) {
+  let db_connect = dbo.getDb();
+  console.log(db_connect);
+  let myobj = {
+    name: req.body.name,
+    blessing: req.body.blessing,
+    stats: req.body.stats,
+  };
+  db_connect.collection("LegendaryMythic").insertOne(myobj, function (err, res) {
+    if (err) throw err;
+    response.json(res);
+  });
+});
+
+heroRoutes.route("/LegendaryMythic/:blessing").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  db_connect
+    .collection("LegendaryMythic")
+    .find({ blessing: { $regex: req.params.blessing.toLowerCase() } })
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);

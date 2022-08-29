@@ -4,6 +4,7 @@ import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import BlessingComponent from "./BlessingComponent.js";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -47,8 +48,14 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
+      Blessing:
       <TabPanel value={value} index={0}>
-        Blessings
+        {" "}
+        <BlessingComponent
+          exists={this.props.exists}
+          name={this.props.name}
+          onChange={this.blessingChange}
+        />
       </TabPanel>
       <TabPanel value={value} index={1}>
         Skill Rarity and Banners coming soon

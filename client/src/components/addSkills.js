@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 
-import {
-  useCSVReader,
-  lightenDarkenColor,
-  formatFileSize,
-} from "react-papaparse";
+import { useCSVReader, lightenDarkenColor, formatFileSize } from "react-papaparse";
 
 const GREY = "#CCC";
 const GREY_LIGHT = "rgba(255, 255, 255, 0.4)";
 const DEFAULT_REMOVE_HOVER_COLOR = "#A01919";
-const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
-  DEFAULT_REMOVE_HOVER_COLOR,
-  40
-);
+const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(DEFAULT_REMOVE_HOVER_COLOR, 40);
 const GREY_DIM = "#686868";
 
 const styles = {
@@ -82,7 +75,7 @@ const styles = {
 async function createASkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 413) {
+  while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
     const data = {
       name: skills.data[index][1],
@@ -114,7 +107,7 @@ async function createASkills(skills) {
 async function createBSkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 600) {
+  while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
     const data = {
       name: skills.data[index][1],
@@ -147,7 +140,7 @@ async function createBSkills(skills) {
 async function createCSkills(skills) {
   var index = 1; //to ignore header
 
-  while (index < 700) {
+  while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
     const data = {
       name: skills.data[index][1],
@@ -180,7 +173,7 @@ async function createCSkills(skills) {
 async function createPWeapons(weapons) {
   var index = 1; //to ignore header
 
-  while (index < 1129) {
+  while (weapons.data[index][1] !== "" && weapons.data[index + 1] !== undefined) {
     // create skill json
     const data = {
       name: weapons.data[index][1],
@@ -211,7 +204,7 @@ async function createPWeapons(weapons) {
 async function createGWeapons(weapons) {
   var index = 1; //to ignore header
 
-  while (index < 1129) {
+  while (weapons.data[index][1] !== "" && weapons.data[index + 1] !== undefined) {
     // create skill json
     const data = {
       name: weapons.data[index][1],
@@ -242,7 +235,7 @@ async function createGWeapons(weapons) {
 async function createRefines(weapons) {
   var index = 1; //to ignore header
 
-  while (index < 1129) {
+  while (weapons.data[index][1] !== "" && weapons.data[index + 1] !== undefined) {
     // create skill json
     const data = {
       name: weapons.data[index][1],
@@ -270,7 +263,7 @@ async function createRefines(weapons) {
 async function createAssists(assists) {
   var index = 1; //to ignore header
 
-  while (index < 1129) {
+  while (assists.data[index][1] !== "" && assists.data[index + 1] !== undefined) {
     // create skill json
     const data = {
       name: assists.data[index][1],
@@ -300,7 +293,7 @@ async function createAssists(assists) {
 async function createSpecials(specials) {
   var index = 1; //to ignore header
 
-  while (index < 1129) {
+  while (specials.data[index][1] !== "" && specials.data[index + 1] !== undefined) {
     // create skill json
     const data = {
       name: specials.data[index][1],
@@ -311,6 +304,7 @@ async function createSpecials(specials) {
       unique: specials.data[index][6],
       heroesList: specials.data[index][7],
       weaponRestrictions: specials.data[index][8],
+      movementRestrictions: specials.data[index][9],
     };
     if (specials.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -331,9 +325,7 @@ async function createSpecials(specials) {
 export default function CSVReader() {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
-  const [removeHoverColor, setRemoveHoverColor] = useState(
-    DEFAULT_REMOVE_HOVER_COLOR
-  );
+  const [removeHoverColor, setRemoveHoverColor] = useState(DEFAULT_REMOVE_HOVER_COLOR);
 
   return (
     <div>
@@ -357,29 +349,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -428,29 +408,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -499,29 +467,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -570,29 +526,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -641,29 +585,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -712,29 +644,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -784,29 +704,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -856,29 +764,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>

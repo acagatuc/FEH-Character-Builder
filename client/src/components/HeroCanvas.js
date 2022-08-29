@@ -137,10 +137,10 @@ const StatComponent = ({ text, color, x, y }) => {
 };
 
 const WMComponent = ({ image, x, y, width, height }) => {
-  if (
-    image === "https://fehskills.s3.amazonaws.com/normal.png" ||
-    "https://fehskills.s3.amazonaws.com/.png"
-  ) {
+  if (image.includes("normal")) {
+    image = "https://fehskills.s3.amazonaws.com/default.png";
+  }
+  if (image.includes("https://fehskills.s3.amazonaws.com/.png")) {
     image = "https://fehskills.s3.amazonaws.com/default.png";
   }
   const [imgElement] = useImage(image, "Anonymous");
@@ -221,29 +221,21 @@ const AssistOrSpecial = ({ text, x, y, offsetX, offsetY }) => {
 };
 
 const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
-  if (text === "-") {
+  var url = "";
+  if (text === "") {
     url = "default";
   } else {
-    var url = text.replace(" ", "+");
+    url = text.replace(" ", "+");
     url = url.replace("%20", "+");
     url = url.replace("/", "");
   }
-  const [imgElement] = useImage(
-    "https://fehskills.s3.amazonaws.com/" + url + ".png",
-    "Anonymous"
-  );
+  const [imgElement] = useImage("https://fehskills.s3.amazonaws.com/" + url + ".png", "Anonymous");
 
   if (!text.includes("undefined")) {
     if (imgElement && imgElement.width >= 75) {
       return (
         <Group>
-          <Image
-            image={imgElement}
-            x={x - 4}
-            y={y - 3}
-            width={39}
-            height={40}
-          />
+          <Image image={imgElement} x={x - 4} y={y - 3} width={39} height={40} />
           <Text
             text={text}
             fontFamily="nintendoP_Skip-D_003"
@@ -326,76 +318,22 @@ class HeroCanvas extends React.Component {
               y={471}
               width={214}
             />
-            <LargeTextComponent
-              text={this.props.title}
-              color="white"
-              x={12}
-              y={412}
-              width={260}
-            />
+            <LargeTextComponent text={this.props.title} color="white" x={12} y={412} width={260} />
             <MergeComponent merges={this.props.merges} />
-            <WMComponent
-              image={this.props.weapon_type}
-              x={14}
-              y={558}
-              width={20}
-              height={21}
-            />
-            <WMComponent
-              image={this.props.move_type}
-              x={170}
-              y={556}
-              width={25}
-              height={26}
-            />
-            <WMComponent
-              image={this.props.blessing}
-              x={431}
-              y={432}
-              width={111}
-              height={119}
-            />
+            <WMComponent image={this.props.weapon_type} x={14} y={558} width={20} height={21} />
+            <WMComponent image={this.props.move_type} x={170} y={556} width={25} height={26} />
+            <WMComponent image={this.props.blessing} x={431} y={432} width={111} height={119} />
             <TextComponent text={"HP"} color="white" x={85} y={604} />
             <TextComponent text={"Atk"} color="white" x={84} y={641} />
             <TextComponent text={"Spd"} color="white" x={83} y={677} />
             <TextComponent text={"Def"} color="white" x={83} y={715} />
             <TextComponent text={"Res"} color="white" x={83} y={752} />
-            <StatComponent
-              text={`${this.props.stats[0]}`}
-              color="#fffa96"
-              x={171}
-              y={604}
-            />
-            <StatComponent
-              text={`${this.props.stats[1]}`}
-              color="#fffa96"
-              x={171}
-              y={641}
-            />
-            <StatComponent
-              text={`${this.props.stats[2]}`}
-              color="#fffa96"
-              x={171}
-              y={677}
-            />
-            <StatComponent
-              text={`${this.props.stats[3]}`}
-              color="#fffa96"
-              x={171}
-              y={715}
-            />
-            <StatComponent
-              text={`${this.props.stats[4]}`}
-              color="#fffa96"
-              x={171}
-              y={752}
-            />
-            <TextComponent
-              text={"9999\n\n7000"}
-              color="#82f546"
-              x={142}
-              y={789}
-            />
+            <StatComponent text={`${this.props.stats[0]}`} color="#fffa96" x={171} y={604} />
+            <StatComponent text={`${this.props.stats[1]}`} color="#fffa96" x={171} y={641} />
+            <StatComponent text={`${this.props.stats[2]}`} color="#fffa96" x={171} y={677} />
+            <StatComponent text={`${this.props.stats[3]}`} color="#fffa96" x={171} y={715} />
+            <StatComponent text={`${this.props.stats[4]}`} color="#fffa96" x={171} y={752} />
+            <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
           </Layer>
           <Layer id="skill layer">
             <WeaponComponent

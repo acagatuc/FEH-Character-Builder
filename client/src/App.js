@@ -23,11 +23,11 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
+        <AddSkills />
+        <AddHeroes />
         <h2>
           Welcome to the FEH Character Builder
-          <AppInfo
-            image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"}
-          />
+          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
         </h2>
       </header>
       <DisplayHeroes />

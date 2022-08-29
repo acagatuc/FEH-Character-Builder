@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 
-import {
-  useCSVReader,
-  lightenDarkenColor,
-  formatFileSize,
-} from "react-papaparse";
+import { useCSVReader, lightenDarkenColor, formatFileSize } from "react-papaparse";
 
 const GREY = "#CCC";
 const GREY_LIGHT = "rgba(255, 255, 255, 0.4)";
 const DEFAULT_REMOVE_HOVER_COLOR = "#A01919";
-const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(
-  DEFAULT_REMOVE_HOVER_COLOR,
-  40
-);
+const REMOVE_HOVER_COLOR_LIGHT = lightenDarkenColor(DEFAULT_REMOVE_HOVER_COLOR, 40);
 const GREY_DIM = "#686868";
 
 const styles = {
@@ -82,7 +75,7 @@ const styles = {
 async function createNewHeroes(heroes) {
   var index = 1; //to ignore header
 
-  while (index < 775) {
+  while (index < 842) {
     // create hero json
     const data = {
       name: heroes.data[index][1],
@@ -106,6 +99,7 @@ async function createNewHeroes(heroes) {
       eVA: heroes.data[index][19],
       jVA: heroes.data[index][20],
       Artist: heroes.data[index][21],
+      dragonflowers: heroes.data[index][22],
     };
     if (heroes.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");
@@ -122,12 +116,35 @@ async function createNewHeroes(heroes) {
   }
 }
 
+async function createLegendaryList(heroes) {
+  var index = 1; //to ignore header
+
+  while (index < 67) {
+    // create hero json
+    const data = {
+      name: heroes.data[index][0],
+      blessing: heroes.data[index][2],
+      stats: heroes.data[index][3],
+    };
+    if (heroes.data[index][1] !== "") {
+      console.log("adding " + data.name + " to database");
+
+      await fetch("http://localhost:5000/LegendaryMythic/add", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+    }
+    index += 1;
+  }
+}
+
 export default function CSVReader() {
   const { CSVReader } = useCSVReader();
   const [zoneHover, setZoneHover] = useState(false);
-  const [removeHoverColor, setRemoveHoverColor] = useState(
-    DEFAULT_REMOVE_HOVER_COLOR
-  );
+  const [removeHoverColor, setRemoveHoverColor] = useState(DEFAULT_REMOVE_HOVER_COLOR);
 
   return (
     <div>
@@ -151,29 +168,17 @@ export default function CSVReader() {
         }}
         noDrag
       >
-        {({
-          getRootProps,
-          acceptedFile,
-          ProgressBar,
-          getRemoveFileProps,
-          Remove,
-        }: any) => (
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
           <>
             <div
               {...getRootProps()}
-              style={Object.assign(
-                {},
-                styles.zone,
-                zoneHover && styles.zoneHover
-              )}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
             >
               {acceptedFile ? (
                 <>
                   <div style={styles.file}>
                     <div style={styles.info}>
-                      <span style={styles.size}>
-                        {formatFileSize(acceptedFile.size)}
-                      </span>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
                       <span style={styles.name}>{acceptedFile.name}</span>
                     </div>
                     <div style={styles.progressBar}>
@@ -197,6 +202,65 @@ export default function CSVReader() {
                 </>
               ) : (
                 "Click to upload heroes to DB"
+              )}
+            </div>
+          </>
+        )}
+      </CSVReader>
+      <CSVReader
+        onUploadAccepted={(results: any) => {
+          console.log("---------------------------");
+          console.log(results);
+          console.log("---------------------------");
+          setZoneHover(false);
+
+          // add to db
+          createLegendaryList(results);
+        }}
+        onDragOver={(event: DragEvent) => {
+          event.preventDefault();
+          setZoneHover(true);
+        }}
+        onDragLeave={(event: DragEvent) => {
+          event.preventDefault();
+          setZoneHover(false);
+        }}
+        noDrag
+      >
+        {({ getRootProps, acceptedFile, ProgressBar, getRemoveFileProps, Remove }: any) => (
+          <>
+            <div
+              {...getRootProps()}
+              style={Object.assign({}, styles.zone, zoneHover && styles.zoneHover)}
+            >
+              {acceptedFile ? (
+                <>
+                  <div style={styles.file}>
+                    <div style={styles.info}>
+                      <span style={styles.size}>{formatFileSize(acceptedFile.size)}</span>
+                      <span style={styles.name}>{acceptedFile.name}</span>
+                    </div>
+                    <div style={styles.progressBar}>
+                      <ProgressBar />
+                    </div>
+                    <div
+                      {...getRemoveFileProps()}
+                      style={styles.remove}
+                      onMouseOver={(event: Event) => {
+                        event.preventDefault();
+                        setRemoveHoverColor(REMOVE_HOVER_COLOR_LIGHT);
+                      }}
+                      onMouseOut={(event: Event) => {
+                        event.preventDefault();
+                        setRemoveHoverColor(DEFAULT_REMOVE_HOVER_COLOR);
+                      }}
+                    >
+                      <Remove color={removeHoverColor} />
+                    </div>
+                  </div>
+                </>
+              ) : (
+                "Click to upload legendary and mythic heroes to DB"
               )}
             </div>
           </>

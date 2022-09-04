@@ -11,6 +11,7 @@ import SkillComponent from "./SkillComponent.js";
 import Traits from "./Traits.js";
 import Merges from "./Merges.js";
 import FlowerComponent from "./FlowerComponent.js";
+import SwitchComponent from "./SwitchComponent.js";
 
 class DisplayHeroes extends React.Component {
   constructor(props) {
@@ -106,6 +107,9 @@ class DisplayHeroes extends React.Component {
       heroBuffStats: [0, 0, 0, 0, 0],
       mergeOrder: [],
       image: "",
+      resplendent: false,
+      resplendentStatsBoolean: false,
+      resplendentStats: [0, 0, 0, 0, 0],
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -126,6 +130,8 @@ class DisplayHeroes extends React.Component {
     this.changeSSkill = this.changeSSkill.bind(this);
     this.changeBlessing = this.changeBlessing.bind(this);
     this.changeBlessingStats = this.changeBlessingStats.bind(this);
+    this.handleResplendent = this.handleResplendent.bind(this);
+    this.handleResplendentStats = this.handleResplendentStats.bind(this);
   }
 
   handleChange(a) {
@@ -221,6 +227,9 @@ class DisplayHeroes extends React.Component {
           },
           flowerStats: [0, 0, 0, 0, 0],
           heroBuffStats: [0, 0, 0, 0, 0],
+          resplendent: false,
+          resplendentStatsBoolean: false,
+          resplendentStats: [0, 0, 0, 0, 0],
         },
         this.calculateMergeStats
       );
@@ -412,7 +421,8 @@ class DisplayHeroes extends React.Component {
       this.state.heroBuffStats[0] +
       this.state.skills.weapon.visibleStats[0] +
       this.state.skills.refine.stats[0] +
-      this.state.skills.aSkill.visibleStats[0];
+      this.state.skills.aSkill.visibleStats[0] +
+      this.state.resplendentStats[0];
     tempArray[1] =
       this.state.hero.atk[this.state.heroLevel + this.state.levels.array[1]] +
       this.state.mergedStats[1] +
@@ -421,7 +431,8 @@ class DisplayHeroes extends React.Component {
       this.state.skills.weapon.might +
       this.state.skills.weapon.visibleStats[1] +
       this.state.skills.refine.stats[1] +
-      this.state.skills.aSkill.visibleStats[1];
+      this.state.skills.aSkill.visibleStats[1] +
+      this.state.resplendentStats[1];
     tempArray[2] =
       this.state.hero.spd[this.state.heroLevel + this.state.levels.array[2]] +
       this.state.mergedStats[2] +
@@ -429,7 +440,8 @@ class DisplayHeroes extends React.Component {
       this.state.heroBuffStats[2] +
       this.state.skills.weapon.visibleStats[2] +
       this.state.skills.refine.stats[2] +
-      this.state.skills.aSkill.visibleStats[2];
+      this.state.skills.aSkill.visibleStats[2] +
+      this.state.resplendentStats[2];
     tempArray[3] =
       this.state.hero.def[this.state.heroLevel + this.state.levels.array[3]] +
       this.state.mergedStats[3] +
@@ -437,7 +449,8 @@ class DisplayHeroes extends React.Component {
       this.state.heroBuffStats[3] +
       this.state.skills.weapon.visibleStats[3] +
       this.state.skills.refine.stats[3] +
-      this.state.skills.aSkill.visibleStats[3];
+      this.state.skills.aSkill.visibleStats[3] +
+      this.state.resplendentStats[3];
     tempArray[4] =
       this.state.hero.res[this.state.heroLevel + this.state.levels.array[4]] +
       this.state.mergedStats[4] +
@@ -445,7 +458,8 @@ class DisplayHeroes extends React.Component {
       this.state.heroBuffStats[4] +
       this.state.skills.weapon.visibleStats[4] +
       this.state.skills.refine.stats[4] +
-      this.state.skills.aSkill.visibleStats[4];
+      this.state.skills.aSkill.visibleStats[4] +
+      this.state.resplendentStats[4];
     this.setState({
       hero: {
         ...this.state.hero,
@@ -595,6 +609,20 @@ class DisplayHeroes extends React.Component {
     );
   }
 
+  handleResplendent(res) {
+    this.setState({ resplendent: res });
+  }
+
+  handleResplendentStats(r) {
+    if (r) {
+      this.setState({ resplendentStatsBoolean: true });
+      this.setState({ resplendentStats: [2, 2, 2, 2, 2] }, this.calculateMergeStats);
+    } else {
+      this.setState({ resplendentStatsBoolean: false });
+      this.setState({ resplendentStats: [0, 0, 0, 0, 0] }, this.calculateMergeStats);
+    }
+  }
+
   render() {
     // This following section will display the entire-ish webpage
     return (
@@ -610,7 +638,13 @@ class DisplayHeroes extends React.Component {
                 skills={this.state.skills}
                 va={this.state.hero.eVA}
                 art={this.state.hero.artist}
-                image={"https://fehportraits.s3.amazonaws.com/" + this.state.hero.name + ".png"}
+                image={
+                  this.state.resplendent
+                    ? "https://fehportraits.s3.amazonaws.com/Resplendent " +
+                      this.state.hero.name +
+                      ".png"
+                    : "https://fehportraits.s3.amazonaws.com/" + this.state.hero.name + ".png"
+                }
                 background={"https://fehportraits.s3.amazonaws.com/bg_normal.png"}
                 ui={"https://fehportraits.s3.amazonaws.com/updated ui.png"}
                 move_type={
@@ -768,6 +802,16 @@ class DisplayHeroes extends React.Component {
                 hero={this.state.hero}
                 onChange={this.changeBlessingStats}
                 blessing={this.state.hero.blessing}
+              />
+              <SwitchComponent
+                res={this.state.resplendent}
+                onChange={this.handleResplendent}
+                label={"Resplendant Art"}
+              />
+              <SwitchComponent
+                res={this.state.resplendentStatsBoolean}
+                onChange={this.handleResplendentStats}
+                label={"Resplendant Stats"}
               />
             </Col>
           </Row>

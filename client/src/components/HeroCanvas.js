@@ -274,141 +274,134 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
   return <Group></Group>;
 };
 
-class HeroCanvas extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleExport = this.handleExport.bind(this);
-    this.downloadURI = this.downloadURI.bind(this);
-  }
+export default function HeroCanvas(props) {
+  const stageRef = React.useRef();
 
-  handleExport() {
-    const uri = this.refs.stage.toDataURL({ pixelRatio: 2 });
-    this.downloadURI(uri, "FEH Builder - " + this.props.name + ".png");
-  }
-  downloadURI(uri, name) {
+  const handleExport = () => {
+    const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+    downloadURI(uri, "FEH Builder - " + props.name + ".png");
+  };
+  const downloadURI = (uri, name) => {
     var link = document.createElement("a");
     link.download = name;
     link.href = uri;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
+  };
 
-  render() {
-    return (
-      <div id="wrapper" className="wrapper">
-        <Stage width={540} height={960} ref="stage" onClick={this.handleExport}>
-          <Layer id="img layer">
-            <BackgroundComponent image={this.props.background} />
-            <ImageComponent
-              image={this.props.image}
-              cropX={365}
-              cropY={0}
-              cropWidth={869}
-              cropHeight={1530}
-            />
-            <BackgroundComponent image={this.props.ui} />
-          </Layer>
-          <Layer id="stat layer">
-            <LargeTextComponent
-              text={this.props.name}
-              color="white"
-              stroke="black"
-              x={54}
-              y={471}
-              width={214}
-            />
-            <LargeTextComponent text={this.props.title} color="white" x={12} y={412} width={260} />
-            <MergeComponent merges={this.props.merges} />
-            <WMComponent image={this.props.weapon_type} x={14} y={558} width={20} height={21} />
-            <WMComponent image={this.props.move_type} x={170} y={556} width={25} height={26} />
-            <WMComponent image={this.props.blessing} x={431} y={432} width={111} height={119} />
-            <TextComponent text={"HP"} color="white" x={85} y={604} />
-            <TextComponent text={"Atk"} color="white" x={84} y={641} />
-            <TextComponent text={"Spd"} color="white" x={83} y={677} />
-            <TextComponent text={"Def"} color="white" x={83} y={715} />
-            <TextComponent text={"Res"} color="white" x={83} y={752} />
-            <StatComponent text={`${this.props.stats[0]}`} color="#fffa96" x={171} y={604} />
-            <StatComponent text={`${this.props.stats[1]}`} color="#fffa96" x={171} y={641} />
-            <StatComponent text={`${this.props.stats[2]}`} color="#fffa96" x={171} y={677} />
-            <StatComponent text={`${this.props.stats[3]}`} color="#fffa96" x={171} y={715} />
-            <StatComponent text={`${this.props.stats[4]}`} color="#fffa96" x={171} y={752} />
-            <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
-          </Layer>
-          <Layer id="skill layer">
-            <WeaponComponent
-              text={`${this.props.skills.weapon.name}`}
-              image={`${this.props.skills.refine.img}`}
-              x={280}
-              y={596}
-              offsetX={33}
-              offsetY={8}
-            />
-            <AssistOrSpecial
-              text={`${this.props.skills.assist.name}`}
-              x={280}
-              y={631}
-              offsetX={33}
-              offsetY={9}
-            />
-            <AssistOrSpecial
-              text={`${this.props.skills.special.name}`}
-              x={278}
-              y={671}
-              offsetX={35}
-              offsetY={7}
-            />
-            <SkillComponent
-              text={`${this.props.skills.aSkill.name}`}
-              x={275}
-              y={707}
-              offsetX={38}
-              offsetY={8}
-            />
-            <SkillComponent
-              text={`${this.props.skills.bSkill.name}`}
-              x={275}
-              y={745}
-              offsetX={37}
-              offsetY={7}
-            />
-            <SkillComponent
-              text={`${this.props.skills.cSkill.name}`}
-              x={275}
-              y={781}
-              offsetX={38}
-              offsetY={8}
-            />
-          </Layer>
-          <Layer id="VA and Artist">
-            <Text
-              text={`${this.props.va}`}
-              x={33}
-              y={910}
-              fontFamily="nintendoP_Skip-D_003"
-              fontSize={16}
-              stroke="black"
-              strokeWidth={4}
-              lineJoin="round"
-              fill="white"
-              fillAfterStrokeEnabled={true}
-            />
-            <Text
-              text={`${this.props.art}`}
-              x={33}
-              y={932}
-              fontFamily="nintendoP_Skip-D_003"
-              fontSize={16}
-              stroke="black"
-              strokeWidth={4}
-              lineJoin="round"
-              fill="white"
-              fillAfterStrokeEnabled={true}
-            />
-          </Layer>
-        </Stage>
-      </div>
-    );
-  }
+  return (
+    <div id="wrapper" className="wrapper">
+      <Stage width={540} height={960} ref={stageRef} onClick={handleExport}>
+        <Layer id="img layer">
+          <BackgroundComponent image={props.background} />
+          <ImageComponent
+            image={props.image}
+            cropX={365}
+            cropY={0}
+            cropWidth={869}
+            cropHeight={1530}
+          />
+          <BackgroundComponent image={props.ui} />
+        </Layer>
+        <Layer id="stat layer">
+          <LargeTextComponent
+            text={props.name}
+            color="white"
+            stroke="black"
+            x={54}
+            y={471}
+            width={214}
+          />
+          <LargeTextComponent text={props.title} color="white" x={12} y={412} width={260} />
+          <MergeComponent merges={props.merges} />
+          <WMComponent image={props.weapon_type} x={14} y={558} width={20} height={21} />
+          <WMComponent image={props.move_type} x={170} y={556} width={25} height={26} />
+          <WMComponent image={props.blessing} x={431} y={432} width={111} height={119} />
+          <TextComponent text={"HP"} color="white" x={85} y={604} />
+          <TextComponent text={"Atk"} color="white" x={84} y={641} />
+          <TextComponent text={"Spd"} color="white" x={83} y={677} />
+          <TextComponent text={"Def"} color="white" x={83} y={715} />
+          <TextComponent text={"Res"} color="white" x={83} y={752} />
+          <StatComponent text={`${props.stats[0]}`} color="#fffa96" x={171} y={604} />
+          <StatComponent text={`${props.stats[1]}`} color="#fffa96" x={171} y={641} />
+          <StatComponent text={`${props.stats[2]}`} color="#fffa96" x={171} y={677} />
+          <StatComponent text={`${props.stats[3]}`} color="#fffa96" x={171} y={715} />
+          <StatComponent text={`${props.stats[4]}`} color="#fffa96" x={171} y={752} />
+          <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
+        </Layer>
+        <Layer id="skill layer">
+          <WeaponComponent
+            text={`${props.skills.weapon.name}`}
+            image={`${props.skills.refine.img}`}
+            x={280}
+            y={596}
+            offsetX={33}
+            offsetY={8}
+          />
+          <AssistOrSpecial
+            text={`${props.skills.assist.name}`}
+            x={280}
+            y={631}
+            offsetX={33}
+            offsetY={9}
+          />
+          <AssistOrSpecial
+            text={`${props.skills.special.name}`}
+            x={278}
+            y={671}
+            offsetX={35}
+            offsetY={7}
+          />
+          <SkillComponent
+            text={`${props.skills.aSkill.name}`}
+            x={275}
+            y={707}
+            offsetX={38}
+            offsetY={8}
+          />
+          <SkillComponent
+            text={`${props.skills.bSkill.name}`}
+            x={275}
+            y={745}
+            offsetX={37}
+            offsetY={7}
+          />
+          <SkillComponent
+            text={`${props.skills.cSkill.name}`}
+            x={275}
+            y={781}
+            offsetX={38}
+            offsetY={8}
+          />
+        </Layer>
+        <Layer id="VA and Artist">
+          <Text
+            text={`${props.va}`}
+            x={33}
+            y={910}
+            fontFamily="nintendoP_Skip-D_003"
+            fontSize={16}
+            stroke="black"
+            strokeWidth={4}
+            lineJoin="round"
+            fill="white"
+            fillAfterStrokeEnabled={true}
+          />
+          <Text
+            text={`${props.art}`}
+            x={33}
+            y={932}
+            fontFamily="nintendoP_Skip-D_003"
+            fontSize={16}
+            stroke="black"
+            strokeWidth={4}
+            lineJoin="round"
+            fill="white"
+            fillAfterStrokeEnabled={true}
+          />
+        </Layer>
+      </Stage>
+    </div>
+  );
 }
-export default HeroCanvas;

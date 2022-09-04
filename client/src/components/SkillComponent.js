@@ -5,12 +5,14 @@ export default function SkillComponent(props) {
   const [skillList, setSkillList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skill, setSkill] = useState(null);
-  const emptySkill = useState({
-    name: "",
-    img: null,
-    visibleStats: [0, 0, 0, 0, 0],
-    unique: false,
-  });
+  const emptySkill = {
+    value: {
+      name: "",
+      img: null,
+      visibleStats: "",
+      unique: false,
+    },
+  };
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -31,6 +33,7 @@ export default function SkillComponent(props) {
               }
               return {
                 value: listItem,
+                label: listItem.name,
                 color: color,
               };
             })
@@ -49,6 +52,7 @@ export default function SkillComponent(props) {
               }
               return {
                 value: listItem,
+                label: listItem.name,
                 color: color,
               };
             })
@@ -67,6 +71,7 @@ export default function SkillComponent(props) {
               }
               return {
                 value: listItem,
+                label: listItem.name,
                 color: color,
               };
             })
@@ -99,10 +104,10 @@ export default function SkillComponent(props) {
         onChange={handleChange}
         loading={isLoading}
         disabled={!props.hero.exists}
-        getOptionLabel={(option) => option.value.name || ""}
+        getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
-            {option.value.name}
+            {option.label}
           </Box>
         )}
         isOptionEqualToValue={(option, option2) => option.value.name === option2.value.name}

@@ -43,7 +43,7 @@ export default function Dropdown(props) {
         getOptionLabel={(option) => option.value.name || ""}
         isOptionEqualToValue={(option, option2) => option.value.name === option2.value.name}
         renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder="Hero"></TextField>
+          <TextField {...params} variant="outlined" label="Hero List"></TextField>
         )}
       />
     </div>

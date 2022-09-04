@@ -9,6 +9,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // We import all the components we need in our app
 import AddSkills from "./components/addSkills.js";
 import AddHeroes from "./components/addHero.js";
+import HeroTabs from "./HeroTabs.js";
 import DisplayHeroes from "./components/DisplayHeroes.js";
 import AppInfo from "./components/AppInfo.js";
 
@@ -23,14 +24,12 @@ const App = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <AddSkills />
-        <AddHeroes />
         <h2>
           Welcome to the FEH Character Builder
           <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
         </h2>
       </header>
-      <DisplayHeroes />
+      <HeroTabs />
     </div>
   );
 };

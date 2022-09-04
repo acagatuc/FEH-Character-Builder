@@ -14,6 +14,7 @@ export default function BlessingHeroSelectionComponent(props) {
   }, [props.hero.name]);
 
   useEffect(() => {
+    setIsDisabled(true);
     async function fetchMyAPI() {
       let response = await fetch(`http://localhost:5000/LegendaryMythic/` + props.blessing);
       response = await response.json();
@@ -32,8 +33,13 @@ export default function BlessingHeroSelectionComponent(props) {
       setSelectedHeroList([]);
       setStats([0, 0, 0, 0, 0]);
     }
-
-    if (props.blessing !== null && props.blessing !== "") {
+    if (
+      props.blessing !== null &&
+      props.blessing !== "" &&
+      props.blessing !== "normal" &&
+      props.blessing !== "duo" &&
+      props.blessing !== "harmonic"
+    ) {
       fetchMyAPI();
       setIsDisabled(false);
       setSelectedHeroList([]);

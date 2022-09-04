@@ -2,15 +2,15 @@ import React from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import "./../App.css";
 import HeroCanvas from "./HeroCanvas.js";
-import MergeComponent from "./MergeComponent.js";
-import FlowerComponent from "./FlowerComponent.js";
-import SkillsWeapon from "./Skills_Weapon.js";
 import BlessingComponent from "./BlessingComponent.js";
 import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
 
 import Dropdown from "./Dropdown.js";
+import WeaponComponent from "./WeaponComponent.js";
 import SkillComponent from "./SkillComponent.js";
 import Traits from "./Traits.js";
+import Merges from "./Merges.js";
+import FlowerComponent from "./FlowerComponent.js";
 
 class DisplayHeroes extends React.Component {
   constructor(props) {
@@ -40,6 +40,7 @@ class DisplayHeroes extends React.Component {
         eVA: "",
         artist: "",
         exists: false,
+        dragonflowers: 0,
       },
       skills: {
         weapon: {
@@ -170,6 +171,7 @@ class DisplayHeroes extends React.Component {
             eVA: a.value.EVA,
             artist: a.value.Artist.split(",")[0],
             exists: true,
+            dragonflowers: a.value.dragonflowers,
           },
           skills: {
             weapon: {
@@ -653,11 +655,12 @@ class DisplayHeroes extends React.Component {
                   Merges/Dragonflowers:{" "}
                 </label>
                 <Col style={{ padding: "2px" }}>
-                  <MergeComponent
+                  <Merges
                     hero={this.state.hero}
-                    value={this.state}
+                    levels={this.state.levels}
                     onChange={this.handleMerges}
-                  ></MergeComponent>
+                    placeholder={"Merges"}
+                  />
                 </Col>
                 <Col style={{ padding: "2px" }}>
                   <FlowerComponent
@@ -712,8 +715,9 @@ class DisplayHeroes extends React.Component {
                 </Col>
               </Row>
               <h3>Skills:</h3>
-              <SkillsWeapon
+              <WeaponComponent
                 hero={this.state.hero}
+                placeholder={"Weapon"}
                 onChangeW={this.changeWeapon}
                 onChangeR={this.changeRefine}
               />

@@ -7,27 +7,27 @@ export default function Traits(props) {
   const [traitOptions, setTraitOptions] = useState([
     {
       value: "hp",
-      label: "+Hp",
+      label: props.label + "Hp",
       color: "white",
     },
     {
       value: "atk",
-      label: "+Atk",
+      label: props.label + "Atk",
       color: "white",
     },
     {
       value: "spd",
-      label: "+Spd",
+      label: props.label + "Spd",
       color: "white",
     },
     {
       value: "def",
-      label: "+Def",
+      label: props.label + "Def",
       color: "white",
     },
     {
       value: "res",
-      label: "+Res",
+      label: props.label + "Res",
       color: "white",
     },
   ]);
@@ -123,7 +123,7 @@ export default function Traits(props) {
         value={trait}
         onChange={handleChange}
         disabled={isDisabled}
-        getOptionLabel={(option) => option.label || ""}
+        getOptionLabel={(option) => option.label || null}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
             {option.label}

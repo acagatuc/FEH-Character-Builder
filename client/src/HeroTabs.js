@@ -1,27 +1,33 @@
-import React, { useState, useEffect } from "react";
-import { Tabs, Tab, TabContentPanel, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Tabs, Tab, Divider, Box, IconButton } from "@mui/material";
 import Close from "@mui/icons-material/Close";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
-import DisplayHeroes from "./components/DisplayHeroes.js";
 
 export default function HeroTabs(props) {
   const [tabList, setTabList] = useState([
     {
       key: 0,
       id: 0,
+      label: "",
     },
   ]);
 
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event, value) => {
-    setTabValue(value);
+    if (value !== -1) {
+      setTabValue(value);
+    } else {
+      addTab();
+    }
   };
 
   const addTab = () => {
     let id = tabList[tabList.length - 1].id + 1;
-    setTabList([...tabList, { key: id, id: id }]);
+    let key = tabList[tabList.length - 1].key + 1;
+    setTabList([...tabList, { key: key, id: id, label: "" }]);
+    setTabValue(id);
   };
 
   const deleteTab = (e, tabId) => {
@@ -51,6 +57,8 @@ export default function HeroTabs(props) {
       } else {
         curValue = tabList[tabIDIndex].id;
       }
+    } else if (curValue > tabId) {
+      curValue = curValue - 1;
     }
 
     // if the current value is too large, set it equal to the rightmost tab
@@ -68,24 +76,77 @@ export default function HeroTabs(props) {
     setTabList(tabs);
   };
 
+  const changeHero = (event) => {
+    props.onChange(event);
+    tabList[tabValue].label = event.singleName;
+  };
+
+  const changeStats = (event) => {
+    props.changeStats(event);
+  };
+
+  const changeSkills = (event) => {
+    props.changeSkills(event);
+  };
+
   return (
-    <div>
-      <Tabs value={tabValue} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
+    <div style={{ borderRadius: 10, backgroundColor: "white" }}>
+      <Tabs
+        value={tabValue}
+        onChange={handleTabChange}
+        variant="scrollable"
+        scrollButtons="auto"
+        TabIndicatorProps={{ style: { background: "#282c34", transition: "none" } }}
+        TabScrollButtonProps={{ style: { background: "#282c34", color: "white" } }}
+        sx={{
+          height: 10,
+          maxWidth: "90%",
+          borderTopLeftRadius: 10,
+          "& :hover": { backgroundColor: "#ebebeb", color: "red" },
+        }}
+      >
+        >
         {tabList.map((tab) => (
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={"Node " + tab.id}
-            icon={<Close id={tab.id} onClick={(e) => deleteTab(e, tab.id)} />}
+            label={
+              <div style={{ textTransform: "none" }}>
+                {tab.label === "" ? "Build " + (tab.id + 1) : tab.label}
+              </div>
+            }
+            icon={
+              <div
+                style={{ display: tabList.length === 1 ? "none" : "block" }}
+                onClick={(e) => deleteTab(e, tab.id)}
+              >
+                <Close id={tab.id} />
+              </div>
+            }
             iconPosition="end"
+            wrapped
+            sx={{
+              backgroundColor: "white",
+              width: 1 / 6,
+              minHeight: 0,
+              pt: 0,
+              pb: 0,
+            }}
+            disableRipple
           />
         ))}
+        <Tab key={-1} value={-1} icon={<Add style={{ color: "black" }} />} sx={{ width: 10 }} />
       </Tabs>
-      <Button variant="outlined" onClick={addTab}>
-        <Add />
-      </Button>
+      <Divider />
       {tabList.map((tab, index) => (
-        <HeroTabContent key={tab.key} value={tabValue} index={index} />
+        <HeroTabContent
+          key={tab.key}
+          value={tabValue}
+          index={index}
+          onChange={changeHero}
+          changeStats={changeStats}
+          changeSkills={changeSkills}
+        />
       ))}
     </div>
   );

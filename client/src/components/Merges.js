@@ -21,7 +21,7 @@ export default function Merges(props) {
   useEffect(() => {
     setMerges(null);
     setIsDisabled(false);
-    props.onChange(0, [0,0,0,0,0])
+    props.onChange(0, [0, 0, 0, 0, 0]);
   }, [props.hero.name]);
 
   const handleChange = (event, value) => {
@@ -31,10 +31,10 @@ export default function Merges(props) {
       var mergeTemp = [];
 
       tempArray.push(0);
-      tempArray.push(props.hero.atk[props.levels.array[1]]);
-      tempArray.push(props.hero.spd[props.levels.array[2]]);
-      tempArray.push(props.hero.def[props.levels.array[3]]);
-      tempArray.push(props.hero.res[props.levels.array[4]]);
+      tempArray.push(parseInt(props.hero.atk[props.levels.array[1]]));
+      tempArray.push(parseInt(props.hero.spd[props.levels.array[2]]));
+      tempArray.push(parseInt(props.hero.def[props.levels.array[3]]));
+      tempArray.push(parseInt(props.hero.res[props.levels.array[4]]));
 
       mergeTemp.push(0);
       var i = 0;

@@ -110,9 +110,13 @@ export default function Traits(props) {
       } else if (value.value === "res") {
         tempArray[4] = statLevel;
       }
+
+      setTrait(value);
+      props.onChange(tempArray, value.value);
+    } else {
+      setTrait(value);
+      props.onChange(tempArray, "");
     }
-    setTrait(value);
-    props.onChange(tempArray);
   };
 
   return (

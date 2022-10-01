@@ -12,6 +12,7 @@ import Traits from "./Traits.js";
 import Merges from "./Merges.js";
 import FlowerComponent from "./FlowerComponent.js";
 import SwitchComponent from "./SwitchComponent.js";
+import ToggleComponent from "./ToggleComponent.js";
 
 export default function HeroComponent(props) {
   const [hero, setHero] = useState({
@@ -98,17 +99,30 @@ export default function HeroComponent(props) {
 
   // this is for skipping the level 1 stats
   const [heroLevel] = useState(3);
+
+  // merge variables
   const [merges, setMerges] = useState(0);
   const [mergeOrder, setMergeOrder] = useState([]);
   const [mergedStats, setMergedStats] = useState([0, 0, 0, 0, 0]);
+
+  //superboon/superbane variables
   const [prevFlaw, setPrevFlaw] = useState("");
   const [prevAsset, setPrevAsset] = useState("");
   const [prevAscended, setPrevAscended] = useState("");
+
+  // dragonflower variables
   const [flowerStats, setFlowerStats] = useState([0, 0, 0, 0, 0]);
 
   // blessing variables
   const [blessing, setBlessing] = useState("");
   const [heroBuffStats, setHeroBuffStats] = useState([0, 0, 0, 0, 0]);
+
+  // summoner/ally support variables
+  const [summonerSupport, setSummonerSupport] = useState("");
+  const [summonerSupportStats, setSummonerSupportStats] = useState([0, 0, 0, 0, 0]);
+  const [allySupport, setAllySupport] = useState("");
+
+  // resplendent variables
   const [resplendent, setResplendent] = useState(false);
   const [resplendentStatsBoolean, setResplendentStatsBoolean] = useState(false);
   const [resplendentStats, setResplendentStats] = useState([0, 0, 0, 0, 0]);
@@ -159,7 +173,7 @@ export default function HeroComponent(props) {
   useEffect(() => {
     calculateMergeStats();
     addStats();
-  }, [flowerStats, heroBuffStats, prevFlaw, prevAsset, prevAscended]);
+  }, [flowerStats, heroBuffStats, summonerSupportStats, prevFlaw, prevAsset, prevAscended]);
 
   useEffect(() => {
     props.changeBlessing(blessing);
@@ -317,52 +331,58 @@ export default function HeroComponent(props) {
 
   const addStats = () => {
     var tempArray = [0, 0, 0, 0, 0];
+    console.log(summonerSupportStats);
     tempArray[0] =
-      parseInt(hero.hp[heroLevel + levels.array[0]]) +
-      parseInt(mergedStats[0]) +
-      parseInt(flowerStats[0]) +
-      parseInt(heroBuffStats[0]) +
-      parseInt(skills.weapon.visibleStats[0]) +
-      parseInt(skills.refine.stats[0]) +
-      parseInt(skills.aSkill.visibleStats[0]) +
-      parseInt(resplendentStats[0]);
+      hero.hp[heroLevel + levels.array[0]] +
+      mergedStats[0] +
+      flowerStats[0] +
+      heroBuffStats[0] +
+      skills.weapon.visibleStats[0] +
+      skills.refine.stats[0] +
+      skills.aSkill.visibleStats[0] +
+      summonerSupportStats[0] +
+      resplendentStats[0];
     tempArray[1] =
-      parseInt(hero.atk[heroLevel + levels.array[1]]) +
-      parseInt(mergedStats[1]) +
-      parseInt(flowerStats[1]) +
-      parseInt(heroBuffStats[1]) +
-      parseInt(skills.weapon.might) +
-      parseInt(skills.weapon.visibleStats[1]) +
-      parseInt(skills.refine.stats[1]) +
-      parseInt(skills.aSkill.visibleStats[1]) +
-      parseInt(resplendentStats[1]);
+      hero.atk[heroLevel + levels.array[1]] +
+      mergedStats[1] +
+      flowerStats[1] +
+      heroBuffStats[1] +
+      skills.weapon.might +
+      skills.weapon.visibleStats[1] +
+      skills.refine.stats[1] +
+      skills.aSkill.visibleStats[1] +
+      summonerSupportStats[1] +
+      resplendentStats[1];
     tempArray[2] =
-      parseInt(hero.spd[heroLevel + levels.array[2]]) +
-      parseInt(mergedStats[2]) +
-      parseInt(flowerStats[2]) +
-      parseInt(heroBuffStats[2]) +
-      parseInt(skills.weapon.visibleStats[2]) +
-      parseInt(skills.refine.stats[2]) +
-      parseInt(skills.aSkill.visibleStats[2]) +
-      parseInt(resplendentStats[2]);
+      hero.spd[heroLevel + levels.array[2]] +
+      mergedStats[2] +
+      flowerStats[2] +
+      heroBuffStats[2] +
+      skills.weapon.visibleStats[2] +
+      skills.refine.stats[2] +
+      skills.aSkill.visibleStats[2] +
+      summonerSupportStats[2] +
+      resplendentStats[2];
     tempArray[3] =
-      parseInt(hero.def[heroLevel + levels.array[3]]) +
-      parseInt(mergedStats[3]) +
-      parseInt(flowerStats[3]) +
-      parseInt(heroBuffStats[3]) +
-      parseInt(skills.weapon.visibleStats[3]) +
-      parseInt(skills.refine.stats[3]) +
-      parseInt(skills.aSkill.visibleStats[3]) +
-      parseInt(resplendentStats[3]);
+      hero.def[heroLevel + levels.array[3]] +
+      mergedStats[3] +
+      flowerStats[3] +
+      heroBuffStats[3] +
+      skills.weapon.visibleStats[3] +
+      skills.refine.stats[3] +
+      skills.aSkill.visibleStats[3] +
+      summonerSupportStats[3] +
+      resplendentStats[3];
     tempArray[4] =
-      parseInt(hero.res[heroLevel + levels.array[4]]) +
-      parseInt(mergedStats[4]) +
-      parseInt(flowerStats[4]) +
-      parseInt(heroBuffStats[4]) +
-      parseInt(skills.weapon.visibleStats[4]) +
-      parseInt(skills.refine.stats[4]) +
-      parseInt(skills.aSkill.visibleStats[4]) +
-      parseInt(resplendentStats[4]);
+      hero.res[heroLevel + levels.array[4]] +
+      mergedStats[4] +
+      flowerStats[4] +
+      heroBuffStats[4] +
+      skills.weapon.visibleStats[4] +
+      skills.refine.stats[4] +
+      skills.aSkill.visibleStats[4] +
+      summonerSupportStats[4] +
+      resplendentStats[4];
 
     if (isNaN(tempArray[0])) {
       setStats(["", "", "", "", ""]);
@@ -439,6 +459,21 @@ export default function HeroComponent(props) {
     setHeroBuffStats(buffs);
     // not really sure why this is necessary, but the use effect is not triggering appropriately
     addStats();
+  };
+
+  const changeSummonerSupport = (event) => {
+    setSummonerSupport(event);
+    if (event === "No") {
+      setSummonerSupportStats([0, 0, 0, 0, 0]);
+    } else if (event === "C") {
+      setSummonerSupportStats([3, 0, 0, 0, 2]);
+    } else if (event === "B") {
+      setSummonerSupportStats([4, 0, 0, 2, 2]);
+    } else if (event === "A") {
+      setSummonerSupportStats([4, 0, 2, 2, 2]);
+    } else if (event === "S") {
+      setSummonerSupportStats([5, 2, 2, 2, 2]);
+    }
   };
 
   const handleResplendent = (res) => {
@@ -598,6 +633,7 @@ export default function HeroComponent(props) {
               onChange={handleResplendentStats}
               label={"Resplendant Stats"}
             />
+            <ToggleComponent exists={hero.exists} onChange={changeSummonerSupport} />
           </Col>
         </Row>
       </Container>

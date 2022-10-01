@@ -9,7 +9,7 @@ export default function SkillComponent(props) {
     value: {
       name: "",
       img: null,
-      visibleStats: "",
+      visibleStats: [0, 0, 0, 0, 0],
       unique: false,
     },
   };

@@ -10,6 +10,11 @@ export default function HeroTabs(props) {
       key: 0,
       id: 0,
       label: "",
+      hero: {},
+      stats: [],
+      merges: 0,
+      resplendent: false,
+      blessing: "",
     },
   ]);
 
@@ -26,7 +31,7 @@ export default function HeroTabs(props) {
   const addTab = () => {
     let id = tabList[tabList.length - 1].id + 1;
     let key = tabList[tabList.length - 1].key + 1;
-    setTabList([...tabList, { key: key, id: id, label: "" }]);
+    setTabList([...tabList, { key: key, id: id, label: "", hero: {} }]);
     setTabValue(id);
   };
 
@@ -78,15 +83,28 @@ export default function HeroTabs(props) {
 
   const changeHero = (event) => {
     props.onChange(event);
+    tabList[tabValue].hero = event;
     tabList[tabValue].label = event.singleName;
   };
 
-  const changeStats = (event) => {
-    props.changeStats(event);
+  const changeStats = (stats, merges, levels) => {
+    tabList[tabValue].stats = stats;
+    tabList[tabValue].merges = merges;
+    props.changeStats(stats, merges, levels);
   };
 
   const changeSkills = (event) => {
     props.changeSkills(event);
+  };
+
+  const changeResplendent = (event) => {
+    tabList[tabValue].resplendent = event;
+    props.changeResplendent(event);
+  };
+
+  const changeBlessing = (event) => {
+    tabList[tabValue].blessing = event;
+    props.changeBlessing(event);
   };
 
   return (
@@ -146,6 +164,8 @@ export default function HeroTabs(props) {
           onChange={changeHero}
           changeStats={changeStats}
           changeSkills={changeSkills}
+          changeResplendent={changeResplendent}
+          changeBlessing={changeBlessing}
         />
       ))}
     </div>

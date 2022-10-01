@@ -31,7 +31,7 @@ export default function SkillComponent(props) {
         options={blessingOptions}
         value={blessing}
         onChange={handleBlessing}
-        disabled={!props.hero.exists}
+        disabled={!props.hero.exists || props.hero.hero_type !== "normal"}
         getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}

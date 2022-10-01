@@ -8,27 +8,35 @@ export default function HeroTabContent(props) {
     name: "",
     singleName: "",
     title: "",
-    merges: 0,
-    totalStats: [0, 0, 0, 0, 0],
     VA: "",
     artist: "",
     moveType: "",
     weaponType: "",
-    blessing: "",
-    resplendent: false,
+  });
+
+  const [stats, setStats] = useState(["", "", "", "", ""]);
+  const [merges, setMerges] = useState(0);
+  const [resplendent, setResplendent] = useState(false);
+  const [blessing, setBlessing] = useState("");
+
+  const [skills, setSkills] = useState({
     weapon: "",
     refine: "",
-    assist: "",
-    special: "",
     aSkill: "",
+    assist: "",
     bSkill: "",
     cSkill: "",
     sSkill: "",
+    special: "",
   });
 
   useEffect(() => {
     if (props.value === props.index) {
       props.onChange(sendHero);
+      props.changeSkills(skills);
+      props.changeStats(stats, merges);
+      props.changeResplendent(resplendent);
+      props.changeBlessing(blessing);
     }
   }, [props.value]);
 
@@ -38,15 +46,34 @@ export default function HeroTabContent(props) {
   };
 
   const changeSkills = (event) => {
-    props.changeSkills(event);
+    var newObj = {
+      aSkill: event.aSkill.name,
+      assist: event.assist.name,
+      bSkill: event.bSkill.name,
+      cSkill: event.cSkill.name,
+      refine: event.refine.name,
+      sSkill: event.sSkill.name,
+      special: event.special.name,
+      weapon: event.weapon.name,
+    };
+    setSkills(newObj);
+    props.changeSkills(newObj);
   };
 
-  const changeStats = (event) => {
-    props.changeStats(event);
+  const changeStats = (stats, merges, levels) => {
+    setStats(stats);
+    setMerges(merges);
+    props.changeStats(stats, merges, levels);
   };
 
   const changeResplendent = (event) => {
-    //setResplendent(event);
+    setResplendent(event);
+    props.changeResplendent(event);
+  };
+
+  const changeBlessing = (event) => {
+    setBlessing(event);
+    props.changeBlessing(event);
   };
 
   return (
@@ -56,6 +83,7 @@ export default function HeroTabContent(props) {
         changeSkills={changeSkills}
         changeStats={changeStats}
         changeResplendent={changeResplendent}
+        changeBlessing={changeBlessing}
       />
     </div>
   );

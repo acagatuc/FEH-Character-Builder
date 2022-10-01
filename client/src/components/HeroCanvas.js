@@ -225,7 +225,8 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
   if (text === "") {
     url = "default";
   } else {
-    url = text.replace(" ", "+");
+    url = text.replace("+", "%2B");
+    url = url.replace(" ", "+");
     url = url.replace("%20", "+");
     url = url.replace("/", "");
   }
@@ -299,7 +300,8 @@ export default function HeroCanvas(props) {
       setStageWidth(window.innerWidth / 3);
       setStageHeight(aspectRatio * stageWidth);
     }
-  });
+    props.sendWidth(stageWidth);
+  }, [stageWidth]);
 
   return (
     <div id="wrapper" className="wrapper">
@@ -338,11 +340,11 @@ export default function HeroCanvas(props) {
           <WMComponent image={props.weapon_type} x={14} y={558} width={20} height={21} />
           <WMComponent image={props.move_type} x={170} y={556} width={25} height={26} />
           <WMComponent image={props.blessing} x={431} y={432} width={111} height={119} />
-          <TextComponent text={"HP"} color="white" x={85} y={604} />
-          <TextComponent text={"Atk"} color="white" x={84} y={641} />
-          <TextComponent text={"Spd"} color="white" x={83} y={677} />
-          <TextComponent text={"Def"} color="white" x={83} y={715} />
-          <TextComponent text={"Res"} color="white" x={83} y={752} />
+          <TextComponent text={"HP"} color={props.statColorArray[0]} x={85} y={604} />
+          <TextComponent text={"Atk"} color={props.statColorArray[1]} x={84} y={641} />
+          <TextComponent text={"Spd"} color={props.statColorArray[2]} x={83} y={677} />
+          <TextComponent text={"Def"} color={props.statColorArray[3]} x={83} y={715} />
+          <TextComponent text={"Res"} color={props.statColorArray[4]} x={83} y={752} />
           <StatComponent text={`${props.stats[0]}`} color="#fffa96" x={171} y={604} />
           <StatComponent text={`${props.stats[1]}`} color="#fffa96" x={171} y={641} />
           <StatComponent text={`${props.stats[2]}`} color="#fffa96" x={171} y={677} />

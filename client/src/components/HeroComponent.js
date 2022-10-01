@@ -23,43 +23,20 @@ export default function HeroComponent(props) {
     spd: [],
     def: [],
     res: [],
-    totalStats: [],
     weapons: [],
     assists: [],
     specials: [],
     passives: [],
     weapon_type: "",
     move_type: "",
-    character_type: "",
+    hero_type: "",
     eVA: "",
-    Artist: "",
+    Artist: ",",
     dragonflowers: 0,
     exists: false,
   });
 
   const [stats, setStats] = useState(["", "", "", "", ""]);
-
-  const [sendHero, setSendHero] = useState({
-    name: "",
-    singleName: "",
-    title: "",
-    merges: 0,
-    totalStats: [0, 0, 0, 0, 0],
-    VA: "",
-    artist: "",
-    moveType: "",
-    weaponType: "",
-    blessing: "",
-    resplendent: false,
-    weapon: "",
-    refine: "",
-    assist: "",
-    special: "",
-    aSkill: "",
-    bSkill: "",
-    cSkill: "",
-    sSkill: "",
-  });
 
   const [skills, setSkills] = useState({
     weapon: {
@@ -119,7 +96,8 @@ export default function HeroComponent(props) {
     superbane: [],
   });
 
-  const [heroLevel, setHeroLevel] = useState(3);
+  // this is for skipping the level 1 stats
+  const [heroLevel] = useState(3);
   const [merges, setMerges] = useState(0);
   const [mergeOrder, setMergeOrder] = useState([]);
   const [mergedStats, setMergedStats] = useState([0, 0, 0, 0, 0]);
@@ -127,37 +105,38 @@ export default function HeroComponent(props) {
   const [prevAsset, setPrevAsset] = useState("");
   const [prevAscended, setPrevAscended] = useState("");
   const [flowerStats, setFlowerStats] = useState([0, 0, 0, 0, 0]);
+
+  // blessing variables
+  const [blessing, setBlessing] = useState("");
   const [heroBuffStats, setHeroBuffStats] = useState([0, 0, 0, 0, 0]);
-  const [image, setImage] = useState("");
   const [resplendent, setResplendent] = useState(false);
   const [resplendentStatsBoolean, setResplendentStatsBoolean] = useState(false);
   const [resplendentStats, setResplendentStats] = useState([0, 0, 0, 0, 0]);
 
   useEffect(() => {
     // call calculate stats here
-    var artistIndex = 0;
-    if (resplendent) {
-      artistIndex = 1;
-    }
+    addStats();
 
     var newObject = {
       name: hero.name,
       singleName: hero.single_name,
       title: hero.title,
-      merges: merges,
-      totalStats: hero.totalStats,
       VA: hero.EVA,
-      artist: hero.Artist.split(",")[artistIndex],
+      artist: hero.Artist.split(","),
       moveType: hero.move_type,
       weaponType: hero.weapon_type,
-      blessing: hero.blessing,
-      resplendent: resplendent,
+      hero_type: hero.hero_type,
     };
-    setSendHero(newObject);
     props.changeHero(newObject);
+
+    // set the resplendent to be false for any switch in hero
+    setResplendent(false);
+    props.changeResplendent(false);
 
     setFlowerStats([0, 0, 0, 0, 0]);
     setMergedStats([0, 0, 0, 0, 0]);
+    setHeroBuffStats([0, 0, 0, 0, 0]);
+    setBlessing("");
   }, [hero]);
 
   useEffect(() => {
@@ -168,41 +147,39 @@ export default function HeroComponent(props) {
   useEffect(() => {
     if (merges !== 0) {
       calculateMergeStats();
+    } else {
+      setMergedStats([0, 0, 0, 0, 0]);
     }
   }, [merges]);
 
   useEffect(() => {
     addStats();
-  }, [flowerStats, mergedStats, heroBuffStats, prevFlaw, prevAsset, prevAscended]);
+  }, [mergedStats]);
+
+  useEffect(() => {
+    calculateMergeStats();
+    addStats();
+  }, [flowerStats, heroBuffStats, prevFlaw, prevAsset, prevAscended]);
+
+  useEffect(() => {
+    props.changeBlessing(blessing);
+  }, [blessing]);
 
   useEffect(() => {
     addStats();
-  }, [resplendentStats, resplendent]);
+  }, [resplendentStats]);
 
   useEffect(() => {
-    props.changeStats(stats);
+    props.changeResplendent(resplendent);
+  }, [resplendent]);
+
+  useEffect(() => {
+    props.changeStats(stats, merges, levels.array);
   }, [stats]);
 
   const heroChange = (newHero) => {
     //get all possible skills on call? Instead of in multiple calls in children?
-    try {
-      // splitting stats arrays
-      newHero.value.hp = newHero.value.hp.split(",");
-      newHero.value.atk = newHero.value.atk.split(",");
-      newHero.value.spd = newHero.value.spd.split(",");
-      newHero.value.def = newHero.value.def.split(",");
-      newHero.value.res = newHero.value.res.split(",");
-      newHero.value.totalStats = [0, 0, 0, 0, 0];
-
-      // splitting skills arrays
-      newHero.value.weapons = newHero.value.weapons.split(",");
-      newHero.value.assists = newHero.value.assists.split(",");
-      newHero.value.specials = newHero.value.specials.split(",");
-      newHero.value.passives = newHero.value.passives.split(",");
-
-      newHero.value.exists = true;
-    } catch (error) {}
-
+    newHero.value.exists = true;
     setHero(newHero.value);
 
     setLevels({
@@ -455,16 +432,17 @@ export default function HeroComponent(props) {
   };
 
   const changeBlessing = (b) => {
-    setHero({ ...hero, blessing: b.value });
+    setBlessing(b.value);
   };
 
   const changeBlessingStats = (buffs) => {
     setHeroBuffStats(buffs);
+    // not really sure why this is necessary, but the use effect is not triggering appropriately
+    addStats();
   };
 
   const handleResplendent = (res) => {
     setResplendent(res);
-    //  props.changeResplendent(res);
   };
 
   const handleResplendentStats = (r) => {
@@ -606,7 +584,7 @@ export default function HeroComponent(props) {
             <BlessingHeroSelectionComponent
               hero={hero}
               onChange={changeBlessingStats}
-              blessing={hero.blessing}
+              blessing={blessing}
             />
             <SwitchComponent
               res={resplendent}
@@ -616,7 +594,7 @@ export default function HeroComponent(props) {
             />
             <SwitchComponent
               res={resplendentStatsBoolean}
-              R_Artist={true}
+              R_Artist={hero.exists}
               onChange={handleResplendentStats}
               label={"Resplendant Stats"}
             />

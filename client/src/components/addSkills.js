@@ -77,11 +77,17 @@ async function createASkills(skills) {
 
   while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
+    let temp = "";
+    if (skills.data[index][4] === "") {
+      temp = "0,0,0,0,0";
+    } else {
+      temp = skills.data[index][4];
+    }
     const data = {
       name: skills.data[index][1],
       description: skills.data[index][2],
       sp: skills.data[index][3],
-      visibleStats: skills.data[index][4],
+      visibleStats: temp.split(",").map(Number),
       unique: skills.data[index][5],
       img: skills.data[index][6],
       maxSkill: skills.data[index][7],
@@ -109,11 +115,17 @@ async function createBSkills(skills) {
 
   while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
+    let temp = "";
+    if (skills.data[index][4] === "") {
+      temp = "0,0,0,0,0";
+    } else {
+      temp = skills.data[index][4];
+    }
     const data = {
       name: skills.data[index][1],
       description: skills.data[index][2],
       sp: skills.data[index][3],
-      visibleStats: skills.data[index][4],
+      visibleStats: temp.split(",").map(Number),
       unique: skills.data[index][5],
       img: skills.data[index][6],
       maxSkill: skills.data[index][7],
@@ -142,11 +154,17 @@ async function createCSkills(skills) {
 
   while (skills.data[index][1] !== "" && skills.data[index][1] !== undefined) {
     // create skill json
+    let temp = "";
+    if (skills.data[index][4] === "") {
+      temp = "0,0,0,0,0";
+    } else {
+      temp = skills.data[index][4];
+    }
     const data = {
       name: skills.data[index][1],
       description: skills.data[index][2],
       sp: skills.data[index][3],
-      visibleStats: skills.data[index][4],
+      visibleStats: temp.split(",").map(Number),
       unique: skills.data[index][5],
       img: skills.data[index][6],
       maxSkill: skills.data[index][7],
@@ -175,12 +193,18 @@ async function createPWeapons(weapons) {
 
   while (weapons.data[index][1] !== "" && weapons.data[index + 1] !== undefined) {
     // create skill json
+    let temp = "";
+    if (weapons.data[index][5] === "") {
+      temp = "0,0,0,0,0";
+    } else {
+      temp = weapons.data[index][5];
+    }
     const data = {
       name: weapons.data[index][1],
       description: weapons.data[index][2],
       type: weapons.data[index][3],
-      might: weapons.data[index][4],
-      visibleStats: weapons.data[index][5],
+      might: parseInt(weapons.data[index][4]),
+      visibleStats: temp.split(",").map(Number),
       sp: weapons.data[index][6],
       refine: weapons.data[index][7],
       heroesList: weapons.data[index][8],
@@ -206,12 +230,18 @@ async function createGWeapons(weapons) {
 
   while (weapons.data[index][1] !== "" && weapons.data[index + 1] !== undefined) {
     // create skill json
+    let temp = "";
+    if (weapons.data[index][5] === "") {
+      temp = "0,0,0,0,0";
+    } else {
+      temp = weapons.data[index][5];
+    }
     const data = {
       name: weapons.data[index][1],
       description: weapons.data[index][2],
       type: weapons.data[index][3],
-      might: weapons.data[index][4],
-      visibleStats: weapons.data[index][5],
+      might: parseInt(weapons.data[index][4]),
+      visibleStats: temp.split(",").map(Number),
       sp: weapons.data[index][6],
       refine: weapons.data[index][7],
       maxSkill: weapons.data[index][8],
@@ -241,8 +271,8 @@ async function createRefines(weapons) {
       name: weapons.data[index][1],
       description: weapons.data[index][2],
       type: weapons.data[index][3],
-      uniqueRefine: weapons.data[index][4],
-      genericRefine: weapons.data[index][5],
+      uniqueRefine: weapons.data[index][4].split(",").map(Number),
+      genericRefine: weapons.data[index][5].split(",").map(Number),
     };
     if (weapons.data[index][1] !== "") {
       console.log("adding " + data.heroesList + " to database");

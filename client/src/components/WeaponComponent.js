@@ -107,7 +107,6 @@ export default function WeaponComponent(props) {
     if (value === null) {
       props.onChangeW(emptyWeapon);
     } else {
-      value.value.visibleStats = value.value.visibleStats.split(",");
       props.onChangeW(value);
     }
     setWeapon(value);

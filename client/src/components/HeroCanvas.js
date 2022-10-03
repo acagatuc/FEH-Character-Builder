@@ -7,6 +7,24 @@ import "./../App.css";
 const BackgroundComponent = ({ image, width, height }) => {
   const [imgElement] = useImage(image, "Anonymous");
 
+  return (
+    <Image
+      image={imgElement}
+      x={0}
+      y={0}
+      cropX={122}
+      cropY={0}
+      cropWidth={505}
+      cropHeight={900}
+      width={540}
+      height={960}
+    />
+  );
+};
+
+const UIComponent = ({ image, width, height }) => {
+  const [imgElement] = useImage(image, "Anonymous");
+
   return <Image image={imgElement} x={0} y={0} width={width} height={height} />;
 };
 
@@ -324,7 +342,7 @@ export default function HeroCanvas(props) {
             width={540}
             height={960}
           />
-          <BackgroundComponent image={props.ui} width={540} height={960} />
+          <UIComponent image={props.ui} width={540} height={960} />
         </Layer>
         <Layer id="stat layer">
           <LargeTextComponent

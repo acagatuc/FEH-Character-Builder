@@ -6,6 +6,7 @@ export default function WeaponComponent(props) {
   const [weapon, setWeapon] = useState("");
   const [refineList, setRefineList] = useState([]);
   const [refine, setRefine] = useState("");
+  const [fetchRefine, setFetchRefine] = useState("");
   const genericRefineList = [
     { value: "atk_refine", label: "+Atk" },
     { value: "spd_refine", label: "+Spd" },
@@ -79,13 +80,14 @@ export default function WeaponComponent(props) {
     async function fetchMyAPI() {
       let response = await fetch(`http://localhost:5000/Refines/` + weapon.label);
       response = await response.json();
-      if (response.uniqueRefine !== "") {
-        var list = [].concat(response).map(function (listItem) {
-          return {
-            value: listItem,
-            label: "+Unique Effect: " + listItem.name,
-          };
-        });
+      setFetchRefine(response);
+      if (weapon.value.heroesList) {
+        var list = [
+          {
+            value: "unique",
+            label: "+Unique Effect: " + weapon.value.name,
+          },
+        ];
         setRefineList(list.concat(genericRefineList));
       } else {
         setRefineList(genericRefineList);
@@ -113,10 +115,34 @@ export default function WeaponComponent(props) {
   };
 
   const handleRefine = (event, value) => {
+    var refine = {
+      stats: [0, 0, 0, 0, 0],
+      img: "",
+    };
     if (value === null) {
-      props.onChangeR(null);
+      props.onChangeR(refine);
     } else {
-      props.onChangeR(value);
+      if (value.value === "unique") {
+        refine.stats = fetchRefine.uniqueRefine;
+        refine.img = "https://fehskills.s3.amazonaws.com/" + weapon.value.name + ".png";
+      } else if (value.value === "atk_refine") {
+        refine.stats[0] = fetchRefine.genericRefine[0];
+        refine.stats[1] = fetchRefine.genericRefine[1];
+        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
+      } else if (value.value === "spd_refine") {
+        refine.stats[0] = fetchRefine.genericRefine[0];
+        refine.stats[2] = fetchRefine.genericRefine[2];
+        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
+      } else if (value.value === "def_refine") {
+        refine.stats[0] = fetchRefine.genericRefine[0];
+        refine.stats[3] = fetchRefine.genericRefine[3];
+        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
+      } else if (value.value === "res_refine") {
+        refine.stats[0] = fetchRefine.genericRefine[0];
+        refine.stats[4] = fetchRefine.genericRefine[4];
+        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
+      }
+      props.onChangeR(refine);
     }
     setRefine(value);
   };

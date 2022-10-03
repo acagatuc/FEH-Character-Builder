@@ -18,6 +18,7 @@ export default function HeroTabContent(props) {
   const [merges, setMerges] = useState(0);
   const [resplendent, setResplendent] = useState(false);
   const [blessing, setBlessing] = useState("");
+  const [background, setBackground] = useState("");
 
   const [skills, setSkills] = useState({
     weapon: "",
@@ -38,7 +39,7 @@ export default function HeroTabContent(props) {
       props.changeResplendent(resplendent);
       props.changeBlessing(blessing);
     }
-  }, [props.value]);
+  }, [props.value, props.id]);
 
   const changeHero = (event) => {
     setSendHero(event);
@@ -51,7 +52,7 @@ export default function HeroTabContent(props) {
       assist: event.assist.name,
       bSkill: event.bSkill.name,
       cSkill: event.cSkill.name,
-      refine: event.refine.name,
+      refine: event.refine.img,
       sSkill: event.sSkill.name,
       special: event.special.name,
       weapon: event.weapon.name,
@@ -76,6 +77,11 @@ export default function HeroTabContent(props) {
     props.changeBlessing(event);
   };
 
+  const changeBackground = (event) => {
+    setBackground(event);
+    props.changeBackground(event);
+  };
+
   return (
     <div hidden={props.value !== props.index}>
       <HeroComponent
@@ -84,6 +90,7 @@ export default function HeroTabContent(props) {
         changeStats={changeStats}
         changeResplendent={changeResplendent}
         changeBlessing={changeBlessing}
+        changeBackground={changeBackground}
       />
     </div>
   );

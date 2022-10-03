@@ -33,7 +33,6 @@ export default function Traits(props) {
   ]);
 
   useEffect(() => {
-    console.log("use effect ran");
     if (props.hero.name !== "") {
       setIsDisabled(false);
     }

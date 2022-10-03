@@ -7,13 +7,13 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Col, Row } from "react-bootstrap";
 
 // We import all the components we need in our app
-// import AddSkills from "./components/addSkills.js";
-// import AddHeroes from "./components/addHero.js";
+import AddSkills from "./components/addSkills.js";
+import AddHeroes from "./components/addHero.js";
 import HeroTabs from "./HeroTabs.js";
 import HeroCanvas from "./components/HeroCanvas.js";
 import AppInfo from "./components/AppInfo.js";
 
-import background from "./background.png";
+import bg from "./background.png";
 
 const App = () => {
   <link
@@ -48,6 +48,9 @@ const App = () => {
 
   const [artistIndex, setArtistIndex] = useState(0);
   const [blessing, setBlessing] = useState("");
+  const [background, setBackground] = useState(
+    "https://fehportraits.s3.amazonaws.com/bg_normal.png"
+  );
 
   const [displayedSkills, setDisplayedSkills] = useState({
     weapon: "",
@@ -119,7 +122,7 @@ const App = () => {
           <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
         </h2>
       </header>
-      <Container fluid style={{ backgroundImage: `url(${background})` }}>
+      <Container fluid style={{ backgroundImage: `url(${bg})` }}>
         <Row>
           <Col md={4} style={{ width: canvasWidth, paddingTop: "5px", paddingLeft: "5px" }}>
             <HeroCanvas
@@ -146,7 +149,7 @@ const App = () => {
                     ".png"
                   : "https://fehportraits.s3.amazonaws.com/" + displayedHero.name + ".png"
               }
-              background={"https://fehportraits.s3.amazonaws.com/bg_normal.png"}
+              background={background}
               ui={"https://fehportraits.s3.amazonaws.com/updated ui.png"}
               move_type={"https://fehskills.s3.amazonaws.com/" + displayedHero.moveType + ".png"}
               weapon_type={
@@ -163,7 +166,8 @@ const App = () => {
               changeStats={changeStats}
               changeSkills={changeSkills}
               changeResplendent={changeResplendent}
-              changeBlessing={changeBlessing}
+              changeBlessing={setBlessing}
+              changeBackground={setBackground}
             />
           </Col>
         </Row>

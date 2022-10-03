@@ -13,6 +13,7 @@ import Merges from "./Merges.js";
 import FlowerComponent from "./FlowerComponent.js";
 import SwitchComponent from "./SwitchComponent.js";
 import ToggleComponent from "./ToggleComponent.js";
+import BackgroundDropdown from "./BackgroundDropdown.js";
 
 export default function HeroComponent(props) {
   const [hero, setHero] = useState({
@@ -47,8 +48,6 @@ export default function HeroComponent(props) {
       refine: false,
     },
     refine: {
-      name: "",
-      description: "",
       stats: [0, 0, 0, 0, 0],
       img: "",
     },
@@ -127,6 +126,11 @@ export default function HeroComponent(props) {
   const [resplendentStatsBoolean, setResplendentStatsBoolean] = useState(false);
   const [resplendentStats, setResplendentStats] = useState([0, 0, 0, 0, 0]);
 
+  // background variable
+  const [background, setBackground] = useState(
+    "https://fehportraits.s3.amazonaws.com/bg_normal.png"
+  );
+
   useEffect(() => {
     // call calculate stats here
     addStats();
@@ -178,6 +182,10 @@ export default function HeroComponent(props) {
   useEffect(() => {
     props.changeBlessing(blessing);
   }, [blessing]);
+
+  useEffect(() => {
+    props.changeBackground(background);
+  }, [background]);
 
   useEffect(() => {
     addStats();
@@ -331,7 +339,6 @@ export default function HeroComponent(props) {
 
   const addStats = () => {
     var tempArray = [0, 0, 0, 0, 0];
-    console.log(summonerSupportStats);
     tempArray[0] =
       hero.hp[heroLevel + levels.array[0]] +
       mergedStats[0] +
@@ -424,7 +431,7 @@ export default function HeroComponent(props) {
   };
 
   const changeRefine = (r) => {
-    setSkills({ ...skills, refine: r.value });
+    setSkills({ ...skills, refine: r });
   };
 
   const changeAssist = (a) => {
@@ -463,17 +470,28 @@ export default function HeroComponent(props) {
 
   const changeSummonerSupport = (event) => {
     setSummonerSupport(event);
+    var backgroundUrl = "";
     if (event === "No") {
       setSummonerSupportStats([0, 0, 0, 0, 0]);
+      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_normal.png";
     } else if (event === "C") {
       setSummonerSupportStats([3, 0, 0, 0, 2]);
+      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "B") {
       setSummonerSupportStats([4, 0, 0, 2, 2]);
+      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "A") {
       setSummonerSupportStats([4, 0, 2, 2, 2]);
+      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "S") {
       setSummonerSupportStats([5, 2, 2, 2, 2]);
+      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     }
+    setBackground(backgroundUrl);
+  };
+
+  const changeAllySupport = (event) => {
+    setAllySupport(event);
   };
 
   const handleResplendent = (res) => {
@@ -614,7 +632,7 @@ export default function HeroComponent(props) {
               placeholder={"Choose S Skill"}
             />
           </Col>
-          <Col md={3}>
+          <Col md={4}>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} />
             <BlessingHeroSelectionComponent
               hero={hero}
@@ -633,7 +651,17 @@ export default function HeroComponent(props) {
               onChange={handleResplendentStats}
               label={"Resplendant Stats"}
             />
-            <ToggleComponent exists={hero.exists} onChange={changeSummonerSupport} />
+            <ToggleComponent
+              exists={hero.exists}
+              label={"Summoner Support:"}
+              onChange={changeSummonerSupport}
+            />
+            <ToggleComponent
+              exists={hero.exists}
+              label={"Ally Support:"}
+              onChange={changeAllySupport}
+            />
+            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={setBackground} />
           </Col>
         </Row>
       </Container>

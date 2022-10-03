@@ -15,6 +15,7 @@ export default function HeroTabs(props) {
       merges: 0,
       resplendent: false,
       blessing: "",
+      background: "",
     },
   ]);
 
@@ -107,6 +108,11 @@ export default function HeroTabs(props) {
     props.changeBlessing(event);
   };
 
+  const changeBackground = (event) => {
+    tabList[tabValue].background = event;
+    props.changeBackground(event);
+  };
+
   return (
     <div style={{ borderRadius: 10, backgroundColor: "white" }}>
       <Tabs
@@ -159,6 +165,7 @@ export default function HeroTabs(props) {
       {tabList.map((tab, index) => (
         <HeroTabContent
           key={tab.key}
+          id={tab.id}
           value={tabValue}
           index={index}
           onChange={changeHero}
@@ -166,6 +173,7 @@ export default function HeroTabs(props) {
           changeSkills={changeSkills}
           changeResplendent={changeResplendent}
           changeBlessing={changeBlessing}
+          changeBackground={changeBackground}
         />
       ))}
     </div>

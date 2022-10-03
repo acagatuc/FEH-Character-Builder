@@ -10,7 +10,8 @@ export default function ToggleComponent(props) {
   };
   return (
     <div>
-      <label>Summoner Support: </label>
+      <label>{props.label} </label>
+      <br />
       <ToggleButtonGroup
         value={selected}
         onChange={handleChange}

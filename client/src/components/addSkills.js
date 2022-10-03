@@ -245,6 +245,7 @@ async function createGWeapons(weapons) {
       sp: weapons.data[index][6],
       refine: weapons.data[index][7],
       maxSkill: weapons.data[index][8],
+      rearmed: weapons.data[index][9],
     };
     if (weapons.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");

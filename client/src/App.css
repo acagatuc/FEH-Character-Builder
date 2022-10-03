@@ -12,11 +12,28 @@
   justify-content: left;
   font-size: calc(10px + 2vmin);
   color: white;
+  width: 100%;
 }
 
 div.noMargin {
   margin-left: 0;
   margin-right: 0;
+}
+
+div.noPadding { 
+  padding-right: 0;
+}
+
+@media screen and (max-width: 600px) {
+  .col-md-4{
+    padding: 0px !important; 
+  }
+}
+
+@media screen and (min-width: 601px) {
+  .col{
+    padding-right: 3px !important
+  }
 }
 
 @font-face {

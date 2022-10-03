@@ -47,7 +47,6 @@ skillRoutes.route("/GenericWeapons/:id/:name").get(async function (req, res) {
     name = req.params.name.replace(/[()]/g, "");
     name = req.params.name.replace(/[()]/g, "");
   }
-
   var eh = await db_connect
     .collection("PrefWeapons")
     .find({ heroesList: { $regex: "," + name + "," } })

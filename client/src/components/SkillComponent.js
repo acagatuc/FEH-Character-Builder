@@ -9,7 +9,7 @@ export default function SkillComponent(props) {
     value: {
       name: "",
       img: null,
-      visibleStats: "",
+      visibleStats: [0, 0, 0, 0, 0],
       unique: false,
     },
   };
@@ -26,7 +26,7 @@ export default function SkillComponent(props) {
             .sort((a, b) => (a.name > b.name ? 1 : -1))
             .map(function (listItem) {
               var color;
-              if (props.hero.heroSkills.assist.includes(listItem.name)) {
+              if (props.hero.assists.includes(listItem.name)) {
                 color = "#daf5e5";
               } else {
                 color = "white";
@@ -45,7 +45,7 @@ export default function SkillComponent(props) {
             .sort((a, b) => (a.name > b.name ? 1 : -1))
             .map(function (listItem) {
               var color;
-              if (props.hero.heroSkills.special.includes(listItem.name)) {
+              if (props.hero.specials.includes(listItem.name)) {
                 color = "#daf5e5";
               } else {
                 color = "white";
@@ -64,7 +64,7 @@ export default function SkillComponent(props) {
             .sort((a, b) => (a.name > b.name ? 1 : -1))
             .map(function (listItem) {
               var color;
-              if (props.hero.heroSkills.passives.includes(listItem.name)) {
+              if (props.hero.passives.includes(listItem.name)) {
                 color = "#daf5e5";
               } else {
                 color = "white";

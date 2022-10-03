@@ -46,6 +46,8 @@ export default function BlessingHeroSelectionComponent(props) {
       setStats([0, 0, 0, 0, 0]);
       calculateHeroBuffs(stats, false);
     }
+    // not sure why its yelling because i dont understand this error.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.blessing]);
 
   const handleAdd = (chip) => {
@@ -53,7 +55,7 @@ export default function BlessingHeroSelectionComponent(props) {
       return element.label === chip.target.innerHTML;
     });
     setSelectedHeroList([...selectedHeroList, chip.target.innerHTML]);
-    calculateHeroBuffs(hero.value.stats.split(","), true);
+    calculateHeroBuffs(hero.value.stats, true);
   };
 
   const handleDelete = (index, option) => {
@@ -63,7 +65,7 @@ export default function BlessingHeroSelectionComponent(props) {
     const arr = [...selectedHeroList];
     arr.splice(index, 1);
     setSelectedHeroList(arr);
-    calculateHeroBuffs(hero.value.stats.split(","), false);
+    calculateHeroBuffs(hero.value.stats, false);
   };
 
   const calculateHeroBuffs = (heroStats, addOrSubtract) => {
@@ -82,7 +84,6 @@ export default function BlessingHeroSelectionComponent(props) {
       arr[2] -= +heroStats[2];
       arr[3] -= +heroStats[3];
       arr[4] -= +heroStats[4];
-      setStats(arr);
     }
     props.onChange(arr);
   };

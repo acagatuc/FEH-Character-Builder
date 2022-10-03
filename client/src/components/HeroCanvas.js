@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Stage, Layer, Group, Image, Text } from "react-konva";
 import useImage from "use-image";
 import "./HeroCanvas.css";
 import "./../App.css";
 
-const BackgroundComponent = ({ image }) => {
+const BackgroundComponent = ({ image, width, height }) => {
   const [imgElement] = useImage(image, "Anonymous");
 
-  return <Image image={imgElement} x={0} y={0} width={540} height={960} />;
+  return (
+    <Image
+      image={imgElement}
+      x={0}
+      y={0}
+      cropX={122}
+      cropY={0}
+      cropWidth={505}
+      cropHeight={900}
+      width={540}
+      height={960}
+    />
+  );
 };
 
-const ImageComponent = ({ image, cropX, cropY, cropWidth, cropHeight }) => {
+const UIComponent = ({ image, width, height }) => {
+  const [imgElement] = useImage(image, "Anonymous");
+
+  return <Image image={imgElement} x={0} y={0} width={width} height={height} />;
+};
+
+const ImageComponent = ({ image, cropX, cropY, cropWidth, cropHeight, width, height }) => {
   if (image === "https://fehportraits.s3.amazonaws.com/.png") {
     image = "https://fehskills.s3.amazonaws.com/default.png";
   }
@@ -24,8 +42,8 @@ const ImageComponent = ({ image, cropX, cropY, cropWidth, cropHeight }) => {
       cropY={cropY}
       cropWidth={869}
       cropHeight={1530}
-      width={540}
-      height={960}
+      width={width}
+      height={height}
     />
   );
 };
@@ -37,7 +55,7 @@ const LargeTextComponent = ({ text, color, x, y, width }) => {
       fontFamily="nintendoP_Skip-D_003"
       fontStyle="bold"
       fontSize={25}
-      fill={color}
+      fill={"white"}
       stroke="black"
       strokeWidth={4}
       lineJoin="miter"
@@ -225,7 +243,8 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
   if (text === "") {
     url = "default";
   } else {
-    url = text.replace(" ", "+");
+    url = text.replace("+", "%2B");
+    url = url.replace(" ", "+");
     url = url.replace("%20", "+");
     url = url.replace("/", "");
   }
@@ -276,11 +295,14 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
 
 export default function HeroCanvas(props) {
   const stageRef = React.useRef();
+  const [stageWidth, setStageWidth] = useState(window.innerWidth);
+  const [stageHeight, setStageHeight] = useState((960 / 540) * window.innerWidth);
 
   const handleExport = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
     downloadURI(uri, "FEH Builder - " + props.name + ".png");
   };
+
   const downloadURI = (uri, name) => {
     var link = document.createElement("a");
     link.download = name;
@@ -290,39 +312,57 @@ export default function HeroCanvas(props) {
     document.body.removeChild(link);
   };
 
+  useEffect(() => {
+    if (window.innerWidth > 768) {
+      var aspectRatio = 960 / 540;
+      setStageWidth(window.innerWidth / 3);
+      setStageHeight(aspectRatio * stageWidth);
+    }
+    props.sendWidth(stageWidth);
+  }, [stageWidth]);
+
   return (
     <div id="wrapper" className="wrapper">
-      <Stage width={540} height={960} ref={stageRef} onClick={handleExport}>
+      <Stage
+        width={stageWidth}
+        height={stageHeight}
+        ref={stageRef}
+        onClick={handleExport}
+        scaleX={stageWidth / 540}
+        scaleY={stageHeight / 960}
+      >
         <Layer id="img layer">
-          <BackgroundComponent image={props.background} />
+          <BackgroundComponent image={props.background} width={540} height={960} />
           <ImageComponent
             image={props.image}
             cropX={365}
             cropY={0}
             cropWidth={869}
             cropHeight={1530}
+            width={540}
+            height={960}
           />
-          <BackgroundComponent image={props.ui} />
+          <UIComponent image={props.ui} width={540} height={960} />
         </Layer>
         <Layer id="stat layer">
           <LargeTextComponent
             text={props.name}
             color="white"
             stroke="black"
-            x={54}
-            y={471}
+            x={50}
+            y={469}
             width={214}
           />
-          <LargeTextComponent text={props.title} color="white" x={12} y={412} width={260} />
+          <LargeTextComponent text={props.title} color="white" x={10} y={410} width={260} />
           <MergeComponent merges={props.merges} />
           <WMComponent image={props.weapon_type} x={14} y={558} width={20} height={21} />
           <WMComponent image={props.move_type} x={170} y={556} width={25} height={26} />
           <WMComponent image={props.blessing} x={431} y={432} width={111} height={119} />
-          <TextComponent text={"HP"} color="white" x={85} y={604} />
-          <TextComponent text={"Atk"} color="white" x={84} y={641} />
-          <TextComponent text={"Spd"} color="white" x={83} y={677} />
-          <TextComponent text={"Def"} color="white" x={83} y={715} />
-          <TextComponent text={"Res"} color="white" x={83} y={752} />
+          <TextComponent text={"HP"} color={props.statColorArray[0]} x={85} y={604} />
+          <TextComponent text={"Atk"} color={props.statColorArray[1]} x={84} y={641} />
+          <TextComponent text={"Spd"} color={props.statColorArray[2]} x={83} y={677} />
+          <TextComponent text={"Def"} color={props.statColorArray[3]} x={83} y={715} />
+          <TextComponent text={"Res"} color={props.statColorArray[4]} x={83} y={752} />
           <StatComponent text={`${props.stats[0]}`} color="#fffa96" x={171} y={604} />
           <StatComponent text={`${props.stats[1]}`} color="#fffa96" x={171} y={641} />
           <StatComponent text={`${props.stats[2]}`} color="#fffa96" x={171} y={677} />
@@ -332,48 +372,18 @@ export default function HeroCanvas(props) {
         </Layer>
         <Layer id="skill layer">
           <WeaponComponent
-            text={`${props.skills.weapon.name}`}
-            image={`${props.skills.refine.img}`}
+            text={`${props.weapon}`}
+            image={`${props.refine}`}
             x={280}
             y={596}
             offsetX={33}
             offsetY={8}
           />
-          <AssistOrSpecial
-            text={`${props.skills.assist.name}`}
-            x={280}
-            y={631}
-            offsetX={33}
-            offsetY={9}
-          />
-          <AssistOrSpecial
-            text={`${props.skills.special.name}`}
-            x={278}
-            y={671}
-            offsetX={35}
-            offsetY={7}
-          />
-          <SkillComponent
-            text={`${props.skills.aSkill.name}`}
-            x={275}
-            y={707}
-            offsetX={38}
-            offsetY={8}
-          />
-          <SkillComponent
-            text={`${props.skills.bSkill.name}`}
-            x={275}
-            y={745}
-            offsetX={37}
-            offsetY={7}
-          />
-          <SkillComponent
-            text={`${props.skills.cSkill.name}`}
-            x={275}
-            y={781}
-            offsetX={38}
-            offsetY={8}
-          />
+          <AssistOrSpecial text={`${props.assist}`} x={280} y={631} offsetX={33} offsetY={9} />
+          <AssistOrSpecial text={`${props.special}`} x={278} y={671} offsetX={35} offsetY={7} />
+          <SkillComponent text={`${props.aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
+          <SkillComponent text={`${props.bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
+          <SkillComponent text={`${props.cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
         </Layer>
         <Layer id="VA and Artist">
           <Text

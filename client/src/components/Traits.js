@@ -73,7 +73,7 @@ export default function Traits(props) {
       };
     }
     setTraitOptions(tempArray);
-  }, [props.hero]);
+  }, [props.hero, props.color, props.label, props.stats, traitOptions]);
 
   const handleChange = (event, value) => {
     var tempArray = props.array;
@@ -110,9 +110,13 @@ export default function Traits(props) {
       } else if (value.value === "res") {
         tempArray[4] = statLevel;
       }
+
+      setTrait(value);
+      props.onChange(tempArray, value.value);
+    } else {
+      setTrait(value);
+      props.onChange(tempArray, "");
     }
-    setTrait(value);
-    props.onChange(tempArray);
   };
 
   return (

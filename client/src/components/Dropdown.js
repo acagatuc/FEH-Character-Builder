@@ -5,6 +5,7 @@ export default function Dropdown(props) {
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hero, setHero] = useState(null);
+  const [heroName, setHeroName] = useState("");
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -17,6 +18,7 @@ export default function Dropdown(props) {
           .map(function (listItem) {
             return {
               value: listItem,
+              label: listItem.name,
             };
           })
       );
@@ -36,12 +38,14 @@ export default function Dropdown(props) {
         id="hero list"
         autoSelect={true}
         disableClearable
+        openOnFocus
+        selectOnFocus
         options={list}
         value={hero}
         onChange={handleChange}
         loading={isLoading}
-        getOptionLabel={(option) => option.value.name || ""}
-        isOptionEqualToValue={(option, option2) => option.value.name === option2.value.name}
+        getOptionLabel={(option) => option.label || heroName}
+        isOptionEqualToValue={(option, option2) => option.label === option2.label}
         renderInput={(params) => (
           <TextField {...params} variant="outlined" label="Hero List"></TextField>
         )}

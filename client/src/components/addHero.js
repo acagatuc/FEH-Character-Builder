@@ -74,25 +74,24 @@ const styles = {
 
 async function createNewHeroes(heroes) {
   var index = 1; //to ignore header
-
-  while (index < 842) {
+  while (heroes.data[index][1] !== "" && heroes.data[index][1] !== undefined) {
     // create hero json
     const data = {
       name: heroes.data[index][1],
       title: heroes.data[index][2],
       move_type: heroes.data[index][3],
       weapon_type: heroes.data[index][4],
-      hp: heroes.data[index][5],
-      atk: heroes.data[index][6],
-      spd: heroes.data[index][7],
-      def: heroes.data[index][8],
-      res: heroes.data[index][9],
-      superboon: heroes.data[index][10],
-      superbane: heroes.data[index][11],
-      weapons: heroes.data[index][12],
-      assists: heroes.data[index][13],
-      specials: heroes.data[index][14],
-      passives: heroes.data[index][15],
+      hp: heroes.data[index][5].split(",").map(Number),
+      atk: heroes.data[index][6].split(",").map(Number),
+      spd: heroes.data[index][7].split(",").map(Number),
+      def: heroes.data[index][8].split(",").map(Number),
+      res: heroes.data[index][9].split(",").map(Number),
+      superboon: heroes.data[index][10].split(","),
+      superbane: heroes.data[index][11].split(","),
+      weapons: heroes.data[index][12].split(","),
+      assists: heroes.data[index][13].split(","),
+      specials: heroes.data[index][14].split(","),
+      passives: heroes.data[index][15].split(","),
       recommended: heroes.data[index][16],
       hero_type: heroes.data[index][17],
       single_name: heroes.data[index][18],
@@ -119,12 +118,12 @@ async function createNewHeroes(heroes) {
 async function createLegendaryList(heroes) {
   var index = 1; //to ignore header
 
-  while (index < 67) {
+  while (heroes.data[index][1] !== "" && heroes.data[index][1] !== undefined) {
     // create hero json
     const data = {
       name: heroes.data[index][0],
       blessing: heroes.data[index][2],
-      stats: heroes.data[index][3],
+      stats: heroes.data[index][3].split(",").map(Number),
     };
     if (heroes.data[index][1] !== "") {
       console.log("adding " + data.name + " to database");

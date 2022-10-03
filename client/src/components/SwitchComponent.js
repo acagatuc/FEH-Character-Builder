@@ -8,6 +8,7 @@ export default function SwitchComponent(props) {
   return (
     <FormControlLabel
       control={<Switch checked={props.res} onChange={handleChange} />}
+      disabled={!props.R_Artist}
       label={props.label}
       labelPlacement="start"
     />

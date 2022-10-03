@@ -36,6 +36,7 @@ export default function FlowerComponent(props) {
   useEffect(() => {
     var index = +props.hero.dragonflowers + 1;
     setFlowerList(options.slice(0, index));
+    setFlowers("");
   }, [props.hero]);
 
   const handleDragonflowers = (event, value) => {

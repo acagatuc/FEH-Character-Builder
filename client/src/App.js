@@ -1,4 +1,4 @@
-import React, { useState, useRef, useLayoutEffect } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 //import AddIcon from "@mui/icons-material/Add";
 
@@ -34,23 +34,20 @@ const App = () => {
     artist: ["", ""],
     moveType: "",
     weaponType: "",
+    hero_type: "",
   });
 
   const [displayedStats, setDisplayedStats] = useState(["", "", "", "", ""]);
-  const [statColorArray, setStatColorArray] = useState([
-    "white",
-    "white",
-    "white",
-    "white",
-    "white",
-  ]);
+  const [statColorArray, setStatColorArray] = useState(["white", "white", "white", "white", "white"]);
   const [displayedMerges, setDisplayedMerges] = useState(0);
 
   const [artistIndex, setArtistIndex] = useState(0);
   const [blessing, setBlessing] = useState("");
-  const [background, setBackground] = useState(
-    "https://fehportraits.s3.amazonaws.com/bg_normal.png"
-  );
+  const [background, setBackground] = useState("normal");
+  const [displayFloret, setDisplayFloret] = useState(false);
+  const [dragonflowers, setDragonflowers] = useState("");
+  const [summonerSupport, setSummonerSupport] = useState("");
+  const [allySupport, setAllySupport] = useState("");
 
   const [displayedSkills, setDisplayedSkills] = useState({
     weapon: "",
@@ -110,10 +107,6 @@ const App = () => {
     setArtistIndex(artistIndex);
   };
 
-  const changeBlessing = (event) => {
-    setBlessing(event);
-  };
-
   return (
     <div className="App">
       <header className="App-header">
@@ -126,7 +119,7 @@ const App = () => {
         <Row>
           <Col md={4} style={{ width: canvasWidth, paddingTop: "5px", paddingLeft: "5px" }}>
             <HeroCanvas
-              sendWidth={(width) => setWidth(width + 20)}
+              sendWidth={(width) => setWidth(width + 5)}
               name={displayedHero.singleName}
               title={displayedHero.title}
               merges={displayedMerges}
@@ -144,20 +137,16 @@ const App = () => {
               art={displayedHero.name === "" ? "" : displayedHero.artist[artistIndex]}
               image={
                 artistIndex === 1
-                  ? "https://fehportraits.s3.amazonaws.com/Resplendent " +
-                    displayedHero.name +
-                    ".png"
+                  ? "https://fehportraits.s3.amazonaws.com/Resplendent " + displayedHero.name + ".png"
                   : "https://fehportraits.s3.amazonaws.com/" + displayedHero.name + ".png"
               }
               background={background}
-              ui={"https://fehportraits.s3.amazonaws.com/updated ui.png"}
-              move_type={"https://fehskills.s3.amazonaws.com/" + displayedHero.moveType + ".png"}
-              weapon_type={
-                "https://fehskills.s3.amazonaws.com/" +
-                displayedHero.weaponType.toLowerCase() +
-                ".png"
-              }
-              blessing={"https://fehskills.s3.amazonaws.com/" + blessing + ".png"}
+              ui={"https://fehportraits.s3.amazonaws.com/updated ui 2.png"} // if the ui is true, display something? maybe different setups like echoes or awakening or something else?
+              move_type={displayedHero.moveType}
+              weapon_type={"https://fehskills.s3.amazonaws.com/" + displayedHero.weaponType.toLowerCase() + ".png"}
+              ascended_trait={displayFloret}
+              dragonflowers={dragonflowers}
+              badgeList={[blessing, displayedHero.hero_type, summonerSupport, allySupport]}
             />
           </Col>
           <Col style={{ padding: 0, paddingTop: "5px" }}>
@@ -168,6 +157,10 @@ const App = () => {
               changeResplendent={changeResplendent}
               changeBlessing={setBlessing}
               changeBackground={setBackground}
+              displayFloret={setDisplayFloret}
+              changeSummonerSupport={setSummonerSupport}
+              changeAllySupport={setAllySupport}
+              changeDragonflowers={setDragonflowers}
             />
           </Col>
         </Row>

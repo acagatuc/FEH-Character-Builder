@@ -20,7 +20,9 @@ export default function SkillComponent(props) {
     if (
       props.hero.hero_type === "normal" ||
       props.hero.hero_type === "duo" ||
-      props.hero.hero_type === "harmonic"
+      props.hero.hero_type === "harmonic" ||
+      props.hero.hero_type === "rearmed" ||
+      props.hero.hero_type === "ascended"
     ) {
       setIsDisabled(false);
     } else {
@@ -29,6 +31,9 @@ export default function SkillComponent(props) {
   }, [props.hero.name]);
 
   const handleBlessing = (e, value) => {
+    if (value === null) {
+      value = "";
+    }
     setBlessing(value);
     props.onChange(value);
   };
@@ -37,7 +42,6 @@ export default function SkillComponent(props) {
     <div>
       <Autocomplete
         id="blessing dropdown"
-        disableClearable
         options={blessingOptions}
         value={blessing}
         onChange={handleBlessing}
@@ -45,9 +49,7 @@ export default function SkillComponent(props) {
         getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />
     </div>
   );

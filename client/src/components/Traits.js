@@ -73,6 +73,7 @@ export default function Traits(props) {
       };
     }
     setTraitOptions(tempArray);
+    setTrait(null);
   }, [props.hero, props.color, props.label, props.stats, traitOptions]);
 
   const handleChange = (event, value) => {

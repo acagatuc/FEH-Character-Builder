@@ -3,22 +3,18 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export default function ToggleComponent(props) {
-  const [selected, setSelected] = useState(0);
+  const [selected, setSelected] = useState("No");
   const handleChange = (e, value) => {
-    setSelected(value);
-    props.onChange(value);
+    if (value !== null) {
+      setSelected(value);
+      props.onChange(value);
+    }
   };
   return (
     <div>
       <label>{props.label} </label>
       <br />
-      <ToggleButtonGroup
-        value={selected}
-        onChange={handleChange}
-        exclusive
-        color="warning"
-        disabled={!props.exists}
-      >
+      <ToggleButtonGroup value={selected} onChange={handleChange} exclusive color="warning" disabled={!props.exists}>
         <ToggleButton value="No">No</ToggleButton>
         <ToggleButton value="C">C</ToggleButton>
         <ToggleButton value="B">B</ToggleButton>

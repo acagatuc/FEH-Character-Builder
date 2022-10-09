@@ -121,15 +121,17 @@ export default function HeroComponent(props) {
   const [summonerSupportStats, setSummonerSupportStats] = useState([0, 0, 0, 0, 0]);
   const [allySupport, setAllySupport] = useState("");
 
+  // for beast units only
+  const [transformed, setTransformed] = useState(false);
+  const [transformedStats, setTransformedStats] = useState(0);
+
   // resplendent variables
   const [resplendent, setResplendent] = useState(false);
   const [resplendentStatsBoolean, setResplendentStatsBoolean] = useState(false);
   const [resplendentStats, setResplendentStats] = useState([0, 0, 0, 0, 0]);
 
   // background variable
-  const [background, setBackground] = useState(
-    "https://fehportraits.s3.amazonaws.com/bg_normal.png"
-  );
+  const [background, setBackground] = useState("normal");
 
   useEffect(() => {
     // call calculate stats here
@@ -154,6 +156,7 @@ export default function HeroComponent(props) {
     setFlowerStats([0, 0, 0, 0, 0]);
     setMergedStats([0, 0, 0, 0, 0]);
     setHeroBuffStats([0, 0, 0, 0, 0]);
+    setLevels({ ...levels, array: [1, 1, 1, 1, 1] });
     setBlessing("");
   }, [hero]);
 
@@ -177,11 +180,27 @@ export default function HeroComponent(props) {
   useEffect(() => {
     calculateMergeStats();
     addStats();
-  }, [flowerStats, heroBuffStats, summonerSupportStats, prevFlaw, prevAsset, prevAscended]);
+  }, [flowerStats, heroBuffStats, summonerSupportStats, transformedStats, prevFlaw, prevAsset, prevAscended]);
+
+  useEffect(() => {
+    if (prevAscended !== "") {
+      props.displayFloret(true);
+    } else {
+      props.displayFloret(false);
+    }
+  });
 
   useEffect(() => {
     props.changeBlessing(blessing);
   }, [blessing]);
+
+  useEffect(() => {
+    props.changeSummonerSupport(summonerSupport);
+  }, [summonerSupport]);
+
+  useEffect(() => {
+    props.changeAllySupport(allySupport);
+  }, [allySupport]);
 
   useEffect(() => {
     props.changeBackground(background);
@@ -339,6 +358,7 @@ export default function HeroComponent(props) {
 
   const addStats = () => {
     var tempArray = [0, 0, 0, 0, 0];
+
     tempArray[0] =
       hero.hp[heroLevel + levels.array[0]] +
       mergedStats[0] +
@@ -359,6 +379,7 @@ export default function HeroComponent(props) {
       skills.refine.stats[1] +
       skills.aSkill.visibleStats[1] +
       summonerSupportStats[1] +
+      transformedStats +
       resplendentStats[1];
     tempArray[2] =
       hero.spd[heroLevel + levels.array[2]] +
@@ -404,7 +425,8 @@ export default function HeroComponent(props) {
     calculateMergeStats();
   };
 
-  const flowerChange = (array) => {
+  const flowerChange = (value, array) => {
+    props.changeDragonflowers(value);
     setFlowerStats(array);
   };
 
@@ -469,33 +491,32 @@ export default function HeroComponent(props) {
   };
 
   const changeSummonerSupport = (event) => {
-    setSummonerSupport(event);
-    var backgroundUrl = "";
     if (event === "No") {
+      event = "";
       setSummonerSupportStats([0, 0, 0, 0, 0]);
-      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_normal.png";
     } else if (event === "C") {
       setSummonerSupportStats([3, 0, 0, 0, 2]);
-      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "B") {
       setSummonerSupportStats([4, 0, 0, 2, 2]);
-      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "A") {
       setSummonerSupportStats([4, 0, 2, 2, 2]);
-      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     } else if (event === "S") {
       setSummonerSupportStats([5, 2, 2, 2, 2]);
-      backgroundUrl = "https://fehportraits.s3.amazonaws.com/bg_summoner.png";
     }
-    setBackground(backgroundUrl);
+    setSummonerSupport(event);
   };
 
   const changeAllySupport = (event) => {
     setAllySupport(event);
   };
 
-  const handleResplendent = (res) => {
-    setResplendent(res);
+  const handleTransform = (event) => {
+    setTransformed(event);
+    if (event) {
+      setTransformedStats(2);
+    } else {
+      setTransformedStats(0);
+    }
   };
 
   const handleResplendentStats = (r) => {
@@ -524,12 +545,7 @@ export default function HeroComponent(props) {
                 Hero List:
               </label>
               <Col style={{ padding: "2px" }}>
-                <Dropdown
-                  onChange={heroChange}
-                  url={"http://localhost:5000/Heroes/"}
-                  title={"Select Hero"}
-                  hero={hero}
-                />
+                <Dropdown onChange={heroChange} url={"http://localhost:5000/Heroes/"} title={"Select Hero"} hero={hero} />
               </Col>
             </Row>
             <Row>
@@ -595,72 +611,26 @@ export default function HeroComponent(props) {
             </Row>
             <h3>Skills:</h3>
             <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} />
-            <SkillComponent
-              hero={hero}
-              onChange={changeAssist}
-              url={`http://localhost:5000/Assist/`}
-              placeholder={"Choose Assist"}
-            />
-            <SkillComponent
-              hero={hero}
-              onChange={changeSpecial}
-              url={`http://localhost:5000/Specials/`}
-              placeholder={"Choose Special"}
-            />
-            <SkillComponent
-              hero={hero}
-              onChange={changeASkill}
-              url={`http://localhost:5000/A_Slot/`}
-              placeholder={"Choose A Skill"}
-            />
-            <SkillComponent
-              hero={hero}
-              onChange={changeBSkill}
-              url={`http://localhost:5000/B_Slot/`}
-              placeholder={"Choose B Skill"}
-            />
-            <SkillComponent
-              hero={hero}
-              onChange={changeCSkill}
-              url={`http://localhost:5000/C_Slot/`}
-              placeholder={"Choose C Skill"}
-            />
-            <SkillComponent
-              hero={hero}
-              onChange={changeSSkill}
-              url={`http://localhost:5000/S_Slot/`}
-              placeholder={"Choose S Skill"}
-            />
+            <SkillComponent hero={hero} onChange={changeAssist} url={`http://localhost:5000/Assist/`} placeholder={"Choose Assist"} />
+            <SkillComponent hero={hero} onChange={changeSpecial} url={`http://localhost:5000/Specials/`} placeholder={"Choose Special"} />
+            <SkillComponent hero={hero} onChange={changeASkill} url={`http://localhost:5000/A_Slot/`} placeholder={"Choose A Skill"} />
+            <SkillComponent hero={hero} onChange={changeBSkill} url={`http://localhost:5000/B_Slot/`} placeholder={"Choose B Skill"} />
+            <SkillComponent hero={hero} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
+            <SkillComponent hero={hero} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
           </Col>
           <Col md={4}>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} />
-            <BlessingHeroSelectionComponent
-              hero={hero}
-              onChange={changeBlessingStats}
-              blessing={blessing}
-            />
+            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} blessing={blessing} />
             <SwitchComponent
-              res={resplendent}
-              R_Artist={hero.Artist.split(",")[1]}
-              onChange={handleResplendent}
-              label={"Resplendant Art"}
+              res={transformed}
+              R_Artist={hero.weapon_type.includes("Beast") && skills.weapon.name !== ""}
+              onChange={handleTransform}
+              label={"Transformed?"}
             />
-            <SwitchComponent
-              res={resplendentStatsBoolean}
-              R_Artist={hero.exists}
-              onChange={handleResplendentStats}
-              label={"Resplendant Stats"}
-            />
-            <ToggleComponent
-              exists={hero.exists}
-              label={"Summoner Support:"}
-              onChange={changeSummonerSupport}
-            />
-            <ToggleComponent
-              exists={hero.exists}
-              label={"Ally Support:"}
-              onChange={changeAllySupport}
-            />
+            <SwitchComponent res={resplendent} R_Artist={hero.Artist.split(",")[1]} onChange={setResplendent} label={"Resplendant Art"} />
+            <SwitchComponent res={resplendentStatsBoolean} R_Artist={hero.exists} onChange={handleResplendentStats} label={"Resplendant Stats"} />
+            <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
+            <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={setBackground} />
           </Col>
         </Row>

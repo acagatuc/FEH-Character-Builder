@@ -134,16 +134,9 @@ export default function HeroTabs(props) {
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={
-              <div style={{ textTransform: "none" }}>
-                {tab.label === "" ? "Build " + (tab.id + 1) : tab.label}
-              </div>
-            }
+            label={<div style={{ textTransform: "none" }}>{tab.label === "" ? "Build " + (tab.id + 1) : tab.label}</div>}
             icon={
-              <div
-                style={{ display: tabList.length === 1 ? "none" : "block" }}
-                onClick={(e) => deleteTab(e, tab.id)}
-              >
+              <div style={{ display: tabList.length === 1 ? "none" : "block" }} onClick={(e) => deleteTab(e, tab.id)}>
                 <Close id={tab.id} />
               </div>
             }
@@ -174,6 +167,10 @@ export default function HeroTabs(props) {
           changeResplendent={changeResplendent}
           changeBlessing={changeBlessing}
           changeBackground={changeBackground}
+          displayFloret={props.displayFloret}
+          changeSummonerSupport={props.changeSummonerSupport}
+          changeAllySupport={props.changeAllySupport}
+          changeDragonflowers={props.changeDragonflowers}
         />
       ))}
     </div>

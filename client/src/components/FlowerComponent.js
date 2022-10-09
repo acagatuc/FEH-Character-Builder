@@ -49,7 +49,7 @@ export default function FlowerComponent(props) {
       }
     }
     setFlowers(value);
-    props.onChange(tempArray);
+    props.onChange(value.label, tempArray);
   };
 
   return (
@@ -67,9 +67,7 @@ export default function FlowerComponent(props) {
           </Box>
         )}
         isOptionEqualToValue={(option, value) => option.label === value.label || ""}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder="Dragonflowers"></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder="Dragonflowers"></TextField>}
       />
     </div>
   );

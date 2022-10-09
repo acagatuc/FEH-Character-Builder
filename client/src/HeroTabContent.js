@@ -12,12 +12,15 @@ export default function HeroTabContent(props) {
     artist: "",
     moveType: "",
     weaponType: "",
+    hero_type: "",
   });
 
   const [stats, setStats] = useState(["", "", "", "", ""]);
   const [merges, setMerges] = useState(0);
   const [resplendent, setResplendent] = useState(false);
   const [blessing, setBlessing] = useState("");
+  const [summonerSupport, setSummonerSupport] = useState("");
+  const [allySupport, setAllySupport] = useState("");
   const [background, setBackground] = useState("");
 
   const [skills, setSkills] = useState({
@@ -38,6 +41,8 @@ export default function HeroTabContent(props) {
       props.changeStats(stats, merges);
       props.changeResplendent(resplendent);
       props.changeBlessing(blessing);
+      props.changeSummonerSupport(summonerSupport);
+      props.changeAllySupport(allySupport);
     }
   }, [props.value, props.id]);
 
@@ -91,6 +96,10 @@ export default function HeroTabContent(props) {
         changeResplendent={changeResplendent}
         changeBlessing={changeBlessing}
         changeBackground={changeBackground}
+        displayFloret={props.displayFloret}
+        changeSummonerSupport={props.changeSummonerSupport}
+        changeAllySupport={props.changeAllySupport}
+        changeDragonflowers={props.changeDragonflowers}
       />
     </div>
   );

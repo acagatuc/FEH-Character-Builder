@@ -48,8 +48,19 @@ heroRoutes.route("/Heroes/add").post(function (req, response) {
 heroRoutes.route("/Heroes").get(function (req, res) {
   let db_connect = dbo.getDb();
   db_connect
-    .collection("Heroes")
+    .collection("Hero List")
     .find({})
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+});
+
+heroRoutes.route("/Heroes/:id").get(function (req, res) {
+  let db_connect = dbo.getDb();
+  db_connect
+    .collection("Heroes")
+    .find({ _id: ObjectId(req.params.id) })
     .toArray(function (err, result) {
       if (err) throw err;
       res.json(result);

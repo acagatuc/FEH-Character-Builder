@@ -49,7 +49,7 @@ export default function FlowerComponent(props) {
       }
     }
     setFlowers(value);
-    props.onChange(value.label, tempArray);
+    props.onChange(value.value, tempArray);
   };
 
   return (

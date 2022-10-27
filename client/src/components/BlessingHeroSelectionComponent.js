@@ -117,15 +117,7 @@ export default function BlessingHeroSelectionComponent(props) {
             />
           ))
         }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            label="Hero Buffs"
-            placeholder="Heroes"
-            fullWidth
-          />
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" label="Hero Buffs" placeholder="Heroes" fullWidth />}
       />
     </div>
   );

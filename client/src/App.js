@@ -12,6 +12,7 @@ import AddHeroes from "./components/addHero.js";
 import HeroTabs from "./HeroTabs.js";
 import HeroCanvas from "./components/HeroCanvas.js";
 import AppInfo from "./components/AppInfo.js";
+import { DisplayContext } from "./DisplayContext.js";
 
 import bg from "./background.png";
 
@@ -25,6 +26,7 @@ const App = () => {
 
   // this is to set the width of the col so the form does not overflow
   const [canvasWidth, setWidth] = useState(0);
+  const [display, setDisplay] = useState("full");
 
   const [displayedHero, setDisplayedHero] = useState({
     name: "",
@@ -44,6 +46,7 @@ const App = () => {
   const [artistIndex, setArtistIndex] = useState(0);
   const [blessing, setBlessing] = useState("");
   const [background, setBackground] = useState("normal");
+  const [fav, setFav] = useState("0");
   const [displayFloret, setDisplayFloret] = useState(false);
   const [dragonflowers, setDragonflowers] = useState("");
   const [summonerSupport, setSummonerSupport] = useState("");
@@ -112,7 +115,7 @@ const App = () => {
       <header className="App-header">
         <h2>
           Welcome to the FEH Character Builder
-          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
+          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} onChange={setDisplay} />
         </h2>
       </header>
       <Container fluid style={{ backgroundImage: `url(${bg})` }}>
@@ -143,25 +146,29 @@ const App = () => {
               background={background}
               ui={"https://fehportraits.s3.amazonaws.com/updated ui 2.png"} // if the ui is true, display something? maybe different setups like echoes or awakening or something else?
               move_type={displayedHero.moveType}
-              weapon_type={"https://fehskills.s3.amazonaws.com/" + displayedHero.weaponType.toLowerCase() + ".png"}
+              weapon_type={displayedHero.weaponType}
               ascended_trait={displayFloret}
               dragonflowers={dragonflowers}
               badgeList={[blessing, displayedHero.hero_type, summonerSupport, allySupport]}
+              fav={fav}
             />
           </Col>
           <Col style={{ padding: 0, paddingTop: "5px" }}>
-            <HeroTabs
-              onChange={changeDisplayedHero}
-              changeStats={changeStats}
-              changeSkills={changeSkills}
-              changeResplendent={changeResplendent}
-              changeBlessing={setBlessing}
-              changeBackground={setBackground}
-              displayFloret={setDisplayFloret}
-              changeSummonerSupport={setSummonerSupport}
-              changeAllySupport={setAllySupport}
-              changeDragonflowers={setDragonflowers}
-            />
+            <DisplayContext.Provider value={{ display }}>
+              <HeroTabs
+                onChange={changeDisplayedHero}
+                changeStats={changeStats}
+                changeSkills={changeSkills}
+                changeResplendent={changeResplendent}
+                changeBlessing={setBlessing}
+                changeBackground={setBackground}
+                displayFloret={setDisplayFloret}
+                changeSummonerSupport={setSummonerSupport}
+                changeAllySupport={setAllySupport}
+                changeDragonflowers={setDragonflowers}
+                changeFavorite={setFav}
+              />
+            </DisplayContext.Provider>
           </Col>
         </Row>
       </Container>

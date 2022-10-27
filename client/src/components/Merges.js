@@ -3,7 +3,6 @@ import { Autocomplete, Box, TextField } from "@mui/material";
 
 export default function Merges(props) {
   const [merges, setMerges] = useState(null);
-  const [isDisabled, setIsDisabled] = useState(true);
   let mergeOptions = [
     { value: 0, label: "+0" },
     { value: 1, label: "+1" },
@@ -20,7 +19,6 @@ export default function Merges(props) {
 
   useEffect(() => {
     setMerges(null);
-    setIsDisabled(false);
     props.onChange(0, [0, 0, 0, 0, 0]);
   }, [props.hero.name]);
 
@@ -53,21 +51,19 @@ export default function Merges(props) {
   return (
     <div>
       <Autocomplete
-        id="merge dropdown"
+        id="flower dropdown"
         options={mergeOptions}
         value={merges}
         onChange={handleChange}
-        disabled={isDisabled}
-        getOptionLabel={(option) => option.label || null}
+        disabled={!props.hero.exists}
+        getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
             {option.label}
           </Box>
         )}
-        isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" label={props.placeholder}></TextField>
-        )}
+        isOptionEqualToValue={(option, value) => option.label === value.label || ""}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder="Merges"></TextField>}
       />
     </div>
   );

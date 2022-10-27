@@ -14,6 +14,7 @@ import FlowerComponent from "./FlowerComponent.js";
 import SwitchComponent from "./SwitchComponent.js";
 import ToggleComponent from "./ToggleComponent.js";
 import BackgroundDropdown from "./BackgroundDropdown.js";
+import FavoriteComponent from "./FavoriteComponent.js";
 
 export default function HeroComponent(props) {
   const [hero, setHero] = useState({
@@ -133,6 +134,9 @@ export default function HeroComponent(props) {
   // background variable
   const [background, setBackground] = useState("normal");
 
+  //favorite variable
+  const [favorite, setFavorite] = useState(0);
+
   useEffect(() => {
     // call calculate stats here
     addStats();
@@ -207,6 +211,10 @@ export default function HeroComponent(props) {
   }, [background]);
 
   useEffect(() => {
+    props.changeFavorite(favorite);
+  }, [favorite]);
+
+  useEffect(() => {
     addStats();
   }, [resplendentStats]);
 
@@ -220,13 +228,13 @@ export default function HeroComponent(props) {
 
   const heroChange = (newHero) => {
     //get all possible skills on call? Instead of in multiple calls in children?
-    newHero.value.exists = true;
-    setHero(newHero.value);
+    newHero["exists"] = true;
+    setHero(newHero);
 
     setLevels({
       ...levels,
-      superboon: newHero.value.superboon,
-      superbane: newHero.value.superbane,
+      superboon: newHero.superboon,
+      superbane: newHero.superbane,
     });
 
     setSkills({
@@ -533,48 +541,22 @@ export default function HeroComponent(props) {
     <div>
       <Container className="noMargin">
         <Row>
-          <Col style={{ margin: "5px" }}>
-            <h3 style={{ marginLeft: "-8px" }}>Base Stats:</h3>
+          <Col md={5}>
+            <h3>Stats:</h3>
             <Row>
-              <label
-                style={{
-                  fontFamily: "Verdana, sans-serif",
-                  fontSize: "16px",
-                }}
-              >
-                Hero List:
-              </label>
-              <Col style={{ padding: "2px" }}>
+              <Col>
                 <Dropdown onChange={heroChange} url={"http://localhost:5000/Heroes/"} title={"Select Hero"} hero={hero} />
               </Col>
             </Row>
-            <Row>
-              <label
-                style={{
-                  fontFamily: "Verdana, sans-serif",
-                  fontSize: "16px",
-                }}
-              >
-                {" "}
-                Merges/Dragonflowers:{" "}
-              </label>
-              <Col style={{ padding: "2px" }}>
+            <Row style={{ marginTop: "10px" }}>
+              <Col>
                 <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} />
               </Col>
-              <Col style={{ padding: "2px" }}>
+              <Col>
                 <FlowerComponent hero={hero} value={flowerStats} onChange={flowerChange} />
               </Col>
             </Row>
             <Row>
-              <label
-                style={{
-                  fontFamily: "Verdana, sans-serif",
-                  fontSize: "16px",
-                }}
-              >
-                {" "}
-                Asset/Flaw/Ascended:{" "}
-              </label>
               <Col style={{ padding: "2px", margin: "10px" }}>
                 <Traits
                   hero={hero}
@@ -618,7 +600,8 @@ export default function HeroComponent(props) {
             <SkillComponent hero={hero} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
             <SkillComponent hero={hero} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
           </Col>
-          <Col md={4}>
+          <Col md={4} style={{ marginTop: "10px", textAlign: "right" }}>
+            <h4>Additional:</h4>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} />
             <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} blessing={blessing} />
             <SwitchComponent
@@ -632,7 +615,11 @@ export default function HeroComponent(props) {
             <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
             <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={setBackground} />
+            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={setFavorite} />
           </Col>
+        </Row>
+        <Row style={{ marginTop: "5%" }}>
+          <Col> put whole vs battle ui vs echoes here, also put recommended builds or bookmarks here</Col>
         </Row>
       </Container>
     </div>

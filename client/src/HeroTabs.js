@@ -1,8 +1,29 @@
 import React, { useState } from "react";
-import { Tabs, Tab, Divider, Box, IconButton } from "@mui/material";
-import Close from "@mui/icons-material/Close";
+import { Tabs, Tab, Divider } from "@mui/material";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
+import "./App.css";
+
+const TabLabel = (props) => {
+  const url = ("https://fehsmallportraits.s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
+
+  return (
+    <div className="d-flex justify-content-between">
+      <img src={url} height="40" align="left" />
+      <div style={{ textTransform: "none", fontSize: 16 }}>{props.label === "" ? "Build " + (props.id + 1) : props.label}</div>
+      <MoreVertIcon style={{ fontSize: 32 }} disabled={props.length === 1} onClick={(e) => props.deleteTab(e, props.id)} id={props.id} />
+    </div>
+  );
+};
+
+const AddTabLabel = (props) => {
+  return (
+    <div style={{ textTransform: "none" }}>
+      <Add style={{ color: "black" }} />
+    </div>
+  );
+};
 
 export default function HeroTabs(props) {
   const [tabList, setTabList] = useState([
@@ -16,6 +37,7 @@ export default function HeroTabs(props) {
       resplendent: false,
       blessing: "",
       background: "",
+      favorite: 0,
     },
   ]);
 
@@ -85,7 +107,7 @@ export default function HeroTabs(props) {
   const changeHero = (event) => {
     props.onChange(event);
     tabList[tabValue].hero = event;
-    tabList[tabValue].label = event.singleName;
+    tabList[tabValue].label = event.name;
   };
 
   const changeStats = (stats, merges, levels) => {
@@ -113,6 +135,11 @@ export default function HeroTabs(props) {
     props.changeBackground(event);
   };
 
+  const changeFavorite = (event) => {
+    tabList[tabValue].favorite = event;
+    props.changeFavorite(event);
+  };
+
   return (
     <div style={{ borderRadius: 10, backgroundColor: "white" }}>
       <Tabs
@@ -126,7 +153,6 @@ export default function HeroTabs(props) {
           height: 10,
           maxWidth: "90%",
           borderTopLeftRadius: 10,
-          "& :hover": { backgroundColor: "#ebebeb", color: "red" },
         }}
       >
         >
@@ -134,17 +160,11 @@ export default function HeroTabs(props) {
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={<div style={{ textTransform: "none" }}>{tab.label === "" ? "Build " + (tab.id + 1) : tab.label}</div>}
-            icon={
-              <div style={{ display: tabList.length === 1 ? "none" : "block" }} onClick={(e) => deleteTab(e, tab.id)}>
-                <Close id={tab.id} />
-              </div>
-            }
-            iconPosition="end"
+            label={<TabLabel label={tab.label} id={tab.id} deleteTab={deleteTab} length={tabList.length} />}
             wrapped
             sx={{
               backgroundColor: "white",
-              width: 1 / 6,
+              width: 1 / 2,
               minHeight: 0,
               pt: 0,
               pb: 0,
@@ -152,7 +172,7 @@ export default function HeroTabs(props) {
             disableRipple
           />
         ))}
-        <Tab key={-1} value={-1} icon={<Add style={{ color: "black" }} />} sx={{ width: 10 }} />
+        <Tab key={-1} value={-1} label={<AddTabLabel />} sx={{ width: 10 }} />
       </Tabs>
       <Divider />
       {tabList.map((tab, index) => (
@@ -171,6 +191,7 @@ export default function HeroTabs(props) {
           changeSummonerSupport={props.changeSummonerSupport}
           changeAllySupport={props.changeAllySupport}
           changeDragonflowers={props.changeDragonflowers}
+          changeFavorite={changeFavorite}
         />
       ))}
     </div>

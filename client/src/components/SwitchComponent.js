@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Switch, FormControlLabel } from "@mui/material";
 
 export default function SwitchComponent(props) {

@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Tabs, Tab, TabContentPanel } from "@mui/material";
 import HeroComponent from "./components/HeroComponent.js";
-import HeroCanvas from "./components/HeroCanvas.js";
 
 export default function HeroTabContent(props) {
   const [sendHero, setSendHero] = useState({
@@ -22,6 +20,7 @@ export default function HeroTabContent(props) {
   const [summonerSupport, setSummonerSupport] = useState("");
   const [allySupport, setAllySupport] = useState("");
   const [background, setBackground] = useState("");
+  const [favorite, setFavorite] = useState("");
 
   const [skills, setSkills] = useState({
     weapon: "",
@@ -43,6 +42,8 @@ export default function HeroTabContent(props) {
       props.changeBlessing(blessing);
       props.changeSummonerSupport(summonerSupport);
       props.changeAllySupport(allySupport);
+      props.changeBackground(background);
+      props.changeFavorite(favorite);
     }
   }, [props.value, props.id]);
 
@@ -87,6 +88,21 @@ export default function HeroTabContent(props) {
     props.changeBackground(event);
   };
 
+  const changeFavorite = (event) => {
+    setFavorite(event);
+    props.changeFavorite(event);
+  };
+
+  const changeSummonerSupport = (event) => {
+    setSummonerSupport(event);
+    props.changeSummonerSupport(event);
+  };
+
+  const changeAllySupport = (event) => {
+    setAllySupport(event);
+    props.changeAllySupport(event);
+  };
+
   return (
     <div hidden={props.value !== props.index}>
       <HeroComponent
@@ -97,9 +113,10 @@ export default function HeroTabContent(props) {
         changeBlessing={changeBlessing}
         changeBackground={changeBackground}
         displayFloret={props.displayFloret}
-        changeSummonerSupport={props.changeSummonerSupport}
-        changeAllySupport={props.changeAllySupport}
+        changeSummonerSupport={changeSummonerSupport}
+        changeAllySupport={changeAllySupport}
         changeDragonflowers={props.changeDragonflowers}
+        changeFavorite={changeFavorite}
       />
     </div>
   );

@@ -36,6 +36,13 @@ div.noPadding {
   }
 }
 
+.button.MuiButtonBase-root{
+  display: flex;
+  flex: 1;
+  color: red;
+  justify-content: space-between;
+}
+
 @font-face {
   font-family: "nintendoP_Skip-D_003";
   src: url("./fonts/nintendoPSkip-D003.eot");

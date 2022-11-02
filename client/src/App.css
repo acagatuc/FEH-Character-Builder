@@ -24,6 +24,12 @@ div.noPadding {
   padding-right: 0;
 }
 
+.chibis {
+  height: 45px;
+  max-width: 50px;
+  object-fit: cover;
+}
+
 @media screen and (max-width: 600px) {
   .col-md-4{
     padding: 0px !important; 
@@ -34,13 +40,6 @@ div.noPadding {
   .col{
     padding-right: 3px !important
   }
-}
-
-.button.MuiButtonBase-root{
-  display: flex;
-  flex: 1;
-  color: red;
-  justify-content: space-between;
 }
 
 @font-face {

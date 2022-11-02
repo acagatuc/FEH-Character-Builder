@@ -51,16 +51,18 @@ export default function BlessingHeroSelectionComponent(props) {
   }, [props.blessing]);
 
   const handleAdd = (chip) => {
-    var hero = heroList.find((element) => {
-      return element.label === chip.target.innerHTML;
-    });
-    setSelectedHeroList([...selectedHeroList, chip.target.innerHTML]);
-    calculateHeroBuffs(hero.value.stats, true);
+    if (selectedHeroList.length < 6) {
+      var hero = heroList.find((element) => {
+        return element.label === chip.target.innerHTML;
+      });
+      setSelectedHeroList([...selectedHeroList, { label: chip.target.innerHTML, index: selectedHeroList.length }]);
+      calculateHeroBuffs(hero.value.stats, true);
+    }
   };
 
   const handleDelete = (index, option) => {
     var hero = heroList.find((element) => {
-      return element.label === option;
+      return element.label === option.label;
     });
     const arr = [...selectedHeroList];
     arr.splice(index, 1);
@@ -95,7 +97,7 @@ export default function BlessingHeroSelectionComponent(props) {
         id="tags-outlined"
         disableClearable
         options={heroList}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={(option) => option.label || ""}
         defaultValue={[]}
         value={selectedHeroList}
         disabled={isDisabled}
@@ -109,7 +111,7 @@ export default function BlessingHeroSelectionComponent(props) {
               {...getTagProps({ index })}
               variant="outlined"
               key={index}
-              label={option}
+              label={option.label}
               clickable
               onDelete={() => {
                 handleDelete(index, option);

@@ -6,4 +6,4 @@ export const displays = {
   abbrev: "abbrev",
 };
 
-export const DisplayContext = React.createContext("full");
+export const DisplayContext = React.createContext({ nameDisplay: "full", backpack: false, grima: false });

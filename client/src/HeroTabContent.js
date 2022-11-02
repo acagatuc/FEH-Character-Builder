@@ -117,6 +117,7 @@ export default function HeroTabContent(props) {
         changeAllySupport={changeAllySupport}
         changeDragonflowers={props.changeDragonflowers}
         changeFavorite={changeFavorite}
+        changeTransformed={props.changeTransformed}
       />
     </div>
   );

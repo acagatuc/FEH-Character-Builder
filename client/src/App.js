@@ -27,6 +27,8 @@ const App = () => {
   // this is to set the width of the col so the form does not overflow
   const [canvasWidth, setWidth] = useState(0);
   const [display, setDisplay] = useState("full");
+  const [backpack, setBackpack] = useState(false);
+  const [grima, setGrima] = useState(false);
 
   const [displayedHero, setDisplayedHero] = useState({
     name: "",
@@ -75,9 +77,9 @@ const App = () => {
       var tempArray = [];
       for (var i = 0; i < 5; i++) {
         if (levels[i] === 0) {
-          tempArray[i] = "red";
+          tempArray[i] = "#E9A3BB";
         } else if (levels[i] === 2) {
-          tempArray[i] = "blue";
+          tempArray[i] = "#B6E6F0";
         } else {
           tempArray[i] = "white";
         }
@@ -115,7 +117,7 @@ const App = () => {
       <header className="App-header">
         <h2>
           Welcome to the FEH Character Builder
-          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} onChange={setDisplay} />
+          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} onChange={setDisplay} onBackpack={setBackpack} onGrima={setGrima} />
         </h2>
       </header>
       <Container fluid style={{ backgroundImage: `url(${bg})` }}>
@@ -154,7 +156,7 @@ const App = () => {
             />
           </Col>
           <Col style={{ padding: 0, paddingTop: "5px" }}>
-            <DisplayContext.Provider value={{ display }}>
+            <DisplayContext.Provider value={{ display, backpack, grima }}>
               <HeroTabs
                 onChange={changeDisplayedHero}
                 changeStats={changeStats}

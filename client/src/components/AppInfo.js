@@ -2,11 +2,14 @@ import React, { useState, useContext } from "react";
 import { Modal, Button } from "react-bootstrap";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { Switch, FormControlLabel } from "@mui/material";
 import { DisplayContext } from "../DisplayContext.js";
 
 const AppInfo = (props) => {
   const [show, setShow] = useState(false);
   const [nameDisplay, setNameDisplay] = useState("full");
+  const [backpack, setBackpack] = useState(false);
+  const [grima, setGrima] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -16,6 +19,14 @@ const AppInfo = (props) => {
       setNameDisplay(value);
       props.onChange(value);
     }
+  };
+  const changeBackpack = (e, value) => {
+    setBackpack(value);
+    props.onBackpack(value);
+  };
+  const changeGrima = (e, value) => {
+    setGrima(value);
+    props.onGrima(value);
   };
 
   return (
@@ -48,7 +59,8 @@ const AppInfo = (props) => {
               <ToggleButton value="abbrev">Abbreviated</ToggleButton>
             </ToggleButtonGroup>
             <br />
-            <label>Display Backpack</label>
+            <FormControlLabel control={<Switch checked={backpack} onChange={changeBackpack} />} label={"Display Backpack"} labelPlacement="start" />
+            <FormControlLabel control={<Switch checked={grima} onChange={changeGrima} />} label={"Display Grima"} labelPlacement="start" />
           </div>
         </Modal.Body>
         <Modal.Footer>

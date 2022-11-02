@@ -1,21 +1,69 @@
 import React, { useState } from "react";
-import { Tabs, Tab, Divider } from "@mui/material";
+import { Tabs, Tab, Divider, IconButton, Select, Menu, MenuItem } from "@mui/material";
+import cloneDeep from "lodash/cloneDeep";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
 import "./App.css";
 
 const TabLabel = (props) => {
-  const url = ("https://fehsmallportraits.s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+  };
+  const copyItem = (e) => {
+    props.copyTab(props.id);
+    setAnchorEl(null);
+  };
+  const deleteItem = (e) => {
+    console.log(e);
+    props.deleteTab(e, props.id);
+  };
+
+  let url = "";
+  if (props.label === "") {
+    url = "";
+  } else if (props.transform) {
+    url = ("https://fehchibis.s3.amazonaws.com/" + props.label + "+Transform.png").replace(" ", "+");
+  } else {
+    url = ("https://fehchibis.s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
+  }
 
   return (
-    <div className="d-flex justify-content-between">
-      <img src={url} height="40" align="left" />
-      <div style={{ textTransform: "none", fontSize: 16 }}>{props.label === "" ? "Build " + (props.id + 1) : props.label}</div>
-      <MoreVertIcon style={{ fontSize: 32 }} disabled={props.length === 1} onClick={(e) => props.deleteTab(e, props.id)} id={props.id} />
+    <div className="d-flex justify-content-between align-items-center noPadding" style={{ width: "115%" }}>
+      <img className="chibis" src={url} align="left" />
+      <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>{props.label === "" ? "Build " + (props.id + 1) : props.label}</div>
+      <IconButton
+        component="div"
+        aria-controls={open ? "basic-menu" : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? "true" : undefined}
+        id={props.id}
+        onClick={(e) => handleClick(e)}
+      >
+        <MoreVertIcon style={{ fontSize: 32 }} />
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          "aria-labelledby": "basic-button",
+        }}
+      >
+        <MenuItem onClick={copyItem}>Copy</MenuItem>
+        <MenuItem onClick={deleteItem}>Delete</MenuItem>
+      </Menu>
     </div>
   );
 };
+
+//onClick={(e) => props.deleteTab(e, props.id)}
 
 const AddTabLabel = (props) => {
   return (
@@ -38,6 +86,7 @@ export default function HeroTabs(props) {
       blessing: "",
       background: "",
       favorite: 0,
+      transformed: false,
     },
   ]);
 
@@ -56,6 +105,13 @@ export default function HeroTabs(props) {
     let key = tabList[tabList.length - 1].key + 1;
     setTabList([...tabList, { key: key, id: id, label: "", hero: {} }]);
     setTabValue(id);
+  };
+
+  const copyTab = (value) => {
+    const copiedHero = cloneDeep(tabList[value]);
+    copiedHero.key = tabList[tabList.length - 1].key + 1;
+    copiedHero.id = tabList[tabList.length - 1].id + 1;
+    console.log(copiedHero);
   };
 
   const deleteTab = (e, tabId) => {
@@ -140,6 +196,14 @@ export default function HeroTabs(props) {
     props.changeFavorite(event);
   };
 
+  const changeTransformed = (event) => {
+    tabList[tabValue].transformed = event;
+  };
+
+  React.useEffect(() => {
+    console.log(tabList);
+  }, [tabList, tabList[0]]);
+
   return (
     <div style={{ borderRadius: 10, backgroundColor: "white" }}>
       <Tabs
@@ -160,11 +224,13 @@ export default function HeroTabs(props) {
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={<TabLabel label={tab.label} id={tab.id} deleteTab={deleteTab} length={tabList.length} />}
+            label={
+              <TabLabel label={tab.label} id={tab.id} copyTab={copyTab} deleteTab={deleteTab} transform={tab.transformed} length={tabList.length} />
+            }
             wrapped
             sx={{
               backgroundColor: "white",
-              width: 1 / 2,
+              width: 1 / 4,
               minHeight: 0,
               pt: 0,
               pb: 0,
@@ -192,6 +258,7 @@ export default function HeroTabs(props) {
           changeAllySupport={props.changeAllySupport}
           changeDragonflowers={props.changeDragonflowers}
           changeFavorite={changeFavorite}
+          changeTransformed={changeTransformed}
         />
       ))}
     </div>

@@ -156,6 +156,8 @@ export default function HeroComponent(props) {
     // set the resplendent to be false for any switch in hero
     setResplendent(false);
     props.changeResplendent(false);
+    setTransformed(false);
+    props.changeTransformed(false);
 
     setFlowerStats([0, 0, 0, 0, 0]);
     setMergedStats([0, 0, 0, 0, 0]);
@@ -520,11 +522,12 @@ export default function HeroComponent(props) {
 
   const handleTransform = (event) => {
     setTransformed(event);
-    if (event) {
+    if (event && hero.weapon_type.includes("Beast")) {
       setTransformedStats(2);
     } else {
       setTransformedStats(0);
     }
+    props.changeTransformed(event);
   };
 
   const handleResplendentStats = (r) => {
@@ -600,13 +603,12 @@ export default function HeroComponent(props) {
             <SkillComponent hero={hero} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
             <SkillComponent hero={hero} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
           </Col>
-          <Col md={4} style={{ marginTop: "10px", textAlign: "right" }}>
-            <h4>Additional:</h4>
+          <Col md={3} style={{ marginTop: "10px", textAlign: "right" }}>
+            <h5 style={{ marginTop: "10px" }}>Additional:</h5>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} />
-            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} blessing={blessing} />
             <SwitchComponent
               res={transformed}
-              R_Artist={hero.weapon_type.includes("Beast") && skills.weapon.name !== ""}
+              R_Artist={(hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")) && skills.weapon.name !== ""}
               onChange={handleTransform}
               label={"Transformed?"}
             />
@@ -616,6 +618,10 @@ export default function HeroComponent(props) {
             <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={setBackground} />
             <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={setFavorite} />
+          </Col>
+          <Col>
+            buffs or debuffs stats
+            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} blessing={blessing} />
           </Col>
         </Row>
         <Row style={{ marginTop: "5%" }}>

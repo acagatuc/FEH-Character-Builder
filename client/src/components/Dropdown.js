@@ -11,7 +11,6 @@ export default function Dropdown(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      console.log(context.display);
       let response = await fetch(props.url);
       response = await response.json();
       if (context.display === "full") {
@@ -20,10 +19,23 @@ export default function Dropdown(props) {
             .concat(response)
             .sort((a, b) => (a.full_name > b.full_name ? 1 : -1))
             .map(function (listItem) {
-              return {
-                value: listItem,
-                label: listItem.full_name,
-              };
+              var fullName;
+              if (context.grima && listItem.full_name.includes("Fallen Robin")) {
+                fullName = listItem.full_name.replace("Fallen Robin", "Grima");
+              } else {
+                fullName = listItem.full_name;
+              }
+              if (context.backpack && listItem.backpack !== null) {
+                return {
+                  value: listItem,
+                  label: fullName + " (+ " + listItem.backpack + ")",
+                };
+              } else {
+                return {
+                  value: listItem,
+                  label: fullName,
+                };
+              }
             })
         );
       } else if (context.display === "title") {
@@ -32,10 +44,17 @@ export default function Dropdown(props) {
             .concat(response)
             .sort((a, b) => (a.name_title > b.name_title ? 1 : -1))
             .map(function (listItem) {
-              return {
-                value: listItem,
-                label: listItem.name_title,
-              };
+              if (context.backpack && listItem.backpack !== null) {
+                return {
+                  value: listItem,
+                  label: listItem.name_title + " (+ " + listItem.backpack + ")",
+                };
+              } else {
+                return {
+                  value: listItem,
+                  label: listItem.name_title,
+                };
+              }
             })
         );
       } else if (context.display === "abbrev") {
@@ -44,10 +63,25 @@ export default function Dropdown(props) {
             .concat(response)
             .sort((a, b) => (a.abbreviated > b.abbreviated ? 1 : -1))
             .map(function (listItem) {
-              return {
-                value: listItem,
-                label: listItem.abbreviated,
-              };
+              var abbr = "";
+              if (context.grima && listItem.abbreviated.includes("F!M!Robin")) {
+                abbr = listItem.abbreviated.replace("F!M!Robin", "M!Grima");
+              } else if (context.grima && listItem.abbreviated.includes("F!F!Robin")) {
+                abbr = listItem.abbreviated.replace("F!F!Robin", "F!Grima");
+              } else {
+                abbr = listItem.abbreviated;
+              }
+              if (context.backpack && listItem.backpack !== null) {
+                return {
+                  value: listItem,
+                  label: abbr + " (+ " + listItem.backpack + ")",
+                };
+              } else {
+                return {
+                  value: listItem,
+                  label: abbr,
+                };
+              }
             })
         );
       }
@@ -56,7 +90,7 @@ export default function Dropdown(props) {
     }
 
     fetchMyAPI();
-  }, [context.display]);
+  }, [context.display, context.grima]);
 
   async function handleChange(event, value) {
     let response = await fetch(props.url + value.value.character_id);
@@ -69,7 +103,6 @@ export default function Dropdown(props) {
     <div>
       <Autocomplete
         id="hero list"
-        autoSelect={true}
         disableClearable
         openOnFocus
         selectOnFocus
@@ -78,7 +111,7 @@ export default function Dropdown(props) {
         onChange={handleChange}
         loading={isLoading}
         getOptionLabel={(option) => option.label || heroName}
-        isOptionEqualToValue={(option, option2) => option.character_id === option2.character_id}
+        isOptionEqualToValue={(option, option2) => option.label === option2.label}
         renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
       />
     </div>

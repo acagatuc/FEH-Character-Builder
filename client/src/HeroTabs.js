@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { Tabs, Tab, Divider, IconButton, Select, Menu, MenuItem } from "@mui/material";
-import cloneDeep from "lodash/cloneDeep";
+import React, { useState, useEffect } from "react";
+import { Tabs, Tab, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
+
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "./redux/actions";
 import "./App.css";
 
 const TabLabel = (props) => {
@@ -20,7 +22,6 @@ const TabLabel = (props) => {
     setAnchorEl(null);
   };
   const deleteItem = (e) => {
-    console.log(e);
     props.deleteTab(e, props.id);
   };
 
@@ -35,7 +36,7 @@ const TabLabel = (props) => {
 
   return (
     <div className="d-flex justify-content-between align-items-center noPadding" style={{ width: "115%" }}>
-      <img className="chibis" src={url} align="left" />
+      <img className="chibis" src={url} align="left" alt="Chibi" />
       <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>{props.label === "" ? "Build " + (props.id + 1) : props.label}</div>
       <IconButton
         component="div"
@@ -63,8 +64,6 @@ const TabLabel = (props) => {
   );
 };
 
-//onClick={(e) => props.deleteTab(e, props.id)}
-
 const AddTabLabel = (props) => {
   return (
     <div style={{ textTransform: "none" }}>
@@ -73,52 +72,40 @@ const AddTabLabel = (props) => {
   );
 };
 
-export default function HeroTabs(props) {
-  const [tabList, setTabList] = useState([
-    {
-      key: 0,
-      id: 0,
-      label: "",
-      hero: {},
-      stats: [],
-      merges: 0,
-      resplendent: false,
-      blessing: "",
-      background: "",
-      favorite: 0,
-      transformed: false,
-    },
-  ]);
+function HeroTabs(props) {
+  const ex = useSelector((state) => state.tabList);
+  const t = useSelector((state) => state.tabList.tabList);
+  const dispatch = useDispatch();
 
   const [tabValue, setTabValue] = useState(0);
 
   const handleTabChange = (event, value) => {
     if (value !== -1) {
       setTabValue(value);
+      dispatch(actions.changeTab(value));
     } else {
       addTab();
     }
   };
 
   const addTab = () => {
-    let id = tabList[tabList.length - 1].id + 1;
-    let key = tabList[tabList.length - 1].key + 1;
-    setTabList([...tabList, { key: key, id: id, label: "", hero: {} }]);
+    let id = t[t.length - 1].id + 1;
+    dispatch(actions.addTab(id));
     setTabValue(id);
+    dispatch(actions.changeTab(id));
   };
 
   const copyTab = (value) => {
-    const copiedHero = cloneDeep(tabList[value]);
-    copiedHero.key = tabList[tabList.length - 1].key + 1;
-    copiedHero.id = tabList[tabList.length - 1].id + 1;
-    console.log(copiedHero);
+    let id = t[t.length - 1].id + 1;
+    dispatch(actions.copyTab(value, id));
+    setTabValue(id);
   };
 
   const deleteTab = (e, tabId) => {
     e.stopPropagation();
 
     // if the array is only 1 length, just return
-    if (tabList.length === 1) {
+    if (t.length === 1) {
       return;
     }
 
@@ -126,7 +113,7 @@ export default function HeroTabs(props) {
     let tabIDIndex = 0;
 
     // find the id of the index to delete and remove it
-    let tabs = tabList.filter((value, index) => {
+    let tabs = t.filter((value, index) => {
       if (value.id === tabId) {
         tabIDIndex = index;
       }
@@ -137,9 +124,9 @@ export default function HeroTabs(props) {
     let curValue = parseInt(tabValue);
     if (curValue === tabId) {
       if (tabIDIndex === 0) {
-        curValue = tabList[tabIDIndex + 1].id;
+        curValue = t[tabIDIndex + 1].id;
       } else {
-        curValue = tabList[tabIDIndex].id;
+        curValue = t[tabIDIndex].id;
       }
     } else if (curValue > tabId) {
       curValue = curValue - 1;
@@ -157,52 +144,8 @@ export default function HeroTabs(props) {
 
     // set current tab and tab list
     setTabValue(curValue);
-    setTabList(tabs);
+    dispatch(actions.changeTab(curValue));
   };
-
-  const changeHero = (event) => {
-    props.onChange(event);
-    tabList[tabValue].hero = event;
-    tabList[tabValue].label = event.name;
-  };
-
-  const changeStats = (stats, merges, levels) => {
-    tabList[tabValue].stats = stats;
-    tabList[tabValue].merges = merges;
-    props.changeStats(stats, merges, levels);
-  };
-
-  const changeSkills = (event) => {
-    props.changeSkills(event);
-  };
-
-  const changeResplendent = (event) => {
-    tabList[tabValue].resplendent = event;
-    props.changeResplendent(event);
-  };
-
-  const changeBlessing = (event) => {
-    tabList[tabValue].blessing = event;
-    props.changeBlessing(event);
-  };
-
-  const changeBackground = (event) => {
-    tabList[tabValue].background = event;
-    props.changeBackground(event);
-  };
-
-  const changeFavorite = (event) => {
-    tabList[tabValue].favorite = event;
-    props.changeFavorite(event);
-  };
-
-  const changeTransformed = (event) => {
-    tabList[tabValue].transformed = event;
-  };
-
-  React.useEffect(() => {
-    console.log(tabList);
-  }, [tabList, tabList[0]]);
 
   return (
     <div style={{ borderRadius: 10, backgroundColor: "white" }}>
@@ -220,12 +163,20 @@ export default function HeroTabs(props) {
         }}
       >
         >
-        {tabList.map((tab) => (
+        {t.map((tab) => (
           <Tab
             key={tab.key.toString()}
             value={tab.id}
             label={
-              <TabLabel label={tab.label} id={tab.id} copyTab={copyTab} deleteTab={deleteTab} transform={tab.transformed} length={tabList.length} />
+              <TabLabel
+                tabs={ex}
+                label={tab.label}
+                id={tab.id}
+                copyTab={copyTab}
+                deleteTab={deleteTab}
+                transform={tab.transformed}
+                length={t.length}
+              />
             }
             wrapped
             sx={{
@@ -238,29 +189,14 @@ export default function HeroTabs(props) {
             disableRipple
           />
         ))}
-        <Tab key={-1} value={-1} label={<AddTabLabel />} sx={{ width: 10 }} />
+        <Tab value={-1} label={<AddTabLabel />} sx={{ width: 10 }} />
       </Tabs>
       <Divider />
-      {tabList.map((tab, index) => (
-        <HeroTabContent
-          key={tab.key}
-          id={tab.id}
-          value={tabValue}
-          index={index}
-          onChange={changeHero}
-          changeStats={changeStats}
-          changeSkills={changeSkills}
-          changeResplendent={changeResplendent}
-          changeBlessing={changeBlessing}
-          changeBackground={changeBackground}
-          displayFloret={props.displayFloret}
-          changeSummonerSupport={props.changeSummonerSupport}
-          changeAllySupport={props.changeAllySupport}
-          changeDragonflowers={props.changeDragonflowers}
-          changeFavorite={changeFavorite}
-          changeTransformed={changeTransformed}
-        />
+      {t.map((tab, index) => (
+        <HeroTabContent key={tab.key} id={tab.id} value={tabValue} index={index} />
       ))}
     </div>
   );
 }
+
+export default HeroTabs;

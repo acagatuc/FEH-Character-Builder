@@ -1,0 +1,22 @@
+// tabs actions
+export const ADD_TAB = "ADD_TAB";
+export const COPY_TAB = "COPY_TAB";
+export const DELETE_TAB = "DELETE_TAB";
+export const UPDATE_TABLIST = "UPDATE_TABLIST";
+export const CHANGE_TAB = "CHANGE_TAB";
+
+// hero actions
+export const CHANGE_HERO = "CHANGE_HERO";
+export const CHANGE_STATS = "CHANGE_STATS";
+export const CHANGE_SKILLS = "CHANGE_SKILLS";
+export const CHANGE_LEVELS = "CHANGE_LEVELS";
+export const CHANGE_MERGES = "CHANGE_MERGES";
+export const CHANGE_DRAGONFLOWERS = "CHANGE_DRAGONFLOWERS";
+export const CHANGE_RESPLENDENT = "CHANGE_RESPLENDENT";
+export const CHANGE_BLESSING = "CHANGE_BLESSING";
+export const CHANGE_SUMMONER_SUPPORT = "CHANGE_SUMMONER_SUPPORT";
+export const CHANGE_ALLY_SUPPORT = "CHANGE_ALLY_SUPPORT";
+export const CHANGE_BACKGROUND = "CHANGE_BACKGROUND";
+export const CHANGE_FAVORITE = "CHANGE_FAVORITE";
+
+export const COPY_HERO = "COPY_HERO";

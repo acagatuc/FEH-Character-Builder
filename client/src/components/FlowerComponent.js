@@ -47,9 +47,12 @@ export default function FlowerComponent(props) {
         tempArray[index % 5] += 1;
         index++;
       }
+      setFlowers(value);
+      props.onChange(value.value, tempArray);
+    } else {
+      setFlowers(value);
+      props.onChange(0, tempArray);
     }
-    setFlowers(value);
-    props.onChange(value.value, tempArray);
   };
 
   return (

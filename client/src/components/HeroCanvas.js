@@ -23,6 +23,9 @@ import wmsheet from "./../assets/wmsheet.png";
 import bg_button from "./../assets/bg_button.png";
 import ui from "./../assets/updated ui 2.png";
 
+// redux import
+import { useSelector } from "react-redux";
+
 // an array that declares the x values of all numbers
 const numberArray = [520, 555, 590, 624, 656, 692, 725, 759, 793, 828];
 
@@ -257,7 +260,7 @@ const TopRowComponent = ({ move_type, count }) => {
       cropy = 0;
       break;
     default:
-      image = "https://fehskills.s3.amazonaws.com/default.png";
+      image = "";
       break;
   }
   const [imgElement] = useImage(image, "Anonymous");
@@ -298,6 +301,9 @@ const TopRowComponent = ({ move_type, count }) => {
 
 const NumberComponent = ({ number, x, y, width, height, colorHeight }) => {
   const [sprite_sheet] = useImage(sheet, "Anonymous");
+  if (number === undefined) {
+    return null;
+  }
   if (number.toString().length === 2) {
     return (
       <Group>
@@ -371,7 +377,7 @@ const ResplendentComponent = ({ shouldRender }) => {
 
 const ImageComponent = ({ image, cropX, cropY, cropWidth, cropHeight, width, height }) => {
   if (image === "https://fehportraits.s3.amazonaws.com/.png") {
-    image = "https://fehskills.s3.amazonaws.com/default.png";
+    image = "";
   }
   const [imgElement] = useImage(image, "Anonymous");
   return (
@@ -403,6 +409,37 @@ const LargeTextComponent = ({ text, color, x, y, width }) => {
 };
 
 const TextComponent = ({ text, color, x, y }) => {
+  var index;
+  switch (text) {
+    case "HP":
+      index = 0;
+      break;
+    case "Atk":
+      index = 1;
+      break;
+    case "Spd":
+      index = 2;
+      break;
+    case "Def":
+      index = 3;
+      break;
+    case "Res":
+      index = 4;
+      break;
+    default:
+      index = -1;
+  }
+  if (index !== -1 && color !== undefined) {
+    if (color[index] === 0 || color[index] === 1 || color[index] === 2) {
+      if (color[index] === 0) {
+        color = "#E9A3BB";
+      } else if (color[index] === 2) {
+        color = "#B6E6F0";
+      } else {
+        color = "white";
+      }
+    }
+  }
   return (
     <Text
       text={text}
@@ -457,6 +494,12 @@ const WMComponent = ({ weapon, movement }) => {
   var weaponX = 0;
   var weaponY = 0;
   var moveX = 0;
+
+  if (weapon !== undefined) {
+    weapon = weapon.split(" ");
+  } else {
+    weapon = ["", ""];
+  }
 
   switch (weapon[0]) {
     case "Red":
@@ -532,7 +575,7 @@ const WMComponent = ({ weapon, movement }) => {
 
 const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
   if (image === "https://fehskills.s3.amazonaws.com/.png") {
-    image = "https://fehskills.s3.amazonaws.com/default.png";
+    image = "";
   }
   const [imgElement] = useImage(image, "Anonymous");
   if (text.includes("Falchion (")) {
@@ -653,6 +696,23 @@ export default function HeroCanvas(props) {
   const [stageWidth, setStageWidth] = useState(window.innerWidth);
   const [stageHeight, setStageHeight] = useState((960 / 540) * window.innerWidth);
 
+  // global redux state
+  // const global = useSelector((state) => state.tabList.tabList[state.tabList.tabValue]);
+  const hero = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].hero);
+  const merges = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].merges);
+  const levels = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].levels);
+  const dragonflowers = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].dragonflowers);
+  const stats = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].stats);
+  const skills = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].skills);
+  const resplendent = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].resplendent);
+  const ss = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].summonerSupport);
+  const as = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].allySupport);
+  const background = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].background);
+  const blessing = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].blessing);
+  const fav = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].favorite);
+  var badgeList = [blessing, hero.hero_type, ss, as];
+  const [statColor, setStatColor] = useState(["white", "white", "white", "white", "white"]);
+
   const handleExport = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
     downloadURI(uri, "FEH Builder - " + props.name + ".png");
@@ -680,34 +740,46 @@ export default function HeroCanvas(props) {
     <div id="wrapper" className="wrapper">
       <Stage width={stageWidth} height={stageHeight} ref={stageRef} onClick={handleExport} scaleX={stageWidth / 540} scaleY={stageHeight / 960}>
         <Layer id="img layer">
-          <BackgroundComponent image={props.background} summonerSupport={props.badgeList} width={540} height={960} />
-          <ImageComponent image={props.image} cropX={368} cropY={0} cropWidth={865} cropHeight={1538} width={540} height={960} />
-          <UIComponent image={props.ui} width={540} height={960} />
-          <ButtonsComponent duo={props.badgeList[1] === "duo" || props.badgeList[1] === "harmonic"} fav={props.fav} />
+          <BackgroundComponent image={background} summonerSupport={[blessing, hero.hero_type, ss, as]} width={540} height={960} />
+          <ImageComponent
+            image={
+              resplendent
+                ? "https://fehportraits.s3.amazonaws.com/Resplendent " + hero.name + ".png"
+                : "https://fehportraits.s3.amazonaws.com/" + hero.name + ".png"
+            }
+            cropX={368}
+            cropY={0}
+            cropWidth={865}
+            cropHeight={1538}
+            width={540}
+            height={960}
+          />
+          <UIComponent image={"https://fehportraits.s3.amazonaws.com/updated ui 2.png"} width={540} height={960} />
+          <ButtonsComponent duo={hero.hero_type === "duo" || hero.hero_type === "harmonic"} fav={fav} />
           <BadgeComponent shouldRender={props.ascended_trait} nameOfBadge={floret} d={[5, 375, 45, 45]} />
-          <BadgeList badgeList={props.badgeList} />
-          <TopRowComponent move_type={props.move_type} count={props.dragonflowers} />
+          <BadgeList badgeList={[blessing, hero.hero_type, ss, as]} />
+          <TopRowComponent move_type={hero.moveType} count={dragonflowers} />
           <RarityComponent rarity={5} />
-          <ResplendentComponent shouldRender={props.image.includes("Resplendent")} />
+          <ResplendentComponent shouldRender={resplendent} />
         </Layer>
         <Layer id="stat layer">
-          <LargeTextComponent text={props.name} color="white" stroke="black" x={58} y={470} width={214} />
-          <LargeTextComponent text={props.title} color="white" x={15} y={412} width={260} />
-          <MergeComponent merges={props.merges} />
-          <WMComponent weapon={props.weapon_type.split(" ")} movement={props.move_type} />
-          <TextComponent text={"HP"} color={props.statColorArray[0]} x={88} y={604} />
-          <TextComponent text={"Atk"} color={props.statColorArray[1]} x={87} y={641} />
-          <TextComponent text={"Spd"} color={props.statColorArray[2]} x={85} y={678} />
-          <TextComponent text={"Def"} color={props.statColorArray[3]} x={86} y={715} />
-          <TextComponent text={"Res"} color={props.statColorArray[4]} x={86} y={752} />
-          <StatComponent text={`${props.stats[0]}`} x={172} y={603} />
-          <StatComponent text={`${props.stats[1]}`} x={172} y={640} />
-          <StatComponent text={`${props.stats[2]}`} x={172} y={677} />
-          <StatComponent text={`${props.stats[3]}`} x={172} y={714} />
-          <StatComponent text={`${props.stats[4]}`} x={172} y={751} />
+          <LargeTextComponent text={hero.name} color="white" stroke="black" x={58} y={470} width={214} />
+          <LargeTextComponent text={hero.title} color="white" x={15} y={412} width={260} />
+          <MergeComponent merges={merges} />
+          <WMComponent weapon={hero.weaponType} movement={hero.moveType} />
+          <TextComponent text={"HP"} color={levels} x={88} y={604} />
+          <TextComponent text={"Atk"} color={levels} x={87} y={641} />
+          <TextComponent text={"Spd"} color={levels} x={85} y={678} />
+          <TextComponent text={"Def"} color={levels} x={86} y={715} />
+          <TextComponent text={"Res"} color={levels} x={86} y={752} />
+          <StatComponent text={`${stats[0]}`} x={172} y={603} />
+          <StatComponent text={`${stats[1]}`} x={172} y={640} />
+          <StatComponent text={`${stats[2]}`} x={172} y={677} />
+          <StatComponent text={`${stats[3]}`} x={172} y={714} />
+          <StatComponent text={`${stats[4]}`} x={172} y={751} />
           <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
           <Text
-            text={`${props.va}`}
+            text={`${hero.VA}`}
             x={34}
             y={910}
             fontFamily="nintendoP_Skip-D_003"
@@ -719,7 +791,7 @@ export default function HeroCanvas(props) {
             fillAfterStrokeEnabled={true}
           />
           <Text
-            text={`${props.art}`}
+            text={resplendent ? `${hero.artist[1]}` : `${hero.artist[0]}`}
             x={34}
             y={932}
             fontFamily="nintendoP_Skip-D_003"
@@ -732,12 +804,12 @@ export default function HeroCanvas(props) {
           />
         </Layer>
         <Layer id="skill layer">
-          <WeaponComponent text={`${props.weapon}`} image={`${props.refine}`} x={280} y={596} offsetX={33} offsetY={8} />
-          <AssistOrSpecial text={`${props.assist}`} x={280} y={631} offsetX={33} offsetY={9} />
-          <AssistOrSpecial text={`${props.special}`} x={278} y={671} offsetX={35} offsetY={7} />
-          <SkillComponent text={`${props.aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
-          <SkillComponent text={`${props.bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
-          <SkillComponent text={`${props.cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
+          <WeaponComponent text={`${skills.weapon}`} image={`${props.refine}`} x={280} y={596} offsetX={33} offsetY={8} />
+          <AssistOrSpecial text={`${skills.assist}`} x={280} y={631} offsetX={33} offsetY={9} />
+          <AssistOrSpecial text={`${skills.special}`} x={278} y={671} offsetX={35} offsetY={7} />
+          <SkillComponent text={`${skills.aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
+          <SkillComponent text={`${skills.bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
+          <SkillComponent text={`${skills.cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
         </Layer>
       </Stage>
     </div>

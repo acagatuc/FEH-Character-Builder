@@ -16,7 +16,15 @@ import ToggleComponent from "./ToggleComponent.js";
 import BackgroundDropdown from "./BackgroundDropdown.js";
 import FavoriteComponent from "./FavoriteComponent.js";
 
+//redux imports
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "../redux/actions";
+
 export default function HeroComponent(props) {
+  const globalHero = useSelector((state) => state.tabList.tabList[props.id]);
+  const globalHeroes = useSelector((state) => state.tabList.tabList);
+  const dispatch = useDispatch();
+
   const [hero, setHero] = useState({
     name: "",
     single_name: "",
@@ -90,6 +98,17 @@ export default function HeroComponent(props) {
     },
   });
 
+  const [stringSkills, setStringSkills] = useState({
+    weapon: "",
+    refine: "",
+    aSkill: "",
+    assist: "",
+    bSkill: "",
+    cSkill: "",
+    sSkill: "",
+    special: "",
+  });
+
   const [levels, setLevels] = useState({
     array: [1, 1, 1, 1, 1], // levels for assets and flaws
     disabled: false,
@@ -151,24 +170,26 @@ export default function HeroComponent(props) {
       weaponType: hero.weapon_type,
       hero_type: hero.hero_type,
     };
-    props.changeHero(newObject);
 
     // set the resplendent to be false for any switch in hero
-    setResplendent(false);
-    props.changeResplendent(false);
+    // setResplendent(false);
+    // props.changeResplendent(false);
+    dispatch(actions.changeResplendent(false, props.id));
     setTransformed(false);
-    props.changeTransformed(false);
+    // props.changeTransformed(false);
 
     setFlowerStats([0, 0, 0, 0, 0]);
     setMergedStats([0, 0, 0, 0, 0]);
     setHeroBuffStats([0, 0, 0, 0, 0]);
     setLevels({ ...levels, array: [1, 1, 1, 1, 1] });
+    dispatch(actions.changeLevels(levels.array, props.id));
     setBlessing("");
+    dispatch(actions.changeHero(newObject, props.id));
   }, [hero]);
 
   useEffect(() => {
     addStats();
-    props.changeSkills(skills);
+    dispatch(actions.changeStats(stats, props.id));
   }, [skills]);
 
   useEffect(() => {
@@ -181,52 +202,27 @@ export default function HeroComponent(props) {
 
   useEffect(() => {
     addStats();
+    dispatch(actions.changeStats(stats, props.id));
   }, [mergedStats]);
 
   useEffect(() => {
     calculateMergeStats();
     addStats();
+    dispatch(actions.changeStats(stats, props.id));
   }, [flowerStats, heroBuffStats, summonerSupportStats, transformedStats, prevFlaw, prevAsset, prevAscended]);
 
   useEffect(() => {
-    if (prevAscended !== "") {
-      props.displayFloret(true);
-    } else {
-      props.displayFloret(false);
-    }
-  });
-
-  useEffect(() => {
-    props.changeBlessing(blessing);
-  }, [blessing]);
-
-  useEffect(() => {
-    props.changeSummonerSupport(summonerSupport);
-  }, [summonerSupport]);
-
-  useEffect(() => {
-    props.changeAllySupport(allySupport);
-  }, [allySupport]);
-
-  useEffect(() => {
-    props.changeBackground(background);
-  }, [background]);
-
-  useEffect(() => {
-    props.changeFavorite(favorite);
-  }, [favorite]);
-
-  useEffect(() => {
     addStats();
+    dispatch(actions.changeStats(stats, props.id));
   }, [resplendentStats]);
 
   useEffect(() => {
-    props.changeResplendent(resplendent);
+    dispatch(actions.changeResplendent(resplendent, props.id));
   }, [resplendent]);
 
   useEffect(() => {
-    props.changeStats(stats, merges, levels.array);
-  }, [stats]);
+    dispatch(actions.changeSkills(stringSkills, props.id));
+  }, [stringSkills]);
 
   const heroChange = (newHero) => {
     //get all possible skills on call? Instead of in multiple calls in children?
@@ -364,6 +360,7 @@ export default function HeroComponent(props) {
       setLevels({ ...levels, disabled: false });
     }
     setMergedStats(tempArray);
+    dispatch(actions.changeLevels(levels.array, props.id));
   };
 
   const addStats = () => {
@@ -427,71 +424,87 @@ export default function HeroComponent(props) {
     } else {
       setStats(tempArray);
     }
+    dispatch(actions.changeStats(stats, props.id));
   };
 
   const mergeChange = (number, order) => {
     setMerges(number);
     setMergeOrder(order);
     calculateMergeStats();
+    console.log(globalHeroes);
+    dispatch(actions.changeMerges(number, props.id));
   };
 
   const flowerChange = (value, array) => {
-    props.changeDragonflowers(value);
     setFlowerStats(array);
+    dispatch(actions.changeDragonflowers(value, props.id));
   };
 
   const assetChange = (array, asset) => {
     setLevels({ ...levels, array: array });
     setPrevAsset(asset);
     setMergedStats([0, 0, 0, 0, 0]);
+    dispatch(actions.changeLevels(levels.array, props.id));
   };
 
   const flawChange = (array, flaw) => {
     setLevels({ ...levels, array: array });
     setPrevFlaw(flaw);
     setMergedStats([0, 0, 0, 0, 0]);
+    dispatch(actions.changeLevels(levels.array, props.id));
   };
 
   const ascendedChange = (array, ascended) => {
     setLevels({ ...levels, array: array });
     setPrevAscended(ascended);
     setMergedStats([0, 0, 0, 0, 0]);
+    dispatch(actions.changeLevels(levels.array, props.id));
   };
 
   const changeWeapon = (w) => {
     setSkills({ ...skills, weapon: w.value });
+    setStringSkills({ ...stringSkills, weapon: w.value.name });
+    dispatch(actions.changeSkills(stringSkills, props.id));
   };
 
   const changeRefine = (r) => {
     setSkills({ ...skills, refine: r });
+    setStringSkills({ ...stringSkills, refine: r.value.name });
   };
 
   const changeAssist = (a) => {
     setSkills({ ...skills, assist: a.value });
+    setStringSkills({ ...stringSkills, assist: a.value.name });
   };
 
   const changeSpecial = (s) => {
     setSkills({ ...skills, special: s.value });
+    setStringSkills({ ...stringSkills, special: s.value.name });
   };
 
   const changeASkill = (a) => {
     setSkills({ ...skills, aSkill: a.value });
+    setStringSkills({ ...stringSkills, aSkill: a.value.name });
   };
 
   const changeBSkill = (b) => {
     setSkills({ ...skills, bSkill: b.value });
+    setStringSkills({ ...stringSkills, bSkill: b.value.name });
   };
 
   const changeCSkill = (c) => {
     setSkills({ ...skills, cSkill: c.value });
+    setStringSkills({ ...stringSkills, cSkill: c.value.name });
   };
 
   const changeSSkill = (s) => {
     setSkills({ ...skills, sSkill: s.value });
+    setStringSkills({ ...stringSkills, sSkill: s.value.name });
   };
 
   const changeBlessing = (b) => {
     setBlessing(b.value);
+    dispatch(actions.changeBlessing(b.value, props.id));
   };
 
   const changeBlessingStats = (buffs) => {
@@ -514,10 +527,12 @@ export default function HeroComponent(props) {
       setSummonerSupportStats([5, 2, 2, 2, 2]);
     }
     setSummonerSupport(event);
+    dispatch(actions.changeSS(event, props.id));
   };
 
   const changeAllySupport = (event) => {
     setAllySupport(event);
+    dispatch(actions.changeAS(event, props.id));
   };
 
   const handleTransform = (event) => {
@@ -527,7 +542,17 @@ export default function HeroComponent(props) {
     } else {
       setTransformedStats(0);
     }
-    props.changeTransformed(event);
+    // props.changeTransformed(event);
+  };
+
+  const changeBackground = (bg) => {
+    setBackground(bg);
+    dispatch(actions.changeBackground(bg, props.id));
+  };
+
+  const changeFavorite = (fav) => {
+    setFavorite(fav);
+    dispatch(actions.changeFavorite(fav, props.id));
   };
 
   const handleResplendentStats = (r) => {
@@ -616,8 +641,8 @@ export default function HeroComponent(props) {
             <SwitchComponent res={resplendentStatsBoolean} R_Artist={hero.exists} onChange={handleResplendentStats} label={"Resplendant Stats"} />
             <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
             <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
-            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={setBackground} />
-            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={setFavorite} />
+            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} />
+            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} />
           </Col>
           <Col>
             buffs or debuffs stats

@@ -111,9 +111,7 @@ export default function SkillComponent(props) {
           </Box>
         )}
         isOptionEqualToValue={(option, option2) => option.value.name === option2.value.name}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />
     </div>
   );

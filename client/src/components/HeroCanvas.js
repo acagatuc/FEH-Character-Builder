@@ -574,12 +574,17 @@ const WMComponent = ({ weapon, movement }) => {
 };
 
 const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
+  // console.log(image);
+
   if (image === "https://fehskills.s3.amazonaws.com/.png") {
     image = "";
   }
   const [imgElement] = useImage(image, "Anonymous");
   if (text.includes("Falchion (")) {
     text = "Falchion";
+  }
+  if (text === undefined) {
+    return null;
   }
   if (!text.includes(undefined)) {
     return (
@@ -619,6 +624,9 @@ const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
 };
 
 const AssistOrSpecial = ({ text, x, y, offsetX, offsetY }) => {
+  if (text === undefined) {
+    return null;
+  }
   return (
     <Text
       text={text}
@@ -647,7 +655,9 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
     url = url.replace("/", "");
   }
   const [imgElement] = useImage("https://fehskills.s3.amazonaws.com/" + url + ".png", "Anonymous");
-
+  if (text === undefined) {
+    return null;
+  }
   if (!text.includes("undefined")) {
     if (imgElement && imgElement.width >= 75) {
       return (
@@ -693,8 +703,10 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
 
 export default function HeroCanvas(props) {
   const stageRef = React.useRef();
-  const [stageWidth, setStageWidth] = useState(window.innerWidth);
-  const [stageHeight, setStageHeight] = useState((960 / 540) * window.innerWidth);
+  // const [stageWidth, setStageWidth] = useState(window.innerWidth);
+  // const [stageHeight, setStageHeight] = useState((960 / 540) * window.innerWidth);
+  const [stageWidth, setStageWidth] = useState((540 / 960) * window.innerHeight);
+  const [stageHeight, setStageHeight] = useState(window.innerHeight);
 
   // global redux state
   // const global = useSelector((state) => state.tabList.tabList[state.tabList.tabValue]);
@@ -702,16 +714,25 @@ export default function HeroCanvas(props) {
   const merges = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].merges);
   const levels = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].levels);
   const dragonflowers = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].dragonflowers);
-  const stats = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].stats);
-  const skills = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].skills);
+  const hp = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].hp);
+  const atk = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].atk);
+  const spd = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].spd);
+  const def = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].def);
+  const res = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].res);
+  const weapon = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].weapon);
+  const refine = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].refine);
+  const assist = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].assist);
+  const special = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].special);
+  const aSkill = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].aSkill);
+  const bSkill = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].bSkill);
+  const cSkill = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].cSkill);
+  const sSkill = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].sSkill);
   const resplendent = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].resplendent);
   const ss = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].summonerSupport);
   const as = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].allySupport);
   const background = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].background);
   const blessing = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].blessing);
   const fav = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].favorite);
-  var badgeList = [blessing, hero.hero_type, ss, as];
-  const [statColor, setStatColor] = useState(["white", "white", "white", "white", "white"]);
 
   const handleExport = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
@@ -728,11 +749,11 @@ export default function HeroCanvas(props) {
   };
 
   useEffect(() => {
-    if (window.innerWidth >= 768) {
-      var aspectRatio = 960 / 540;
-      setStageWidth(window.innerWidth / 3);
-      setStageHeight(aspectRatio * stageWidth);
-    }
+    // if (window.innerWidth >= 768) {
+    //   var aspectRatio = 960 / 540;
+    //   setStageWidth(window.innerWidth / 3);
+    //   setStageHeight(aspectRatio * stageWidth);
+    // }
     props.sendWidth(stageWidth);
   }, [stageWidth]);
 
@@ -772,14 +793,14 @@ export default function HeroCanvas(props) {
           <TextComponent text={"Spd"} color={levels} x={85} y={678} />
           <TextComponent text={"Def"} color={levels} x={86} y={715} />
           <TextComponent text={"Res"} color={levels} x={86} y={752} />
-          <StatComponent text={`${stats[0]}`} x={172} y={603} />
-          <StatComponent text={`${stats[1]}`} x={172} y={640} />
-          <StatComponent text={`${stats[2]}`} x={172} y={677} />
-          <StatComponent text={`${stats[3]}`} x={172} y={714} />
-          <StatComponent text={`${stats[4]}`} x={172} y={751} />
+          <StatComponent text={`${hp}`} x={172} y={603} />
+          <StatComponent text={`${atk}`} x={172} y={640} />
+          <StatComponent text={`${spd}`} x={172} y={677} />
+          <StatComponent text={`${def}`} x={172} y={714} />
+          <StatComponent text={`${res}`} x={172} y={751} />
           <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
           <Text
-            text={`${hero.VA}`}
+            text={hero.VA === undefined ? "" : `${hero.VA}`}
             x={34}
             y={910}
             fontFamily="nintendoP_Skip-D_003"
@@ -804,12 +825,12 @@ export default function HeroCanvas(props) {
           />
         </Layer>
         <Layer id="skill layer">
-          <WeaponComponent text={`${skills.weapon}`} image={`${props.refine}`} x={280} y={596} offsetX={33} offsetY={8} />
-          <AssistOrSpecial text={`${skills.assist}`} x={280} y={631} offsetX={33} offsetY={9} />
-          <AssistOrSpecial text={`${skills.special}`} x={278} y={671} offsetX={35} offsetY={7} />
-          <SkillComponent text={`${skills.aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
-          <SkillComponent text={`${skills.bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
-          <SkillComponent text={`${skills.cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
+          <WeaponComponent text={`${weapon}`} image={`${refine}`} x={280} y={596} offsetX={33} offsetY={8} />
+          <AssistOrSpecial text={`${assist}`} x={280} y={631} offsetX={33} offsetY={9} />
+          <AssistOrSpecial text={`${special}`} x={278} y={671} offsetX={35} offsetY={7} />
+          <SkillComponent text={`${aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
+          <SkillComponent text={`${bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
+          <SkillComponent text={`${cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
         </Layer>
       </Stage>
     </div>

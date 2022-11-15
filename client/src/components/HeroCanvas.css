@@ -2,13 +2,6 @@
   display: none;
 }
 
-.heroDisplay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 0;
-}
-
 .black {
   color: black;
 }
@@ -22,6 +15,7 @@
 .wrapper {
   position: relative;
   display: inline-block;
+  height: 100vh;
 }
 
 .wrapper > canvas {

@@ -26,9 +26,7 @@ export default function WeaponComponent(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      let response = await fetch(
-        `http://localhost:5000/GenericWeapons/` + weapon_type + "/" + props.hero.name
-      );
+      let response = await fetch(`http://localhost:5000/GenericWeapons/` + weapon_type + "/" + props.hero.name);
       response = await response.json();
       setWeaponList(
         []
@@ -54,10 +52,7 @@ export default function WeaponComponent(props) {
     if (props.hero.exists) {
       if (props.hero.weapon_type.includes("Beast") || props.hero.weapon_type.includes("Dragon")) {
         weapon_type = props.hero.weapon_type.split(" ")[1];
-      } else if (
-        props.hero.weapon_type.includes("Dagger") ||
-        props.hero.weapon_type.includes("Bow")
-      ) {
+      } else if (props.hero.weapon_type.includes("Dagger") || props.hero.weapon_type.includes("Bow")) {
         weapon_type = props.hero.weapon_type.split(" ")[1] + "s";
       } else {
         weapon_type = props.hero.weapon_type;
@@ -108,6 +103,7 @@ export default function WeaponComponent(props) {
   const handleWeapon = (event, value) => {
     if (value === null) {
       props.onChangeW(emptyWeapon);
+      setRefine(null);
     } else {
       props.onChangeW(value);
     }
@@ -163,9 +159,7 @@ export default function WeaponComponent(props) {
           </Box>
         )}
         isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder={"Weapon"}></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder={"Weapon"}></TextField>}
       />
       <Autocomplete
         id="refine dropdown"
@@ -176,9 +170,7 @@ export default function WeaponComponent(props) {
         getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder={"Refine"}></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder={"Refine"}></TextField>}
       />
     </div>
   );

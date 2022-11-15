@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "./fonts/nintendoPSkip-D003.ttf";
-import store from "./redux/store";
+import { store } from "./redux/store";
 
 ReactDOM.render(
   <Provider store={store}>

@@ -10,6 +10,9 @@ import "./App.css";
 
 const TabLabel = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const grima = useSelector((state) => state.display.grima);
+  const duo = useSelector((state) => state.display.duo_display);
+  const tab_image = useSelector((state) => state.display.tab_image);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -29,10 +32,13 @@ const TabLabel = (props) => {
   if (props.label === "") {
     url = "";
   } else if (props.transform) {
-    url = ("https://fehchibis.s3.amazonaws.com/" + props.label + "+Transform.png").replace(" ", "+");
+    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + "+Transform.png").replace(" ", "+");
+  } else if ((props.type === "harmonic" || props.type === "duo") && duo !== "") {
+    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + duo + ".png").replace(" ", "+");
   } else {
-    url = ("https://fehchibis.s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
+    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
   }
+  // console.log(url);
 
   return (
     <div className="d-flex justify-content-between align-items-center noPadding" style={{ width: "115%" }}>
@@ -169,9 +175,9 @@ function HeroTabs(props) {
             value={tab.id}
             label={
               <TabLabel
-                tabs={ex}
                 label={tab.label}
                 id={tab.id}
+                type={tab.hero.hero_type}
                 copyTab={copyTab}
                 deleteTab={deleteTab}
                 transform={tab.transformed}

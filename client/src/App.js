@@ -9,10 +9,17 @@ import { Container, Col, Row } from "react-bootstrap";
 import HeroTabs from "./HeroTabs.js";
 import HeroCanvas from "./components/HeroCanvas.js";
 import AppInfo from "./components/AppInfo.js";
-import { DisplayContext } from "./DisplayContext.js";
 
 import { useSelector } from "react-redux";
+import { store } from "./redux/store";
+import { saveState } from "./redux/localStorage";
 import bg from "./background.png";
+
+store.subscribe(() => {
+  saveState({
+    display: store.getState().display,
+  });
+});
 
 const App = (props) => {
   <link
@@ -24,10 +31,6 @@ const App = (props) => {
 
   // this is to set the width of the col so the form does not overflow
   const [canvasWidth, setWidth] = useState(0);
-  const [display, setDisplay] = useState("full");
-  const [backpack, setBackpack] = useState(false);
-  const [grima, setGrima] = useState(false);
-
   const [displayFloret, setDisplayFloret] = useState(false);
 
   return (
@@ -35,18 +38,16 @@ const App = (props) => {
       <header className="App-header">
         <h2>
           Welcome to the FEH Character Builder
-          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} onChange={setDisplay} onBackpack={setBackpack} onGrima={setGrima} />
+          <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
         </h2>
       </header>
-      <Container fluid style={{ backgroundImage: `url(${bg})` }}>
+      <Container fluid style={{ backgroundImage: `url(${bg})`, height: "100%" }}>
         <Row>
           <Col md={4} style={{ width: canvasWidth, paddingTop: "5px", paddingLeft: "5px" }}>
             <HeroCanvas sendWidth={(width) => setWidth(width + 5)} />
           </Col>
           <Col style={{ padding: 0, paddingTop: "5px" }}>
-            <DisplayContext.Provider value={{ display, backpack, grima }}>
-              <HeroTabs />
-            </DisplayContext.Provider>
+            <HeroTabs />
           </Col>
         </Row>
       </Container>

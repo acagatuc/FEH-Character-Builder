@@ -133,3 +133,39 @@ export const changeFavorite = (fav, id) => ({
     id: id,
   },
 });
+
+// display actions
+export const changeNameDisplay = (i) => ({
+  type: actionTypes.CHANGE_NAME_DISPLAY,
+  payload: {
+    nameDisplay: i,
+  },
+});
+
+export const changeGrima = (i) => ({
+  type: actionTypes.CHANGE_GRIMA,
+  payload: {
+    grima: i,
+  },
+});
+
+export const changeBackpack = (i) => ({
+  type: actionTypes.CHANGE_BACKPACK,
+  payload: {
+    bp: i,
+  },
+});
+
+export const changeDuoDisplay = (i) => ({
+  type: actionTypes.CHANGE_DUO_DISPLAY,
+  payload: {
+    display: i,
+  },
+});
+
+export const changeTabImageDisplay = (i) => ({
+  type: actionTypes.CHANGE_TAB_IMAGE_DISPLAY,
+  payload: {
+    display: i,
+  },
+});

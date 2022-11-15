@@ -18,7 +18,7 @@ import {
   CHANGE_FAVORITE,
 } from "../actionTypes";
 
-import { clone, cloneDeep } from "lodash";
+// import { clone, cloneDeep } from "lodash";
 
 const initState = {
   key: 0,
@@ -38,7 +38,12 @@ const initState = {
         weaponType: "",
         hero_type: "",
       },
-      stats: ["", "", "", "", ""],
+      hp: "",
+      atk: "",
+      spd: "",
+      def: "",
+      res: "",
+      levels: [1, 1, 1, 1, 1],
       merges: 0,
       dragonflowers: 0,
       resplendent: false,
@@ -47,16 +52,14 @@ const initState = {
       allySupport: "",
       background: "",
       favorite: "",
-      skills: {
-        weapon: "",
-        refine: "",
-        aSkill: "",
-        assist: "",
-        bSkill: "",
-        cSkill: "",
-        sSkill: "",
-        special: "",
-      },
+      weapon: "",
+      refine: "",
+      aSkill: "",
+      assist: "",
+      bSkill: "",
+      cSkill: "",
+      sSkill: "",
+      special: "",
     },
   ],
 };
@@ -84,31 +87,34 @@ export default function (state = initState, action) {
             weaponType: "",
             hero_type: "",
           },
-          stats: ["", "", "", "", ""],
+          hp: "",
+          atk: "",
+          spd: "",
+          def: "",
+          res: "",
           levels: [1, 1, 1, 1, 1],
           merges: 0,
+          dragonflowers: 0,
           resplendent: false,
           blessing: "",
           summonerSupport: "",
           allySupport: "",
           background: "",
           favorite: "",
-          skills: {
-            weapon: "",
-            refine: "",
-            aSkill: "",
-            assist: "",
-            bSkill: "",
-            cSkill: "",
-            sSkill: "",
-            special: "",
-          },
+          weapon: "",
+          refine: "",
+          aSkill: "",
+          assist: "",
+          bSkill: "",
+          cSkill: "",
+          sSkill: "",
+          special: "",
         },
       ];
       return { ...state };
     }
     case COPY_TAB: {
-      const { id, length } = action.payload;
+      // const { id, length } = action.payload;
       // state.key++;
       // var copiedHero = {
       //   key: 0,
@@ -181,12 +187,23 @@ export default function (state = initState, action) {
     }
     case CHANGE_STATS: {
       const { stats, id } = action.payload;
-      state.tabList[id].stats = stats;
+      state.tabList[id].hp = stats[0];
+      state.tabList[id].atk = stats[1];
+      state.tabList[id].spd = stats[2];
+      state.tabList[id].def = stats[3];
+      state.tabList[id].res = stats[4];
       return { ...state };
     }
     case CHANGE_SKILLS: {
       const { skills, id } = action.payload;
-      state.tabList[id].skills = skills;
+      state.tabList[id].weapon = skills.weapon;
+      state.tabList[id].refine = skills.refine;
+      state.tabList[id].assist = skills.assist;
+      state.tabList[id].special = skills.special;
+      state.tabList[id].aSkill = skills.aSkill;
+      state.tabList[id].bSkill = skills.bSkill;
+      state.tabList[id].cSkill = skills.cSkill;
+      state.tabList[id].sSkill = skills.sSkill;
       return { ...state };
     }
     case CHANGE_MERGES: {

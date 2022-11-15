@@ -51,7 +51,10 @@ export default function BlessingHeroSelectionComponent(props) {
   }, [props.blessing]);
 
   const handleAdd = (chip) => {
-    if (selectedHeroList.length < 6) {
+    if (chip.currentTarget.title === "Clear") {
+      setSelectedHeroList([]);
+      calculateHeroBuffs(stats, false);
+    } else if (selectedHeroList.length < 6) {
       var hero = heroList.find((element) => {
         return element.label === chip.target.innerHTML;
       });
@@ -95,7 +98,6 @@ export default function BlessingHeroSelectionComponent(props) {
       <Autocomplete
         multiple
         id="tags-outlined"
-        disableClearable
         options={heroList}
         getOptionLabel={(option) => option.label || ""}
         defaultValue={[]}

@@ -185,11 +185,13 @@ export default function HeroComponent(props) {
     dispatch(actions.changeLevels(levels.array, props.id));
     setBlessing("");
     dispatch(actions.changeHero(newObject, props.id));
+
+    setStringSkills({ weapon: "", refine: "", aSkill: "", assist: "", bSkill: "", cSkill: "", sSkill: "", special: "" });
+    dispatch(actions.changeSkills(stringSkills, props.id));
   }, [hero]);
 
   useEffect(() => {
     addStats();
-    dispatch(actions.changeStats(stats, props.id));
   }, [skills]);
 
   useEffect(() => {
@@ -202,18 +204,15 @@ export default function HeroComponent(props) {
 
   useEffect(() => {
     addStats();
-    dispatch(actions.changeStats(stats, props.id));
   }, [mergedStats]);
 
   useEffect(() => {
     calculateMergeStats();
     addStats();
-    dispatch(actions.changeStats(stats, props.id));
   }, [flowerStats, heroBuffStats, summonerSupportStats, transformedStats, prevFlaw, prevAsset, prevAscended]);
 
   useEffect(() => {
     addStats();
-    dispatch(actions.changeStats(stats, props.id));
   }, [resplendentStats]);
 
   useEffect(() => {
@@ -423,8 +422,8 @@ export default function HeroComponent(props) {
       setStats(["", "", "", "", ""]);
     } else {
       setStats(tempArray);
+      dispatch(actions.changeStats(tempArray, props.id));
     }
-    dispatch(actions.changeStats(stats, props.id));
   };
 
   const mergeChange = (number, order) => {
@@ -464,12 +463,11 @@ export default function HeroComponent(props) {
   const changeWeapon = (w) => {
     setSkills({ ...skills, weapon: w.value });
     setStringSkills({ ...stringSkills, weapon: w.value.name });
-    dispatch(actions.changeSkills(stringSkills, props.id));
   };
 
   const changeRefine = (r) => {
     setSkills({ ...skills, refine: r });
-    setStringSkills({ ...stringSkills, refine: r.value.name });
+    setStringSkills({ ...stringSkills, refine: r.img });
   };
 
   const changeAssist = (a) => {
@@ -567,7 +565,7 @@ export default function HeroComponent(props) {
 
   return (
     <div>
-      <Container className="noMargin">
+      <Container className="noMargin" style={{ height: "100%" }}>
         <Row>
           <Col md={5}>
             <h3>Stats:</h3>

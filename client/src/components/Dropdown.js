@@ -1,105 +1,145 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Autocomplete, MenuItem, TextField } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import { Autocomplete, TextField } from "@mui/material";
 
 // redux import
 import { useSelector } from "react-redux";
 
 export default function Dropdown(props) {
+  // whole hero list that contains all names, backpacks, and character ids
+  const [heroList, setHeroList] = useState([]);
+
+  // list of heroes only used for display (uses parts of the hero list to creat this)
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [hero, setHero] = useState(null);
-  const [heroName, setHeroName] = useState("");
+  const heroName = useRef({ value: null, label: "" });
+
+  // display settings that affect the list
   const name_display = useSelector((state) => state.display.name_display);
   const grima_display = useSelector((state) => state.display.grima);
   const backpack_display = useSelector((state) => state.display.backpack);
 
+  // gets initial hero list with names and character ids
   useEffect(() => {
-    async function fetchMyAPI() {
+    async function fetchHeroList() {
       let response = await fetch(props.url);
       response = await response.json();
+
+      // concats hero list from response onto empty array and sets the hero list
+      setHeroList(
+        [].concat(response).map(function (listItem) {
+          return {
+            character_id: listItem.character_id,
+            full_name: listItem.full_name,
+            name_title: listItem.name_title,
+            abbreviated: listItem.abbreviated,
+            backpack: listItem.backpack,
+          };
+        })
+      );
+    }
+
+    fetchHeroList();
+  }, [props.url]);
+
+  // creates a list with the given conditions outlined by the display state
+  useEffect(() => {
+    // creates a list of heroes from the display settings and the hero list
+    function createList() {
+      // if the user wants full names
       if (name_display === "full") {
         setList(
           []
-            .concat(response)
+            .concat(heroList)
             .sort((a, b) => (a.full_name > b.full_name ? 1 : -1))
             .map(function (listItem) {
-              var fullName;
-              if (grima_display && listItem.full_name.includes("Fallen Robin")) {
-                fullName = listItem.full_name.replace("Fallen Robin", "Grima");
-              } else {
-                fullName = listItem.full_name;
+              // if the user wants to display grima instead of fallen robin
+              var name = listItem.full_name;
+              if (grima_display && name.includes("Fallen Robin")) {
+                name = name.replace("Fallen Robin", "Grima");
               }
+              // if the user wants to display backpacks
               if (backpack_display && listItem.backpack !== null) {
-                return {
-                  value: listItem,
-                  label: fullName + " (+ " + listItem.backpack + ")",
-                };
-              } else {
-                return {
-                  value: listItem,
-                  label: fullName,
-                };
+                name = name + " (+" + listItem.backpack + ")";
               }
-            })
-        );
-      } else if (name_display === "title") {
-        setList(
-          []
-            .concat(response)
-            .sort((a, b) => (a.name_title > b.name_title ? 1 : -1))
-            .map(function (listItem) {
-              if (backpack_display && listItem.backpack !== null) {
-                return {
-                  value: listItem,
-                  label: listItem.name_title + " (+ " + listItem.backpack + ")",
-                };
-              } else {
-                return {
-                  value: listItem,
-                  label: listItem.name_title,
-                };
+              // if the listItem is the currently selected hero, change the
+              if (listItem.character_id === heroName.current.value) {
+                heroName.current.label = name;
               }
-            })
-        );
-      } else if (name_display === "abbrev") {
-        setList(
-          []
-            .concat(response)
-            .sort((a, b) => (a.abbreviated > b.abbreviated ? 1 : -1))
-            .map(function (listItem) {
-              var abbr = "";
-              if (grima_display && listItem.abbreviated.includes("F!M!Robin")) {
-                abbr = listItem.abbreviated.replace("F!M!Robin", "M!Grima");
-              } else if (grima_display && listItem.abbreviated.includes("F!F!Robin")) {
-                abbr = listItem.abbreviated.replace("F!F!Robin", "F!Grima");
-              } else {
-                abbr = listItem.abbreviated;
-              }
-              if (backpack_display && listItem.backpack !== null) {
-                return {
-                  value: listItem,
-                  label: abbr + " (+ " + listItem.backpack + ")",
-                };
-              } else {
-                return {
-                  value: listItem,
-                  label: abbr,
-                };
-              }
+              return {
+                value: listItem.character_id,
+                label: name,
+              };
             })
         );
       }
-
-      setIsLoading(false);
+      // if the user wants names and titles
+      else if (name_display === "title") {
+        setList(
+          []
+            .concat(heroList)
+            .sort((a, b) => (a.name_title > b.name_title ? 1 : -1))
+            .map(function (listItem) {
+              // if the user wants to display grima instead of fallen robin
+              var name = listItem.name_title;
+              if (grima_display && name.includes("Fallen Robin")) {
+                name = name.replace("Fallen Robin", "Grima");
+              }
+              // if the user wants to display backpacks
+              if (backpack_display && listItem.backpack !== null) {
+                name = name + " (+" + listItem.backpack + ")";
+              }
+              // if the listItem is the currently selected hero, change the
+              if (listItem.character_id === heroName.current.value) {
+                heroName.current.label = name;
+              }
+              return {
+                value: listItem.character_id,
+                label: name,
+              };
+            })
+        );
+      }
+      // if the user wants abbreviated names
+      else if (name_display === "abbrev") {
+        setList(
+          []
+            .concat(heroList)
+            .sort((a, b) => (a.abbreviated > b.abbreviated ? 1 : -1))
+            .map(function (listItem) {
+              // if the user wants to display grima instead of fallen robin
+              var name = listItem.abbreviated;
+              if (grima_display && name.includes("F!F!Robin")) {
+                name = name.replace("F!F!Robin", "F!Grima");
+              } else if (grima_display && name.includes("F!M!Robin")) {
+                name = name.replace("F!M!Robin", "M!Grima");
+              }
+              // if the user wants to display backpacks
+              if (backpack_display && listItem.backpack !== null) {
+                name = name + " (+" + listItem.backpack + ")";
+              }
+              // if the listItem is the currently selected hero, change the
+              if (listItem.character_id === heroName.current.value) {
+                heroName.current.label = name;
+              }
+              return {
+                value: listItem.character_id,
+                label: name,
+              };
+            })
+        );
+      }
     }
 
-    fetchMyAPI();
-  }, [name_display, grima_display, backpack_display]);
+    createList();
+    setIsLoading(false);
+    console.log(heroName.current);
+  }, [heroName, heroList, name_display, grima_display, backpack_display]);
 
+  // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(event, value) {
-    let response = await fetch(props.url + value.value.character_id);
+    let response = await fetch(props.url + value.value);
     response = await response.json();
-    setHero(value);
+    heroName.current = value;
     props.onChange(response[0]);
   }
 
@@ -111,11 +151,11 @@ export default function Dropdown(props) {
         openOnFocus
         selectOnFocus
         options={list}
-        value={hero}
+        value={heroName.current}
         onChange={handleChange}
         loading={isLoading}
-        getOptionLabel={(option) => option.label || heroName}
-        isOptionEqualToValue={(option, option2) => option.label === option2.label}
+        getOptionLabel={(option) => option.label}
+        isOptionEqualToValue={(option, option2) => option.value === option2.value}
         renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
       />
     </div>

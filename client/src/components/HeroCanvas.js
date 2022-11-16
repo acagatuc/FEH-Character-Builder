@@ -784,7 +784,7 @@ export default function HeroCanvas(props) {
           <ResplendentComponent shouldRender={resplendent} />
         </Layer>
         <Layer id="stat layer">
-          <LargeTextComponent text={hero.name} color="white" stroke="black" x={58} y={470} width={214} />
+          <LargeTextComponent text={hero.singleName} color="white" stroke="black" x={58} y={470} width={214} />
           <LargeTextComponent text={hero.title} color="white" x={15} y={412} width={260} />
           <MergeComponent merges={merges} />
           <WMComponent weapon={hero.weaponType} movement={hero.moveType} />

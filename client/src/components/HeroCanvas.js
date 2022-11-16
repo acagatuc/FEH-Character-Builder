@@ -779,12 +779,12 @@ export default function HeroCanvas(props) {
           <ButtonsComponent duo={hero.hero_type === "duo" || hero.hero_type === "harmonic"} fav={fav} />
           <BadgeComponent shouldRender={props.ascended_trait} nameOfBadge={floret} d={[5, 375, 45, 45]} />
           <BadgeList badgeList={[blessing, hero.hero_type, ss, as]} />
-          <TopRowComponent move_type={hero.moveType} count={dragonflowers} />
+          <TopRowComponent move_type={hero.move_type} count={dragonflowers} />
           <RarityComponent rarity={5} />
           <ResplendentComponent shouldRender={resplendent} />
         </Layer>
         <Layer id="stat layer">
-          <LargeTextComponent text={hero.singleName} color="white" stroke="black" x={58} y={470} width={214} />
+          <LargeTextComponent text={hero.single_name} color="white" stroke="black" x={58} y={470} width={214} />
           <LargeTextComponent text={hero.title} color="white" x={15} y={412} width={260} />
           <MergeComponent merges={merges} />
           <WMComponent weapon={hero.weaponType} movement={hero.moveType} />

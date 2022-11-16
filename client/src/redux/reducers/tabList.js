@@ -27,6 +27,7 @@ const initState = {
     {
       key: 0,
       id: 0,
+      value: null,
       label: "",
       hero: {
         name: "",
@@ -34,9 +35,20 @@ const initState = {
         title: "",
         VA: "",
         artist: "",
-        moveType: "",
-        weaponType: "",
+        hp: [],
+        atk: [],
+        spd: [],
+        def: [],
+        res: [],
+        weapons: [],
+        assists: [],
+        specials: [],
+        passives: [],
+        weapon_type: "",
+        move_type: "",
         hero_type: "",
+        dragonflowers: 0,
+        exists: false,
       },
       hp: "",
       atk: "",
@@ -76,6 +88,7 @@ export default function (state = initState, action) {
         {
           key: state.key,
           id: id,
+          value: null,
           label: "",
           hero: {
             name: "",
@@ -83,9 +96,20 @@ export default function (state = initState, action) {
             title: "",
             VA: "",
             artist: "",
-            moveType: "",
-            weaponType: "",
+            hp: [],
+            atk: [],
+            spd: [],
+            def: [],
+            res: [],
+            weapons: [],
+            assists: [],
+            specials: [],
+            passives: [],
+            weapon_type: "",
+            move_type: "",
             hero_type: "",
+            dragonflowers: 0,
+            exists: false,
           },
           hp: "",
           atk: "",
@@ -114,54 +138,65 @@ export default function (state = initState, action) {
       return { ...state };
     }
     case COPY_TAB: {
-      // const { id, length } = action.payload;
-      // state.key++;
-      // var copiedHero = {
-      //   key: 0,
-      //   id: 0,
-      //   label: "",
-      //   hero: {
-      //     name: "",
-      //     singleName: "",
-      //     title: "",
-      //     VA: "",
-      //     artist: "",
-      //     moveType: "",
-      //     weaponType: "",
-      //     hero_type: "",
-      //   },
-      //   stats: ["", "", "", "", ""],
-      //   merges: 0,
-      //   dragonflowers: 0,
-      //   resplendent: false,
-      //   blessing: "",
-      //   summonerSupport: "",
-      //   allySupport: "",
-      //   background: "",
-      //   favorite: "",
-      //   skills: {
-      //     weapon: "",
-      //     refine: "",
-      //     aSkill: "",
-      //     assist: "",
-      //     bSkill: "",
-      //     cSkill: "",
-      //     sSkill: "",
-      //     special: "",
-      //   },
-      // };
-      // Object.assign(copiedHero.hero, state.tabList[id].hero);
-      // copiedHero.key = state.key;
-      // copiedHero.id = length;
-      // copiedHero.label = state.tabList[id].label;
-      // copiedHero.hero = state.tabList[id].hero;
-      // console.log(copiedHero.hero);
-      // console.log(copiedHero);
-      // copiedHero.blessing = state.tabList[id].blessing;
-      // copiedHero.summonerSupport = state.tabList[id].summonerSupport;
-      // copiedHero.allySupport = state.tabList[id].allySupport;
-      // state.tabList = [...state.tabList, copiedHero];
-      console.log(state.tabList);
+      const { id, length } = action.payload;
+      state.key++;
+      var copiedHero = {
+        key: 0,
+        id: 0,
+        value: null,
+        label: "",
+        hero: {
+          name: "",
+          singleName: "",
+          title: "",
+          VA: "",
+          artist: "",
+          hp: [],
+          atk: [],
+          spd: [],
+          def: [],
+          res: [],
+          weapons: [],
+          assists: [],
+          specials: [],
+          passives: [],
+          weapon_type: "",
+          move_type: "",
+          hero_type: "",
+          dragonflowers: 0,
+          exists: false,
+        },
+        stats: ["", "", "", "", ""],
+        merges: 0,
+        dragonflowers: 0,
+        resplendent: false,
+        blessing: "",
+        summonerSupport: "",
+        allySupport: "",
+        background: "",
+        favorite: "",
+        skills: {
+          weapon: "",
+          refine: "",
+          aSkill: "",
+          assist: "",
+          bSkill: "",
+          cSkill: "",
+          sSkill: "",
+          special: "",
+        },
+      };
+      Object.assign(copiedHero.hero, state.tabList[id].hero);
+      copiedHero.key = state.key;
+      copiedHero.id = length;
+      copiedHero.label = state.tabList[id].label;
+      copiedHero.hero = state.tabList[id].hero;
+      copiedHero.blessing = state.tabList[id].blessing;
+      copiedHero.summonerSupport = state.tabList[id].summonerSupport;
+      copiedHero.allySupport = state.tabList[id].allySupport;
+      copiedHero.value = state.tabList[id].value;
+      copiedHero.label = state.tabList[id].label;
+      state.tabList = [...state.tabList, copiedHero];
       return { ...state };
     }
     case UPDATE_TABLIST: {
@@ -183,6 +218,7 @@ export default function (state = initState, action) {
       const { hero, id } = action.payload;
       state.tabList[id].hero = hero;
       state.tabList[id].label = hero.name;
+      state.tabList[id].value = hero.character_id;
       return { ...state };
     }
     case CHANGE_STATS: {

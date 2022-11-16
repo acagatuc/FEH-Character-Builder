@@ -11,7 +11,9 @@ export default function Dropdown(props) {
   // list of heroes only used for display (uses parts of the hero list to creat this)
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const heroName = useRef({ value: null, label: "" });
+  const heroName = useSelector((state) => state.tabList.tabList[props.id].label);
+  const heroValue = useSelector((state) => state.tabList.tabList[props.id].value);
+  const dropdown = useRef({ label: heroName, value: heroValue });
 
   // display settings that affect the list
   const name_display = useSelector((state) => state.display.name_display);
@@ -62,8 +64,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === heroName.current.value) {
-                heroName.current.label = name;
+              if (listItem.character_id === dropdown.current.value) {
+                dropdown.current.label = name;
               }
               return {
                 value: listItem.character_id,
@@ -89,8 +91,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === heroName.current.value) {
-                heroName.current.label = name;
+              if (listItem.character_id === dropdown.current.value) {
+                dropdown.current.label = name;
               }
               return {
                 value: listItem.character_id,
@@ -118,8 +120,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === heroName.current.value) {
-                heroName.current.label = name;
+              if (listItem.character_id === dropdown.current.value) {
+                dropdown.current.label = name;
               }
               return {
                 value: listItem.character_id,
@@ -132,15 +134,16 @@ export default function Dropdown(props) {
 
     createList();
     setIsLoading(false);
-    console.log(heroName.current);
-  }, [heroName, heroList, name_display, grima_display, backpack_display]);
+  }, [dropdown, heroList, name_display, grima_display, backpack_display]);
+
+  // if the hero changes, make sure the label and value also changes
+  useEffect(() => {
+    dropdown.current = { label: heroName, value: heroValue };
+  }, [heroName, heroValue]);
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(event, value) {
-    let response = await fetch(props.url + value.value);
-    response = await response.json();
-    heroName.current = value;
-    props.onChange(response[0]);
+    props.onChange(value.value);
   }
 
   return (
@@ -151,7 +154,7 @@ export default function Dropdown(props) {
         openOnFocus
         selectOnFocus
         options={list}
-        value={heroName.current}
+        value={dropdown.current}
         onChange={handleChange}
         loading={isLoading}
         getOptionLabel={(option) => option.label}

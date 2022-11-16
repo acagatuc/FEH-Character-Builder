@@ -10,6 +10,8 @@ import "./App.css";
 
 const TabLabel = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const label = useSelector((state) => state.tabList.tabList[props.id].label);
+  const hero_type = useSelector((state) => state.tabList.tabList[props.id].hero.hero_type);
   const grima = useSelector((state) => state.display.grima);
   const duo = useSelector((state) => state.display.duo_display);
   const tab_image = useSelector((state) => state.display.tab_image);
@@ -29,21 +31,22 @@ const TabLabel = (props) => {
   };
 
   let url = "";
-  if (props.label === "") {
+  if (label === "") {
     url = "";
-  } else if (props.transform) {
-    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + "+Transform.png").replace(" ", "+");
-  } else if ((props.type === "harmonic" || props.type === "duo") && duo !== "") {
-    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + duo + ".png").replace(" ", "+");
+    // } else if (props.transform) {
+    //   url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + "+Transform.png").replace(" ", "+");
+  } else if ((hero_type === "harmonic" || hero_type === "duo") && duo !== "") {
+    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + duo + ".png").replace(" ", "+");
   } else {
-    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + props.label + ".png").replace(" ", "+");
+    url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + ".png").replace(" ", "+");
   }
-  // console.log(url);
 
   return (
     <div className="d-flex justify-content-between align-items-center noPadding" style={{ width: "115%" }}>
       <img className="chibis" src={url} align="left" alt="Chibi" />
-      <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>{props.label === "" ? "Build " + (props.id + 1) : props.label}</div>
+      <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>
+        {label === "" || label === undefined ? "Build " + (props.id + 1) : label}
+      </div>
       <IconButton
         component="div"
         aria-controls={open ? "basic-menu" : undefined}
@@ -79,7 +82,6 @@ const AddTabLabel = (props) => {
 };
 
 function HeroTabs(props) {
-  const ex = useSelector((state) => state.tabList);
   const t = useSelector((state) => state.tabList.tabList);
   const dispatch = useDispatch();
 
@@ -173,17 +175,7 @@ function HeroTabs(props) {
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={
-              <TabLabel
-                label={tab.label}
-                id={tab.id}
-                type={tab.hero.hero_type}
-                copyTab={copyTab}
-                deleteTab={deleteTab}
-                transform={tab.transformed}
-                length={t.length}
-              />
-            }
+            label={<TabLabel id={tab.id} copyTab={copyTab} deleteTab={deleteTab} length={t.length} />}
             wrapped
             sx={{
               backgroundColor: "white",

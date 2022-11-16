@@ -25,27 +25,8 @@ export default function HeroComponent(props) {
   const globalHeroes = useSelector((state) => state.tabList.tabList);
   const dispatch = useDispatch();
 
-  const [hero, setHero] = useState({
-    name: "",
-    single_name: "",
-    title: "",
-    hp: [],
-    atk: [],
-    spd: [],
-    def: [],
-    res: [],
-    weapons: [],
-    assists: [],
-    specials: [],
-    passives: [],
-    weapon_type: "",
-    move_type: "",
-    hero_type: "",
-    eVA: "",
-    Artist: ",",
-    dragonflowers: 0,
-    exists: false,
-  });
+  const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
+  const [character_id, set_character_id] = useState("");
 
   const [stats, setStats] = useState(["", "", "", "", ""]);
 
@@ -157,40 +138,6 @@ export default function HeroComponent(props) {
   const [favorite, setFavorite] = useState(0);
 
   useEffect(() => {
-    // call calculate stats here
-    addStats();
-
-    var newObject = {
-      name: hero.name,
-      singleName: hero.single_name,
-      title: hero.title,
-      VA: hero.EVA,
-      artist: hero.Artist.split(","),
-      moveType: hero.move_type,
-      weaponType: hero.weapon_type,
-      hero_type: hero.hero_type,
-    };
-
-    // set the resplendent to be false for any switch in hero
-    // setResplendent(false);
-    // props.changeResplendent(false);
-    dispatch(actions.changeResplendent(false, props.id));
-    setTransformed(false);
-    // props.changeTransformed(false);
-
-    setFlowerStats([0, 0, 0, 0, 0]);
-    setMergedStats([0, 0, 0, 0, 0]);
-    setHeroBuffStats([0, 0, 0, 0, 0]);
-    setLevels({ ...levels, array: [1, 1, 1, 1, 1] });
-    dispatch(actions.changeLevels(levels.array, props.id));
-    setBlessing("");
-    dispatch(actions.changeHero(newObject, props.id));
-
-    setStringSkills({ weapon: "", refine: "", aSkill: "", assist: "", bSkill: "", cSkill: "", sSkill: "", special: "" });
-    dispatch(actions.changeSkills(stringSkills, props.id));
-  }, [hero]);
-
-  useEffect(() => {
     addStats();
   }, [skills]);
 
@@ -223,15 +170,22 @@ export default function HeroComponent(props) {
     dispatch(actions.changeSkills(stringSkills, props.id));
   }, [stringSkills]);
 
-  const heroChange = (newHero) => {
+  async function heroChange(newHero) {
+    let response = await fetch("http://localhost:5000/Heroes/" + newHero);
+    response = await response.json();
+
     //get all possible skills on call? Instead of in multiple calls in children?
-    newHero["exists"] = true;
-    setHero(newHero);
+    response[0]["exists"] = true;
+    response[0].artist = response[0].Artist.split(",");
+    response[0].VA = response[0].EVA;
+    response[0].character_id = newHero;
+    dispatch(actions.changeHero(response[0], props.id));
+    addStats();
 
     setLevels({
       ...levels,
-      superboon: newHero.superboon,
-      superbane: newHero.superbane,
+      superboon: response[0].superboon,
+      superbane: response[0].superbane,
     });
 
     setSkills({
@@ -284,7 +238,22 @@ export default function HeroComponent(props) {
         unique: false,
       },
     });
-  };
+
+    dispatch(actions.changeResplendent(false, props.id));
+    setTransformed(false);
+    // props.changeTransformed(false);
+
+    setFlowerStats([0, 0, 0, 0, 0]);
+    setMergedStats([0, 0, 0, 0, 0]);
+    setHeroBuffStats([0, 0, 0, 0, 0]);
+    setLevels({ ...levels, array: [1, 1, 1, 1, 1] });
+    dispatch(actions.changeLevels(levels.array, props.id));
+    setBlessing("");
+
+    setStringSkills({ weapon: "", refine: "", aSkill: "", assist: "", bSkill: "", cSkill: "", sSkill: "", special: "" });
+    dispatch(actions.changeSkills(stringSkills, props.id));
+    console.log("hit");
+  }
 
   const calculateMergeStats = () => {
     var tempArray = [0, 0, 0, 0, 0];
@@ -430,7 +399,6 @@ export default function HeroComponent(props) {
     setMerges(number);
     setMergeOrder(order);
     calculateMergeStats();
-    console.log(globalHeroes);
     dispatch(actions.changeMerges(number, props.id));
   };
 
@@ -571,7 +539,7 @@ export default function HeroComponent(props) {
             <h3>Stats:</h3>
             <Row>
               <Col>
-                <Dropdown onChange={heroChange} url={"http://localhost:5000/Heroes/"} title={"Select Hero"} hero={hero} />
+                <Dropdown onChange={heroChange} url={"http://localhost:5000/Heroes/"} title={"Select Hero"} hero={hero} id={props.id} />
               </Col>
             </Row>
             <Row style={{ marginTop: "10px" }}>
@@ -635,7 +603,7 @@ export default function HeroComponent(props) {
               onChange={handleTransform}
               label={"Transformed?"}
             />
-            <SwitchComponent res={resplendent} R_Artist={hero.Artist.split(",")[1]} onChange={setResplendent} label={"Resplendant Art"} />
+            <SwitchComponent res={resplendent} R_Artist={hero.artist[1]} onChange={setResplendent} label={"Resplendant Art"} />
             <SwitchComponent res={resplendentStatsBoolean} R_Artist={hero.exists} onChange={handleResplendentStats} label={"Resplendant Stats"} />
             <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
             <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />

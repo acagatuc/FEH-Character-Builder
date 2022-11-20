@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
+// redux import
+import { useSelector } from "react-redux";
+
 export default function SkillComponent(props) {
+  const rearmed = useSelector((state) => state.tabList.tabList[props.id].weapon.rearmed);
   const [skillList, setSkillList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [skill, setSkill] = useState(null);
   const emptySkill = {
-    value: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
+    name: "",
+    visibleStats: [0, 0, 0, 0, 0],
+    unique: false,
   };
 
   useEffect(() => {
@@ -86,12 +87,21 @@ export default function SkillComponent(props) {
     }
   }, [props.hero.name]);
 
+  useEffect(() => {
+    if (skill !== null && rearmed === "TRUE") {
+      if (skill.value.unique) {
+        setSkill(null);
+        props.onChange(emptySkill);
+      }
+    }
+  }, [rearmed]);
+
   const handleChange = (event, value) => {
     setSkill(value);
     if (value === null) {
       props.onChange(emptySkill);
     } else {
-      props.onChange(value);
+      props.onChange(value.value);
     }
   };
 
@@ -105,12 +115,13 @@ export default function SkillComponent(props) {
         loading={isLoading}
         disabled={!props.hero.exists}
         getOptionLabel={(option) => option.label || ""}
+        getOptionDisabled={(option) => option.value.unique === "TRUE" && rearmed === "TRUE"}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
             {option.label}
           </Box>
         )}
-        isOptionEqualToValue={(option, option2) => option.value.name === option2.value.name}
+        isOptionEqualToValue={(option, option2) => option.value === option2.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />
     </div>

@@ -301,7 +301,7 @@ const TopRowComponent = ({ move_type, count }) => {
 
 const NumberComponent = ({ number, x, y, width, height, colorHeight }) => {
   const [sprite_sheet] = useImage(sheet, "Anonymous");
-  if (number === undefined) {
+  if (number === undefined || isNaN(number)) {
     return null;
   }
   if (number.toString().length === 2) {
@@ -408,7 +408,7 @@ const LargeTextComponent = ({ text, color, x, y, width }) => {
   );
 };
 
-const TextComponent = ({ text, color, x, y }) => {
+const TextComponent = ({ text, color, merges, x, y }) => {
   var index;
   switch (text) {
     case "HP":
@@ -431,7 +431,7 @@ const TextComponent = ({ text, color, x, y }) => {
   }
   if (index !== -1 && color !== undefined) {
     if (color[index] === 0 || color[index] === 1 || color[index] === 2) {
-      if (color[index] === 0) {
+      if (color[index] === 0 && merges === 0) {
         color = "#E9A3BB";
       } else if (color[index] === 2) {
         color = "#B6E6F0";
@@ -574,8 +574,6 @@ const WMComponent = ({ weapon, movement }) => {
 };
 
 const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
-  // console.log(image);
-
   if (image === "https://fehskills.s3.amazonaws.com/.png") {
     image = "";
   }
@@ -736,7 +734,7 @@ export default function HeroCanvas(props) {
 
   const handleExport = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
-    downloadURI(uri, "FEH Builder - " + props.name + ".png");
+    downloadURI(uri, "FEH Builder - " + hero.name + ".png");
   };
 
   const downloadURI = (uri, name) => {
@@ -788,11 +786,11 @@ export default function HeroCanvas(props) {
           <LargeTextComponent text={hero.title} color="white" x={15} y={412} width={260} />
           <MergeComponent merges={merges} />
           <WMComponent weapon={hero.weaponType} movement={hero.moveType} />
-          <TextComponent text={"HP"} color={levels} x={88} y={604} />
-          <TextComponent text={"Atk"} color={levels} x={87} y={641} />
-          <TextComponent text={"Spd"} color={levels} x={85} y={678} />
-          <TextComponent text={"Def"} color={levels} x={86} y={715} />
-          <TextComponent text={"Res"} color={levels} x={86} y={752} />
+          <TextComponent text={"HP"} color={levels} merges={merges} x={88} y={604} />
+          <TextComponent text={"Atk"} color={levels} merges={merges} x={87} y={641} />
+          <TextComponent text={"Spd"} color={levels} merges={merges} x={85} y={678} />
+          <TextComponent text={"Def"} color={levels} merges={merges} x={86} y={715} />
+          <TextComponent text={"Res"} color={levels} merges={merges} x={86} y={752} />
           <StatComponent text={`${hp}`} x={172} y={603} />
           <StatComponent text={`${atk}`} x={172} y={640} />
           <StatComponent text={`${spd}`} x={172} y={677} />
@@ -825,12 +823,12 @@ export default function HeroCanvas(props) {
           />
         </Layer>
         <Layer id="skill layer">
-          <WeaponComponent text={`${weapon}`} image={`${refine}`} x={280} y={596} offsetX={33} offsetY={8} />
-          <AssistOrSpecial text={`${assist}`} x={280} y={631} offsetX={33} offsetY={9} />
-          <AssistOrSpecial text={`${special}`} x={278} y={671} offsetX={35} offsetY={7} />
-          <SkillComponent text={`${aSkill}`} x={275} y={707} offsetX={38} offsetY={8} />
-          <SkillComponent text={`${bSkill}`} x={275} y={745} offsetX={37} offsetY={7} />
-          <SkillComponent text={`${cSkill}`} x={275} y={781} offsetX={38} offsetY={8} />
+          <WeaponComponent text={`${weapon.name}`} image={`${refine}`} x={280} y={596} offsetX={33} offsetY={8} />
+          <AssistOrSpecial text={`${assist.name}`} x={280} y={631} offsetX={33} offsetY={9} />
+          <AssistOrSpecial text={`${special.name}`} x={278} y={671} offsetX={35} offsetY={7} />
+          <SkillComponent text={`${aSkill.name}`} x={275} y={707} offsetX={38} offsetY={8} />
+          <SkillComponent text={`${bSkill.name}`} x={275} y={745} offsetX={37} offsetY={7} />
+          <SkillComponent text={`${cSkill.name}`} x={275} y={781} offsetX={38} offsetY={8} />
         </Layer>
       </Stage>
     </div>

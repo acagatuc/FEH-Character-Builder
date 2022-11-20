@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField, Chip } from "@mui/material";
 
+// redux import
+import { useSelector } from "react-redux";
+
 export default function BlessingHeroSelectionComponent(props) {
   const [heroList, setHeroList] = useState([]);
   const [selectedHeroList, setSelectedHeroList] = useState([]);
   const [stats, setStats] = useState([0, 0, 0, 0, 0]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const blessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
 
   useEffect(() => {
     setIsDisabled(true);
@@ -16,7 +20,7 @@ export default function BlessingHeroSelectionComponent(props) {
   useEffect(() => {
     setIsDisabled(true);
     async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/LegendaryMythic/` + props.blessing);
+      let response = await fetch(`http://localhost:5000/LegendaryMythic/` + blessing);
       response = await response.json();
       setHeroList(
         []
@@ -33,13 +37,7 @@ export default function BlessingHeroSelectionComponent(props) {
       setSelectedHeroList([]);
       setStats([0, 0, 0, 0, 0]);
     }
-    if (
-      props.blessing !== null &&
-      props.blessing !== "" &&
-      props.blessing !== "normal" &&
-      props.blessing !== "duo" &&
-      props.blessing !== "harmonic"
-    ) {
+    if (blessing !== null && blessing !== "" && blessing !== "normal" && blessing !== "duo" && blessing !== "harmonic") {
       fetchMyAPI();
       setIsDisabled(false);
       setSelectedHeroList([]);
@@ -48,7 +46,7 @@ export default function BlessingHeroSelectionComponent(props) {
     }
     // not sure why its yelling because i dont understand this error.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [props.blessing]);
+  }, [blessing]);
 
   const handleAdd = (chip) => {
     if (chip.currentTarget.title === "Clear") {

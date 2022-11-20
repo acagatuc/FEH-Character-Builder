@@ -21,156 +21,29 @@ import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../redux/actions";
 
 export default function HeroComponent(props) {
-  const globalHero = useSelector((state) => state.tabList.tabList[props.id]);
-  const globalHeroes = useSelector((state) => state.tabList.tabList);
   const dispatch = useDispatch();
-
   const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
-  const [character_id, set_character_id] = useState("");
+  const hp = useSelector((state) => state.tabList.tabList[props.id].hero.hp);
+  const atk = useSelector((state) => state.tabList.tabList[props.id].hero.atk);
+  const spd = useSelector((state) => state.tabList.tabList[props.id].hero.spd);
+  const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
+  const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
-  const [stats, setStats] = useState(["", "", "", "", ""]);
+  // assets flaws and ascended stats info
+  const levels = useSelector((state) => state.tabList.tabList[props.id].levels);
+  const superboon = useSelector((state) => state.tabList.tabList[props.id].superboon);
+  const superbane = useSelector((state) => state.tabList.tabList[props.id].superbane);
 
-  const [skills, setSkills] = useState({
-    weapon: {
-      name: "",
-      might: 0,
-      visibleStats: [0, 0, 0, 0, 0],
-      refine: false,
-    },
-    refine: {
-      stats: [0, 0, 0, 0, 0],
-      img: "",
-    },
-    assist: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-    special: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-    aSkill: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-    bSkill: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-    cSkill: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-    sSkill: {
-      name: "",
-      img: null,
-      visibleStats: [0, 0, 0, 0, 0],
-      unique: false,
-    },
-  });
-
-  const [stringSkills, setStringSkills] = useState({
-    weapon: "",
-    refine: "",
-    aSkill: "",
-    assist: "",
-    bSkill: "",
-    cSkill: "",
-    sSkill: "",
-    special: "",
-  });
-
-  const [levels, setLevels] = useState({
-    array: [1, 1, 1, 1, 1], // levels for assets and flaws
-    disabled: false,
-    superboon: [],
-    superbane: [],
-  });
-
-  // this is for skipping the level 1 stats
-  const [heroLevel] = useState(3);
-
-  // merge variables
-  const [merges, setMerges] = useState(0);
-  const [mergeOrder, setMergeOrder] = useState([]);
-  const [mergedStats, setMergedStats] = useState([0, 0, 0, 0, 0]);
-
-  //superboon/superbane variables
-  const [prevFlaw, setPrevFlaw] = useState("");
-  const [prevAsset, setPrevAsset] = useState("");
-  const [prevAscended, setPrevAscended] = useState("");
-
-  // dragonflower variables
-  const [flowerStats, setFlowerStats] = useState([0, 0, 0, 0, 0]);
-
-  // blessing variables
-  const [blessing, setBlessing] = useState("");
-  const [heroBuffStats, setHeroBuffStats] = useState([0, 0, 0, 0, 0]);
-
-  // summoner/ally support variables
-  const [summonerSupport, setSummonerSupport] = useState("");
-  const [summonerSupportStats, setSummonerSupportStats] = useState([0, 0, 0, 0, 0]);
-  const [allySupport, setAllySupport] = useState("");
+  // truthy values for resplendent and resplendent stat toggle buttons
+  const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
+  const resplendentStats = useSelector((state) => state.tabList.tabList[props.id].resplendentStats);
 
   // for beast units only
   const [transformed, setTransformed] = useState(false);
   const [transformedStats, setTransformedStats] = useState(0);
 
-  // resplendent variables
-  const [resplendent, setResplendent] = useState(false);
-  const [resplendentStatsBoolean, setResplendentStatsBoolean] = useState(false);
-  const [resplendentStats, setResplendentStats] = useState([0, 0, 0, 0, 0]);
-
-  // background variable
-  const [background, setBackground] = useState("normal");
-
-  //favorite variable
-  const [favorite, setFavorite] = useState(0);
-
-  useEffect(() => {
-    addStats();
-  }, [skills]);
-
-  useEffect(() => {
-    if (merges !== 0) {
-      calculateMergeStats();
-    } else {
-      setMergedStats([0, 0, 0, 0, 0]);
-    }
-  }, [merges]);
-
-  useEffect(() => {
-    addStats();
-  }, [mergedStats]);
-
-  useEffect(() => {
-    calculateMergeStats();
-    addStats();
-  }, [flowerStats, heroBuffStats, summonerSupportStats, transformedStats, prevFlaw, prevAsset, prevAscended]);
-
-  useEffect(() => {
-    addStats();
-  }, [resplendentStats]);
-
-  useEffect(() => {
-    dispatch(actions.changeResplendent(resplendent, props.id));
-  }, [resplendent]);
-
-  useEffect(() => {
-    dispatch(actions.changeSkills(stringSkills, props.id));
-  }, [stringSkills]);
-
   async function heroChange(newHero) {
+    dispatch(actions.resetTab(props.id));
     let response = await fetch("http://localhost:5000/Heroes/" + newHero);
     response = await response.json();
 
@@ -180,324 +53,93 @@ export default function HeroComponent(props) {
     response[0].VA = response[0].EVA;
     response[0].character_id = newHero;
     dispatch(actions.changeHero(response[0], props.id));
-    addStats();
 
-    setLevels({
-      ...levels,
-      superboon: response[0].superboon,
-      superbane: response[0].superbane,
-    });
-
-    setSkills({
-      weapon: {
-        name: "",
-        might: 0,
-        visibleStats: [0, 0, 0, 0, 0],
-        refine: false,
-      },
-      refine: {
-        name: "",
-        description: "",
-        stats: [0, 0, 0, 0, 0],
-        img: "",
-      },
-      assist: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-      special: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-      aSkill: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-      bSkill: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-      cSkill: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-      sSkill: {
-        name: "",
-        img: null,
-        visibleStats: [0, 0, 0, 0, 0],
-        unique: false,
-      },
-    });
-
-    dispatch(actions.changeResplendent(false, props.id));
-    setTransformed(false);
+    // setTransformed(false);
     // props.changeTransformed(false);
 
-    setFlowerStats([0, 0, 0, 0, 0]);
-    setMergedStats([0, 0, 0, 0, 0]);
-    setHeroBuffStats([0, 0, 0, 0, 0]);
-    setLevels({ ...levels, array: [1, 1, 1, 1, 1] });
-    dispatch(actions.changeLevels(levels.array, props.id));
-    setBlessing("");
-
-    setStringSkills({ weapon: "", refine: "", aSkill: "", assist: "", bSkill: "", cSkill: "", sSkill: "", special: "" });
-    dispatch(actions.changeSkills(stringSkills, props.id));
-    console.log("hit");
+    dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
 
-  const calculateMergeStats = () => {
-    var tempArray = [0, 0, 0, 0, 0];
-
-    if (merges === 10) {
-      tempArray[mergeOrder[4]] = tempArray[mergeOrder[4]] + 1;
-      tempArray[mergeOrder[3]] = tempArray[mergeOrder[3]] + 1;
-    }
-    if (merges >= 9) {
-      tempArray[mergeOrder[1]] = tempArray[mergeOrder[1]] + 1;
-      tempArray[mergeOrder[2]] = tempArray[mergeOrder[2]] + 1;
-    }
-    if (merges >= 8) {
-      tempArray[mergeOrder[4]] = tempArray[mergeOrder[4]] + 1;
-      tempArray[mergeOrder[0]] = tempArray[mergeOrder[0]] + 1;
-    }
-    if (merges >= 7) {
-      tempArray[mergeOrder[2]] = tempArray[mergeOrder[2]] + 1;
-      tempArray[mergeOrder[3]] = tempArray[mergeOrder[3]] + 1;
-    }
-    if (merges >= 6) {
-      tempArray[mergeOrder[1]] = tempArray[mergeOrder[1]] + 1;
-      tempArray[mergeOrder[0]] = tempArray[mergeOrder[0]] + 1;
-    }
-    if (merges >= 5) {
-      tempArray[mergeOrder[4]] = tempArray[mergeOrder[4]] + 1;
-      tempArray[mergeOrder[3]] = tempArray[mergeOrder[3]] + 1;
-    }
-    if (merges >= 4) {
-      tempArray[mergeOrder[1]] = tempArray[mergeOrder[1]] + 1;
-      tempArray[mergeOrder[2]] = tempArray[mergeOrder[2]] + 1;
-    }
-    if (merges >= 3) {
-      tempArray[mergeOrder[4]] = tempArray[mergeOrder[4]] + 1;
-      tempArray[mergeOrder[0]] = tempArray[mergeOrder[0]] + 1;
-    }
-    if (merges >= 2) {
-      tempArray[mergeOrder[2]] = tempArray[mergeOrder[2]] + 1;
-      tempArray[mergeOrder[3]] = tempArray[mergeOrder[3]] + 1;
-    }
-    if (merges >= 1) {
-      if (prevFlaw === "" && prevAsset === "") {
-        tempArray[mergeOrder[0]] = tempArray[mergeOrder[0]] + 2;
-        tempArray[mergeOrder[1]] = tempArray[mergeOrder[1]] + 2;
-        tempArray[mergeOrder[2]] = tempArray[mergeOrder[2]] + 1;
-      } else {
-        tempArray[mergeOrder[0]] = tempArray[mergeOrder[0]] + 1;
-        tempArray[mergeOrder[1]] = tempArray[mergeOrder[1]] + 1;
-
-        if (prevFlaw !== "") {
-          var levelArray = levels.array;
-          if (prevFlaw === "hp") {
-            levelArray[0] = 1;
-          }
-          if (prevFlaw === "atk") {
-            levelArray[1] = 1;
-          }
-          if (prevFlaw === "spd") {
-            levelArray[2] = 1;
-          }
-          if (prevFlaw === "def") {
-            levelArray[3] = 1;
-          }
-          if (prevFlaw === "res") {
-            levelArray[4] = 1;
-          }
-          setLevels({ ...levels, array: levelArray, disabled: true });
-        }
-      }
-    }
-    if (merges === 0) {
-      setLevels({ ...levels, disabled: false });
-    }
-    setMergedStats(tempArray);
-    dispatch(actions.changeLevels(levels.array, props.id));
-  };
-
-  const addStats = () => {
-    var tempArray = [0, 0, 0, 0, 0];
-
-    tempArray[0] =
-      hero.hp[heroLevel + levels.array[0]] +
-      mergedStats[0] +
-      flowerStats[0] +
-      heroBuffStats[0] +
-      skills.weapon.visibleStats[0] +
-      skills.refine.stats[0] +
-      skills.aSkill.visibleStats[0] +
-      summonerSupportStats[0] +
-      resplendentStats[0];
-    tempArray[1] =
-      hero.atk[heroLevel + levels.array[1]] +
-      mergedStats[1] +
-      flowerStats[1] +
-      heroBuffStats[1] +
-      skills.weapon.might +
-      skills.weapon.visibleStats[1] +
-      skills.refine.stats[1] +
-      skills.aSkill.visibleStats[1] +
-      summonerSupportStats[1] +
-      transformedStats +
-      resplendentStats[1];
-    tempArray[2] =
-      hero.spd[heroLevel + levels.array[2]] +
-      mergedStats[2] +
-      flowerStats[2] +
-      heroBuffStats[2] +
-      skills.weapon.visibleStats[2] +
-      skills.refine.stats[2] +
-      skills.aSkill.visibleStats[2] +
-      summonerSupportStats[2] +
-      resplendentStats[2];
-    tempArray[3] =
-      hero.def[heroLevel + levels.array[3]] +
-      mergedStats[3] +
-      flowerStats[3] +
-      heroBuffStats[3] +
-      skills.weapon.visibleStats[3] +
-      skills.refine.stats[3] +
-      skills.aSkill.visibleStats[3] +
-      summonerSupportStats[3] +
-      resplendentStats[3];
-    tempArray[4] =
-      hero.res[heroLevel + levels.array[4]] +
-      mergedStats[4] +
-      flowerStats[4] +
-      heroBuffStats[4] +
-      skills.weapon.visibleStats[4] +
-      skills.refine.stats[4] +
-      skills.aSkill.visibleStats[4] +
-      summonerSupportStats[4] +
-      resplendentStats[4];
-
-    if (isNaN(tempArray[0])) {
-      setStats(["", "", "", "", ""]);
-    } else {
-      setStats(tempArray);
-      dispatch(actions.changeStats(tempArray, props.id));
-    }
-  };
+  useEffect(() => {
+    dispatch(actions.changeStats(props.id));
+  }, [hero, hp, atk, spd, def, res]);
 
   const mergeChange = (number, order) => {
-    setMerges(number);
-    setMergeOrder(order);
-    calculateMergeStats();
-    dispatch(actions.changeMerges(number, props.id));
+    dispatch(actions.changeMerges(number, order, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const flowerChange = (value, array) => {
-    setFlowerStats(array);
     dispatch(actions.changeDragonflowers(value, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const assetChange = (array, asset) => {
-    setLevels({ ...levels, array: array });
-    setPrevAsset(asset);
-    setMergedStats([0, 0, 0, 0, 0]);
-    dispatch(actions.changeLevels(levels.array, props.id));
+    dispatch(actions.changeLevels(array, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const flawChange = (array, flaw) => {
-    setLevels({ ...levels, array: array });
-    setPrevFlaw(flaw);
-    setMergedStats([0, 0, 0, 0, 0]);
-    dispatch(actions.changeLevels(levels.array, props.id));
+    dispatch(actions.changeLevels(array, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const ascendedChange = (array, ascended) => {
-    setLevels({ ...levels, array: array });
-    setPrevAscended(ascended);
-    setMergedStats([0, 0, 0, 0, 0]);
-    dispatch(actions.changeLevels(levels.array, props.id));
+    dispatch(actions.changeLevels(array, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeWeapon = (w) => {
-    setSkills({ ...skills, weapon: w.value });
-    setStringSkills({ ...stringSkills, weapon: w.value.name });
+    dispatch(actions.changeWeapon(w, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeRefine = (r) => {
-    setSkills({ ...skills, refine: r });
-    setStringSkills({ ...stringSkills, refine: r.img });
+    dispatch(actions.changeRefine(r, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeAssist = (a) => {
-    setSkills({ ...skills, assist: a.value });
-    setStringSkills({ ...stringSkills, assist: a.value.name });
+    dispatch(actions.changeAssist(a, props.id));
   };
 
   const changeSpecial = (s) => {
-    setSkills({ ...skills, special: s.value });
-    setStringSkills({ ...stringSkills, special: s.value.name });
+    dispatch(actions.changeSpecial(s, props.id));
   };
 
   const changeASkill = (a) => {
-    setSkills({ ...skills, aSkill: a.value });
-    setStringSkills({ ...stringSkills, aSkill: a.value.name });
+    dispatch(actions.changeASlot(a, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeBSkill = (b) => {
-    setSkills({ ...skills, bSkill: b.value });
-    setStringSkills({ ...stringSkills, bSkill: b.value.name });
+    dispatch(actions.changeBSlot(b, props.id));
   };
 
   const changeCSkill = (c) => {
-    setSkills({ ...skills, cSkill: c.value });
-    setStringSkills({ ...stringSkills, cSkill: c.value.name });
+    dispatch(actions.changeCSlot(c, props.id));
   };
 
   const changeSSkill = (s) => {
-    setSkills({ ...skills, sSkill: s.value });
-    setStringSkills({ ...stringSkills, sSkill: s.value.name });
+    dispatch(actions.changeSSlot(s, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeBlessing = (b) => {
-    setBlessing(b.value);
     dispatch(actions.changeBlessing(b.value, props.id));
   };
 
   const changeBlessingStats = (buffs) => {
-    setHeroBuffStats(buffs);
-    // not really sure why this is necessary, but the use effect is not triggering appropriately
-    addStats();
+    dispatch(actions.changeBlessingStats(buffs, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeSummonerSupport = (event) => {
-    if (event === "No") {
-      event = "";
-      setSummonerSupportStats([0, 0, 0, 0, 0]);
-    } else if (event === "C") {
-      setSummonerSupportStats([3, 0, 0, 0, 2]);
-    } else if (event === "B") {
-      setSummonerSupportStats([4, 0, 0, 2, 2]);
-    } else if (event === "A") {
-      setSummonerSupportStats([4, 0, 2, 2, 2]);
-    } else if (event === "S") {
-      setSummonerSupportStats([5, 2, 2, 2, 2]);
-    }
-    setSummonerSupport(event);
     dispatch(actions.changeSS(event, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeAllySupport = (event) => {
-    setAllySupport(event);
     dispatch(actions.changeAS(event, props.id));
   };
 
@@ -512,23 +154,20 @@ export default function HeroComponent(props) {
   };
 
   const changeBackground = (bg) => {
-    setBackground(bg);
     dispatch(actions.changeBackground(bg, props.id));
   };
 
   const changeFavorite = (fav) => {
-    setFavorite(fav);
     dispatch(actions.changeFavorite(fav, props.id));
   };
 
+  const changeResplendent = (r) => {
+    dispatch(actions.changeResplendent(r, props.id));
+  };
+
   const handleResplendentStats = (r) => {
-    if (r) {
-      setResplendentStatsBoolean(true);
-      setResplendentStats([2, 2, 2, 2, 2]);
-    } else {
-      setResplendentStatsBoolean(false);
-      setResplendentStats([0, 0, 0, 0, 0]);
-    }
+    dispatch(actions.changeResplendentStats(r, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   return (
@@ -544,40 +183,24 @@ export default function HeroComponent(props) {
             </Row>
             <Row style={{ marginTop: "10px" }}>
               <Col>
-                <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} />
+                <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} id={props.id} />
               </Col>
               <Col>
-                <FlowerComponent hero={hero} value={flowerStats} onChange={flowerChange} />
+                <FlowerComponent hero={hero} onChange={flowerChange} id={props.id} />
               </Col>
             </Row>
             <Row>
               <Col style={{ padding: "2px", margin: "10px" }}>
-                <Traits
-                  hero={hero}
-                  stats={levels.superboon}
-                  array={levels.array}
-                  color={"#79ba8e"}
-                  label={"+"}
-                  onChange={assetChange}
-                  placeholder={"Asset"}
-                />
+                <Traits hero={hero} stats={superboon} array={levels} color={"#79ba8e"} label={"+"} onChange={assetChange} placeholder={"Asset"} />
               </Col>
               <Col style={{ padding: "2px", margin: "10px" }}>
-                <Traits
-                  hero={hero}
-                  stats={levels.superbane}
-                  array={levels.array}
-                  color={"#e68585"}
-                  label={"-"}
-                  onChange={flawChange}
-                  placeholder={"Flaw"}
-                />
+                <Traits hero={hero} stats={superbane} array={levels} color={"#e68585"} label={"-"} onChange={flawChange} placeholder={"Flaw"} />
               </Col>{" "}
               <Col style={{ padding: "2px", margin: "10px" }}>
                 <Traits
                   hero={hero}
-                  stats={levels.superboon}
-                  array={levels.array}
+                  stats={superboon}
+                  array={levels}
                   color={"#79ba8e"}
                   label={"+"}
                   onChange={ascendedChange}
@@ -587,24 +210,30 @@ export default function HeroComponent(props) {
             </Row>
             <h3>Skills:</h3>
             <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} />
-            <SkillComponent hero={hero} onChange={changeAssist} url={`http://localhost:5000/Assist/`} placeholder={"Choose Assist"} />
-            <SkillComponent hero={hero} onChange={changeSpecial} url={`http://localhost:5000/Specials/`} placeholder={"Choose Special"} />
-            <SkillComponent hero={hero} onChange={changeASkill} url={`http://localhost:5000/A_Slot/`} placeholder={"Choose A Skill"} />
-            <SkillComponent hero={hero} onChange={changeBSkill} url={`http://localhost:5000/B_Slot/`} placeholder={"Choose B Skill"} />
-            <SkillComponent hero={hero} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
-            <SkillComponent hero={hero} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
+            <SkillComponent hero={hero} id={props.id} onChange={changeAssist} url={`http://localhost:5000/Assist/`} placeholder={"Choose Assist"} />
+            <SkillComponent
+              hero={hero}
+              id={props.id}
+              onChange={changeSpecial}
+              url={`http://localhost:5000/Specials/`}
+              placeholder={"Choose Special"}
+            />
+            <SkillComponent hero={hero} id={props.id} onChange={changeASkill} url={`http://localhost:5000/A_Slot/`} placeholder={"Choose A Skill"} />
+            <SkillComponent hero={hero} id={props.id} onChange={changeBSkill} url={`http://localhost:5000/B_Slot/`} placeholder={"Choose B Skill"} />
+            <SkillComponent hero={hero} id={props.id} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
+            <SkillComponent hero={hero} id={props.id} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
           </Col>
           <Col md={3} style={{ marginTop: "10px", textAlign: "right" }}>
             <h5 style={{ marginTop: "10px" }}>Additional:</h5>
-            <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} />
+            <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
             <SwitchComponent
               res={transformed}
-              R_Artist={(hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")) && skills.weapon.name !== ""}
+              enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
               onChange={handleTransform}
               label={"Transformed?"}
             />
-            <SwitchComponent res={resplendent} R_Artist={hero.artist[1]} onChange={setResplendent} label={"Resplendant Art"} />
-            <SwitchComponent res={resplendentStatsBoolean} R_Artist={hero.exists} onChange={handleResplendentStats} label={"Resplendant Stats"} />
+            <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
+            <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
             <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
             <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} />
@@ -612,7 +241,7 @@ export default function HeroComponent(props) {
           </Col>
           <Col>
             buffs or debuffs stats
-            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} blessing={blessing} />
+            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
           </Col>
         </Row>
         <Row style={{ marginTop: "5%" }}>

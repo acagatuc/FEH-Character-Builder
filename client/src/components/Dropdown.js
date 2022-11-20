@@ -8,11 +8,14 @@ export default function Dropdown(props) {
   // whole hero list that contains all names, backpacks, and character ids
   const [heroList, setHeroList] = useState([]);
 
+  // the value of the current tab
+  const tabValue = useSelector((state) => state.tabList.tabValue);
+
   // list of heroes only used for display (uses parts of the hero list to creat this)
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const heroName = useSelector((state) => state.tabList.tabList[props.id].label);
-  const heroValue = useSelector((state) => state.tabList.tabList[props.id].value);
+  const heroName = useSelector((state) => state.tabList.tabList[tabValue].label);
+  const heroValue = useSelector((state) => state.tabList.tabList[tabValue].value);
   const dropdown = useRef({ label: heroName, value: heroValue });
 
   // display settings that affect the list
@@ -136,10 +139,11 @@ export default function Dropdown(props) {
     setIsLoading(false);
   }, [dropdown, heroList, name_display, grima_display, backpack_display]);
 
-  // if the hero changes, make sure the label and value also changes
-  useEffect(() => {
-    dropdown.current = { label: heroName, value: heroValue };
-  }, [heroName, heroValue]);
+  // if the hero or tab focus changes, make sure the label and value also changes
+  // useEffect(() => {
+  //   dropdown.current = { label: heroName, value: heroValue };
+  //   console.log(dropdown.current);
+  // }, [tabValue, heroName, heroValue]);
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(event, value) {

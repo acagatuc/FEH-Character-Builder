@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
-export default function SkillComponent(props) {
-  const [blessing, setBlessing] = useState(null);
+// redux import
+import { useSelector } from "react-redux";
+
+export default function BlessingComponent(props) {
+  const blessing = useRef({ value: null, label: "" });
   const [isDisabled, setIsDisabled] = useState(true);
   const blessingOptions = [
     { value: "water", label: "Water" },
@@ -16,7 +19,6 @@ export default function SkillComponent(props) {
   ];
 
   useEffect(() => {
-    setBlessing(null);
     if (
       props.hero.hero_type === "normal" ||
       props.hero.hero_type === "duo" ||
@@ -28,13 +30,14 @@ export default function SkillComponent(props) {
     } else {
       setIsDisabled(true);
     }
-  }, [props.hero.name]);
+  }, [props.hero.name, props.hero.hero_type]);
 
   const handleBlessing = (e, value) => {
     if (value === null) {
-      value = "";
+      blessing.current = { value: null, label: "" };
+    } else {
+      blessing.current = value;
     }
-    setBlessing(value);
     props.onChange(value);
   };
 
@@ -43,12 +46,12 @@ export default function SkillComponent(props) {
       <Autocomplete
         id="blessing dropdown"
         options={blessingOptions}
-        value={blessing}
+        value={blessing.current}
         onChange={handleBlessing}
         disabled={!props.hero.exists || isDisabled}
-        getOptionLabel={(option) => option.label || ""}
+        getOptionLabel={(option) => option.label}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
-        isOptionEqualToValue={(option, value) => option.label === value.label}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />
     </div>

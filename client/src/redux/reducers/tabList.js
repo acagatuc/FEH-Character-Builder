@@ -4,14 +4,24 @@ import {
   DELETE_TAB,
   UPDATE_TABLIST,
   CHANGE_TAB,
+  RESET_TAB,
   CHANGE_HERO,
   CHANGE_STATS,
-  CHANGE_SKILLS,
+  CHANGE_WEAPON,
+  CHANGE_REFINE,
+  CHANGE_ASSIST,
+  CHANGE_SPECIAL,
+  CHANGE_ASLOT,
+  CHANGE_BSLOT,
+  CHANGE_CSLOT,
+  CHANGE_SSLOT,
   CHANGE_MERGES,
   CHANGE_LEVELS,
   CHANGE_DRAGONFLOWERS,
   CHANGE_RESPLENDENT,
+  CHANGE_RESPLENDENT_STATS,
   CHANGE_BLESSING,
+  CHANGE_BLESSING_STATS,
   CHANGE_SUMMONER_SUPPORT,
   CHANGE_ALLY_SUPPORT,
   CHANGE_BACKGROUND,
@@ -40,6 +50,8 @@ const initState = {
         spd: [],
         def: [],
         res: [],
+        superboon: [],
+        superbane: [],
         weapons: [],
         assists: [],
         specials: [],
@@ -57,21 +69,57 @@ const initState = {
       res: "",
       levels: [1, 1, 1, 1, 1],
       merges: 0,
+      mergeOrder: [],
+      mergedStats: [0, 0, 0, 0, 0],
       dragonflowers: 0,
+      dragonflowerStats: [0, 0, 0, 0, 0],
       resplendent: false,
+      resplendentStats: false,
+      resStats: [0, 0, 0, 0, 0],
       blessing: "",
+      blessingStats: [0, 0, 0, 0, 0],
       summonerSupport: "",
+      summonerSupportStats: [0, 0, 0, 0, 0],
       allySupport: "",
       background: "",
       favorite: "",
-      weapon: "",
-      refine: "",
-      aSkill: "",
-      assist: "",
-      bSkill: "",
-      cSkill: "",
-      sSkill: "",
-      special: "",
+      weapon: {
+        name: "",
+        might: 0,
+        visibleStats: [0, 0, 0, 0, 0],
+        refine: false,
+        rearmed: false,
+      },
+      refine: {
+        name: "",
+        img: "",
+        stats: [0, 0, 0, 0, 0],
+      },
+      assist: {
+        name: "",
+        unique: false,
+      },
+      special: {
+        name: "",
+        unique: false,
+      },
+      aSkill: {
+        name: "",
+        visibleStats: [0, 0, 0, 0, 0],
+        unique: false,
+      },
+      bSkill: {
+        name: "",
+        unique: false,
+      },
+      cSkill: {
+        name: "",
+        unique: false,
+      },
+      sSkill: {
+        name: "",
+        visibleStats: [0, 0, 0, 0, 0],
+      },
     },
   ],
 };
@@ -101,6 +149,8 @@ export default function (state = initState, action) {
             spd: [],
             def: [],
             res: [],
+            superboon: [],
+            superbane: [],
             weapons: [],
             assists: [],
             specials: [],
@@ -118,21 +168,57 @@ export default function (state = initState, action) {
           res: "",
           levels: [1, 1, 1, 1, 1],
           merges: 0,
+          mergeOrder: [],
+          mergedStats: [0, 0, 0, 0, 0],
           dragonflowers: 0,
+          dragonflowerStats: [0, 0, 0, 0, 0],
           resplendent: false,
+          resplendentStats: false,
+          resStats: [0, 0, 0, 0, 0],
           blessing: "",
+          blessingStats: [0, 0, 0, 0, 0],
           summonerSupport: "",
+          summonerSupportStats: [0, 0, 0, 0, 0],
           allySupport: "",
           background: "",
           favorite: "",
-          weapon: "",
-          refine: "",
-          aSkill: "",
-          assist: "",
-          bSkill: "",
-          cSkill: "",
-          sSkill: "",
-          special: "",
+          weapon: {
+            name: "",
+            might: 0,
+            visibleStats: [0, 0, 0, 0, 0],
+            refine: false,
+            rearmed: false,
+          },
+          refine: {
+            name: "",
+            img: "",
+            stats: [0, 0, 0, 0, 0],
+          },
+          assist: {
+            name: "",
+            unique: false,
+          },
+          special: {
+            name: "",
+            unique: false,
+          },
+          aSkill: {
+            name: "",
+            visibleStats: [0, 0, 0, 0, 0],
+            unique: false,
+          },
+          bSkill: {
+            name: "",
+            unique: false,
+          },
+          cSkill: {
+            name: "",
+            unique: false,
+          },
+          sSkill: {
+            name: "",
+            visibleStats: [0, 0, 0, 0, 0],
+          },
         },
       ];
       return { ...state };
@@ -156,6 +242,8 @@ export default function (state = initState, action) {
           spd: [],
           def: [],
           res: [],
+          superboon: [],
+          superbane: [],
           weapons: [],
           assists: [],
           specials: [],
@@ -166,30 +254,67 @@ export default function (state = initState, action) {
           dragonflowers: 0,
           exists: false,
         },
-        stats: ["", "", "", "", ""],
+        hp: "",
+        atk: "",
+        spd: "",
+        def: "",
+        res: "",
+        levels: [1, 1, 1, 1, 1],
         merges: 0,
+        mergeOrder: [],
+        mergedStats: [0, 0, 0, 0, 0],
         dragonflowers: 0,
+        dragonflowerStats: [0, 0, 0, 0, 0],
         resplendent: false,
+        resplendentStats: false,
+        resStats: [0, 0, 0, 0, 0],
         blessing: "",
+        blessingStats: [0, 0, 0, 0, 0],
         summonerSupport: "",
         allySupport: "",
         background: "",
         favorite: "",
-        skills: {
-          weapon: "",
-          refine: "",
-          aSkill: "",
-          assist: "",
-          bSkill: "",
-          cSkill: "",
-          sSkill: "",
-          special: "",
+        weapon: {
+          name: "",
+          might: 0,
+          visibleStats: [0, 0, 0, 0, 0],
+          refine: false,
+          rearmed: false,
+        },
+        refine: {
+          name: "",
+          img: "",
+          stats: [0, 0, 0, 0, 0],
+        },
+        assist: {
+          name: "",
+          unique: false,
+        },
+        special: {
+          name: "",
+          unique: false,
+        },
+        aSkill: {
+          name: "",
+          visibleStats: [0, 0, 0, 0, 0],
+          unique: false,
+        },
+        bSkill: {
+          name: "",
+          unique: false,
+        },
+        cSkill: {
+          name: "",
+          unique: false,
+        },
+        sSkill: {
+          name: "",
+          visibleStats: [0, 0, 0, 0, 0],
         },
       };
       Object.assign(copiedHero.hero, state.tabList[id].hero);
       copiedHero.key = state.key;
       copiedHero.id = length;
-      copiedHero.label = state.tabList[id].label;
       copiedHero.hero = state.tabList[id].hero;
       copiedHero.blessing = state.tabList[id].blessing;
       copiedHero.summonerSupport = state.tabList[id].summonerSupport;
@@ -211,6 +336,98 @@ export default function (state = initState, action) {
       const { id } = action.payload;
       return { ...state, tabValue: id };
     }
+    case RESET_TAB: {
+      const { id } = action.payload;
+      state.tabList[id] = {
+        key: 0,
+        id: 0,
+        value: null,
+        label: "",
+        hero: {
+          name: "",
+          singleName: "",
+          title: "",
+          VA: "",
+          artist: "",
+          hp: [],
+          atk: [],
+          spd: [],
+          def: [],
+          res: [],
+          superboon: [],
+          superbane: [],
+          weapons: [],
+          assists: [],
+          specials: [],
+          passives: [],
+          weapon_type: "",
+          move_type: "",
+          hero_type: "",
+          dragonflowers: 0,
+          exists: false,
+        },
+        hp: "",
+        atk: "",
+        spd: "",
+        def: "",
+        res: "",
+        levels: [1, 1, 1, 1, 1],
+        merges: 0,
+        mergeOrder: [],
+        mergedStats: [0, 0, 0, 0, 0],
+        dragonflowers: 0,
+        dragonflowerStats: [0, 0, 0, 0, 0],
+        resplendent: false,
+        resplendentStats: false,
+        resStats: [0, 0, 0, 0, 0],
+        blessing: "",
+        blessingStats: [0, 0, 0, 0, 0],
+        summonerSupport: "",
+        summonerSupportStats: [0, 0, 0, 0, 0],
+        allySupport: "",
+        background: "",
+        favorite: "",
+        weapon: {
+          name: "",
+          might: 0,
+          visibleStats: [0, 0, 0, 0, 0],
+          refine: false,
+          rearmed: false,
+        },
+        refine: {
+          name: "",
+          img: "",
+          stats: [0, 0, 0, 0, 0],
+        },
+        assist: {
+          name: "",
+          unique: false,
+        },
+        special: {
+          name: "",
+          unique: false,
+        },
+        aSkill: {
+          name: "",
+          visibleStats: [0, 0, 0, 0, 0],
+          unique: false,
+        },
+        bSkill: {
+          name: "",
+          unique: false,
+        },
+        cSkill: {
+          name: "",
+          unique: false,
+        },
+        sSkill: {
+          name: "",
+          visibleStats: [0, 0, 0, 0, 0],
+        },
+      };
+
+      return { ...state };
+    }
 
     // hero actions
 
@@ -219,32 +436,183 @@ export default function (state = initState, action) {
       state.tabList[id].hero = hero;
       state.tabList[id].label = hero.name;
       state.tabList[id].value = hero.character_id;
+      state.tabList[id].resplendent = false;
+
       return { ...state };
     }
     case CHANGE_STATS: {
-      const { stats, id } = action.payload;
-      state.tabList[id].hp = stats[0];
-      state.tabList[id].atk = stats[1];
-      state.tabList[id].spd = stats[2];
-      state.tabList[id].def = stats[3];
-      state.tabList[id].res = stats[4];
+      const { id } = action.payload;
+
+      // get a new array based on the levels, but ensures that merges are taken into account
+      var levels = [0, 0, 0, 0, 0];
+      for (var i = 0; i < levels.length; i++) {
+        if (state.tabList[id].merges > 0 && state.tabList[id].levels[i] === 0) {
+          levels[i] = 1;
+        } else {
+          levels[i] = state.tabList[id].levels[i];
+        }
+      }
+
+      // calculates hero hp
+      state.tabList[id].hp =
+        state.tabList[id].hero.hp[3 + levels[0]] +
+        state.tabList[id].mergedStats[0] +
+        state.tabList[id].dragonflowerStats[0] +
+        state.tabList[id].blessingStats[0] +
+        state.tabList[id].weapon.visibleStats[0] +
+        state.tabList[id].refine.stats[0] +
+        state.tabList[id].aSkill.visibleStats[0] +
+        state.tabList[id].summonerSupportStats[0] +
+        state.tabList[id].resStats[0];
+
+      // calculates hero atk
+      state.tabList[id].atk =
+        state.tabList[id].hero.atk[3 + levels[1]] +
+        state.tabList[id].mergedStats[1] +
+        state.tabList[id].dragonflowerStats[1] +
+        state.tabList[id].blessingStats[1] +
+        state.tabList[id].weapon.might +
+        state.tabList[id].weapon.visibleStats[1] +
+        state.tabList[id].refine.stats[1] +
+        state.tabList[id].aSkill.visibleStats[1] +
+        state.tabList[id].summonerSupportStats[1] +
+        // transformedStats +
+        state.tabList[id].resStats[1];
+
+      // calculates hero spd
+      state.tabList[id].spd =
+        state.tabList[id].hero.spd[3 + levels[2]] +
+        state.tabList[id].mergedStats[2] +
+        state.tabList[id].dragonflowerStats[2] +
+        state.tabList[id].blessingStats[2] +
+        state.tabList[id].weapon.visibleStats[2] +
+        state.tabList[id].refine.stats[2] +
+        state.tabList[id].aSkill.visibleStats[2] +
+        state.tabList[id].summonerSupportStats[2] +
+        state.tabList[id].resStats[2];
+
+      // calculates hero def
+      state.tabList[id].def =
+        state.tabList[id].hero.def[3 + levels[3]] +
+        state.tabList[id].mergedStats[3] +
+        state.tabList[id].dragonflowerStats[3] +
+        state.tabList[id].blessingStats[3] +
+        state.tabList[id].weapon.visibleStats[3] +
+        state.tabList[id].refine.stats[3] +
+        state.tabList[id].aSkill.visibleStats[3] +
+        state.tabList[id].summonerSupportStats[3] +
+        state.tabList[id].resStats[3];
+
+      // calculates hero res
+      state.tabList[id].res =
+        state.tabList[id].hero.res[3 + levels[4]] +
+        state.tabList[id].mergedStats[4] +
+        state.tabList[id].dragonflowerStats[4] +
+        state.tabList[id].blessingStats[4] +
+        state.tabList[id].weapon.visibleStats[4] +
+        state.tabList[id].refine.stats[4] +
+        state.tabList[id].aSkill.visibleStats[4] +
+        state.tabList[id].summonerSupportStats[4] +
+        state.tabList[id].resStats[4];
       return { ...state };
     }
-    case CHANGE_SKILLS: {
-      const { skills, id } = action.payload;
-      state.tabList[id].weapon = skills.weapon;
-      state.tabList[id].refine = skills.refine;
-      state.tabList[id].assist = skills.assist;
-      state.tabList[id].special = skills.special;
-      state.tabList[id].aSkill = skills.aSkill;
-      state.tabList[id].bSkill = skills.bSkill;
-      state.tabList[id].cSkill = skills.cSkill;
-      state.tabList[id].sSkill = skills.sSkill;
+    case CHANGE_WEAPON: {
+      const { weapon, id } = action.payload;
+      state.tabList[id].weapon = weapon;
+      return { ...state };
+    }
+    case CHANGE_REFINE: {
+      const { refine, id } = action.payload;
+      state.tabList[id].refine = refine;
+      return { ...state };
+    }
+    case CHANGE_ASSIST: {
+      const { assist, id } = action.payload;
+      state.tabList[id].assist = assist;
+      return { ...state };
+    }
+    case CHANGE_SPECIAL: {
+      const { special, id } = action.payload;
+      state.tabList[id].special = special;
+      return { ...state };
+    }
+    case CHANGE_ASLOT: {
+      const { a, id } = action.payload;
+      state.tabList[id].aSkill = a;
+      return { ...state };
+    }
+    case CHANGE_BSLOT: {
+      const { b, id } = action.payload;
+      state.tabList[id].bSkill = b;
+      return { ...state };
+    }
+    case CHANGE_CSLOT: {
+      const { c, id } = action.payload;
+      state.tabList[id].cSkill = c;
+      return { ...state };
+    }
+    case CHANGE_SSLOT: {
+      const { s, id } = action.payload;
+      state.tabList[id].sSkill = s;
       return { ...state };
     }
     case CHANGE_MERGES: {
-      const { merges, id } = action.payload;
+      const { merges, order, id } = action.payload;
       state.tabList[id].merges = merges;
+      state.tabList[id].mergeOrder = order;
+
+      var tempArray = [0, 0, 0, 0, 0];
+
+      if (merges === 10) {
+        tempArray[order[4]] = tempArray[order[4]] + 1;
+        tempArray[order[3]] = tempArray[order[3]] + 1;
+      }
+      if (merges >= 9) {
+        tempArray[order[1]] = tempArray[order[1]] + 1;
+        tempArray[order[2]] = tempArray[order[2]] + 1;
+      }
+      if (merges >= 8) {
+        tempArray[order[4]] = tempArray[order[4]] + 1;
+        tempArray[order[0]] = tempArray[order[0]] + 1;
+      }
+      if (merges >= 7) {
+        tempArray[order[2]] = tempArray[order[2]] + 1;
+        tempArray[order[3]] = tempArray[order[3]] + 1;
+      }
+      if (merges >= 6) {
+        tempArray[order[1]] = tempArray[order[1]] + 1;
+        tempArray[order[0]] = tempArray[order[0]] + 1;
+      }
+      if (merges >= 5) {
+        tempArray[order[4]] = tempArray[order[4]] + 1;
+        tempArray[order[3]] = tempArray[order[3]] + 1;
+      }
+      if (merges >= 4) {
+        tempArray[order[1]] = tempArray[order[1]] + 1;
+        tempArray[order[2]] = tempArray[order[2]] + 1;
+      }
+      if (merges >= 3) {
+        tempArray[order[4]] = tempArray[order[4]] + 1;
+        tempArray[order[0]] = tempArray[order[0]] + 1;
+      }
+      if (merges >= 2) {
+        tempArray[order[2]] = tempArray[order[2]] + 1;
+        tempArray[order[3]] = tempArray[order[3]] + 1;
+      }
+      if (merges >= 1) {
+        var prevAsset = state.tabList[id].levels.indexOf(2);
+        var prevFlaw = state.tabList[id].levels.indexOf(0);
+        if (prevFlaw === -1 && prevAsset === -1) {
+          tempArray[order[0]] = tempArray[order[0]] + 2;
+          tempArray[order[1]] = tempArray[order[1]] + 2;
+          tempArray[order[2]] = tempArray[order[2]] + 1;
+        } else {
+          tempArray[order[0]] = tempArray[order[0]] + 1;
+          tempArray[order[1]] = tempArray[order[1]] + 1;
+        }
+      }
+
+      state.tabList[id].mergedStats = tempArray;
       return { ...state };
     }
     case CHANGE_LEVELS: {
@@ -255,6 +623,18 @@ export default function (state = initState, action) {
     case CHANGE_DRAGONFLOWERS: {
       const { dragonflowers, id } = action.payload;
       state.tabList[id].dragonflowers = dragonflowers;
+
+      tempArray = [0, 0, 0, 0, 0];
+      if (dragonflowers !== null) {
+        var index = 0;
+        while (index < dragonflowers) {
+          tempArray[index % 5] += 1;
+          index++;
+        }
+        state.tabList[id].dragonflowerStats = tempArray;
+      } else {
+        state.tabList[id].dragonflowerStats = [0, 0, 0, 0, 0];
+      }
       return { ...state };
     }
     case CHANGE_RESPLENDENT: {
@@ -262,14 +642,40 @@ export default function (state = initState, action) {
       state.tabList[id].resplendent = res;
       return { ...state };
     }
+    case CHANGE_RESPLENDENT_STATS: {
+      const { res, id } = action.payload;
+      tempArray = [0, 0, 0, 0, 0];
+      if (res) {
+        tempArray = [2, 2, 2, 2, 2];
+      }
+      state.tabList[id].resplendentStats = res;
+      state.tabList[id].resStats = tempArray;
+      return { ...state };
+    }
     case CHANGE_BLESSING: {
       const { blessing, id } = action.payload;
       state.tabList[id].blessing = blessing;
       return { ...state };
     }
+    case CHANGE_BLESSING_STATS: {
+      const { stats, id } = action.payload;
+      state.tabList[id].blessingStats = stats;
+      return { ...state };
+    }
     case CHANGE_SUMMONER_SUPPORT: {
       const { summoner_support, id } = action.payload;
       state.tabList[id].summonerSupport = summoner_support;
+      var summonerSupportStats = [0, 0, 0, 0, 0];
+      if (state.tabList[id].summonerSupport === "C") {
+        summonerSupportStats = [3, 0, 0, 0, 2];
+      } else if (state.tabList[id].summonerSupport === "B") {
+        summonerSupportStats = [4, 0, 0, 2, 2];
+      } else if (state.tabList[id].summonerSupport === "A") {
+        summonerSupportStats = [4, 0, 2, 2, 2];
+      } else if (state.tabList[id].summonerSupport === "S") {
+        summonerSupportStats = [5, 2, 2, 2, 2];
+      }
+      state.tabList[id].summonerSupportStats = summonerSupportStats;
       return { ...state };
     }
     case CHANGE_ALLY_SUPPORT: {
@@ -292,12 +698,3 @@ export default function (state = initState, action) {
     }
   }
 }
-
-/**export const CHANGE_MERGES = "CHANGE_MERGES";
-export const CHANGE_DRAGONFLOWERS = "CHANGE_DRAGONFLOWERS";
-export const CHANGE_RESPLENDENT = "CHANGE_RESPLENDENT";
-export const CHANGE_BLESSING = "CHANGE_BLESSING";
-export const CHANGE_SUMMONER_SUPPORT = "CHANGE_SUMMONER_SUPPORT";
-export const CHANGE_ALLY_SUPPORT = "CHANGE_ALLY_SUPPORT";
-export const CHANGE_BACKGROUND = "CHANGE_BACKGROUND";
-export const CHANGE_FAVORITE = "CHANGE_FAVORITE" */

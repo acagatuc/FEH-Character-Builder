@@ -15,12 +15,11 @@ export default function WeaponComponent(props) {
   ];
   const [isLoading, setIsLoading] = useState(true);
   const emptyWeapon = {
-    value: {
-      name: "",
-      might: 0,
-      visibleStats: [0, 0, 0, 0, 0],
-      refine: false,
-    },
+    name: "",
+    might: 0,
+    visibleStats: [0, 0, 0, 0, 0],
+    refine: false,
+    rearmed: false,
   };
   const [isDisabled, setIsDisabled] = useState(true);
 
@@ -75,8 +74,9 @@ export default function WeaponComponent(props) {
     async function fetchMyAPI() {
       let response = await fetch(`http://localhost:5000/Refines/` + weapon.label);
       response = await response.json();
+      console.log(response);
       setFetchRefine(response);
-      if (weapon.value.heroesList) {
+      if (weapon.value.refine) {
         var list = [
           {
             value: "unique",
@@ -105,18 +105,21 @@ export default function WeaponComponent(props) {
       props.onChangeW(emptyWeapon);
       setRefine(null);
     } else {
-      props.onChangeW(value);
+      props.onChangeW(value.value);
     }
     setWeapon(value);
   };
 
   const handleRefine = (event, value) => {
     var refine = {
-      stats: [0, 0, 0, 0, 0],
+      name: "",
       img: "",
+      stats: [0, 0, 0, 0, 0],
     };
     if (value === null) {
-      props.onChangeR(refine);
+      props.onChangeR({
+        refine,
+      });
     } else {
       if (value.value === "unique") {
         refine.stats = fetchRefine.uniqueRefine;
@@ -158,7 +161,7 @@ export default function WeaponComponent(props) {
             {option.value.name}
           </Box>
         )}
-        isOptionEqualToValue={(option, value) => option.label === value.label}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={"Weapon"}></TextField>}
       />
       <Autocomplete

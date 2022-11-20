@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { Autocomplete, Box, TextField } from "@mui/material";
+import React, { useRef } from "react";
+import { Autocomplete, TextField } from "@mui/material";
 
 export default function Merges(props) {
-  const [merges, setMerges] = useState(null);
+  const mergeSelector = useRef({ label: "", value: 0 });
   let mergeOptions = [
     { value: 0, label: "+0" },
     { value: 1, label: "+1" },
@@ -17,22 +17,16 @@ export default function Merges(props) {
     { value: 10, label: "+10" },
   ];
 
-  useEffect(() => {
-    setMerges(null);
-    props.onChange(0, [0, 0, 0, 0, 0]);
-  }, [props.hero.name]);
-
   const handleChange = (event, value) => {
-    setMerges(value);
     if (value !== null) {
       var tempArray = [];
       var mergeTemp = [];
 
       tempArray.push(0);
-      tempArray.push(parseInt(props.hero.atk[props.levels.array[1]]));
-      tempArray.push(parseInt(props.hero.spd[props.levels.array[2]]));
-      tempArray.push(parseInt(props.hero.def[props.levels.array[3]]));
-      tempArray.push(parseInt(props.hero.res[props.levels.array[4]]));
+      tempArray.push(parseInt(props.hero.atk[props.levels[1]]));
+      tempArray.push(parseInt(props.hero.spd[props.levels[2]]));
+      tempArray.push(parseInt(props.hero.def[props.levels[3]]));
+      tempArray.push(parseInt(props.hero.res[props.levels[4]]));
 
       mergeTemp.push(0);
       var i = 0;
@@ -42,8 +36,10 @@ export default function Merges(props) {
         tempArray[index] = 0;
         i += 1;
       }
+      mergeSelector.current = value;
       props.onChange(value.value, mergeTemp);
     } else {
+      mergeSelector.current = { label: "", value: 0 };
       props.onChange(0, [0, 0, 0, 0, 0]);
     }
   };
@@ -53,16 +49,11 @@ export default function Merges(props) {
       <Autocomplete
         id="flower dropdown"
         options={mergeOptions}
-        value={merges}
+        value={mergeSelector.current}
         onChange={handleChange}
         disabled={!props.hero.exists}
-        getOptionLabel={(option) => option.label || ""}
-        renderOption={(props: object, option: any) => (
-          <Box sx={{ backgroundColor: option.color }} {...props}>
-            {option.label}
-          </Box>
-        )}
-        isOptionEqualToValue={(option, value) => option.label === value.label || ""}
+        getOptionLabel={(option) => option.label}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder="Merges"></TextField>}
       />
     </div>

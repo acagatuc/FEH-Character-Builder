@@ -37,6 +37,13 @@ export const changeTab = (i) => ({
   },
 });
 
+export const resetTab = (i) => ({
+  type: actionTypes.RESET_TAB,
+  payload: {
+    id: i,
+  },
+});
+
 // herolist actions
 export const changeHero = (hero, id) => ({
   type: actionTypes.CHANGE_HERO,
@@ -46,18 +53,66 @@ export const changeHero = (hero, id) => ({
   },
 });
 
-export const changeStats = (stats, id) => ({
+export const changeStats = (id) => ({
   type: actionTypes.CHANGE_STATS,
   payload: {
-    stats: stats,
     id: id,
   },
 });
 
-export const changeSkills = (skills, id) => ({
-  type: actionTypes.CHANGE_SKILLS,
+export const changeWeapon = (w, id) => ({
+  type: actionTypes.CHANGE_WEAPON,
   payload: {
-    skills: skills,
+    weapon: w,
+    id: id,
+  },
+});
+export const changeRefine = (r, id) => ({
+  type: actionTypes.CHANGE_REFINE,
+  payload: {
+    refine: r,
+    id: id,
+  },
+});
+export const changeAssist = (a, id) => ({
+  type: actionTypes.CHANGE_ASSIST,
+  payload: {
+    assist: a,
+    id: id,
+  },
+});
+export const changeSpecial = (s, id) => ({
+  type: actionTypes.CHANGE_SPECIAL,
+  payload: {
+    special: s,
+    id: id,
+  },
+});
+export const changeASlot = (a, id) => ({
+  type: actionTypes.CHANGE_ASLOT,
+  payload: {
+    a: a,
+    id: id,
+  },
+});
+export const changeBSlot = (b, id) => ({
+  type: actionTypes.CHANGE_BSLOT,
+  payload: {
+    b: b,
+    id: id,
+  },
+});
+export const changeCSlot = (c, id) => ({
+  type: actionTypes.CHANGE_CSLOT,
+  payload: {
+    c: c,
+    id: id,
+  },
+});
+export const changeSSlot = (s, id) => ({
+  type: actionTypes.CHANGE_SSLOT,
+  payload: {
+    s: s,
     id: id,
   },
 });
@@ -70,10 +125,11 @@ export const changeLevels = (levels, id) => ({
   },
 });
 
-export const changeMerges = (merges, id) => ({
+export const changeMerges = (merges, order, id) => ({
   type: actionTypes.CHANGE_MERGES,
   payload: {
     merges: merges,
+    order: order,
     id: id,
   },
 });
@@ -94,10 +150,25 @@ export const changeResplendent = (res, id) => ({
   },
 });
 
+export const changeResplendentStats = (res, id) => ({
+  type: actionTypes.CHANGE_RESPLENDENT_STATS,
+  payload: {
+    res: res,
+    id: id,
+  },
+});
+
 export const changeBlessing = (blessing, id) => ({
   type: actionTypes.CHANGE_BLESSING,
   payload: {
     blessing: blessing,
+    id: id,
+  },
+});
+export const changeBlessingStats = (blessing, id) => ({
+  type: actionTypes.CHANGE_BLESSING_STATS,
+  payload: {
+    stats: blessing,
     id: id,
   },
 });

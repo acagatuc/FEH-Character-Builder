@@ -37,40 +37,42 @@ export default function Traits(props) {
       setIsDisabled(false);
     }
     var tempArray = traitOptions;
-    if (props.stats.includes("hp")) {
-      tempArray[0] = {
-        value: "hp",
-        label: props.label + "Hp",
-        color: props.color,
-      };
-    }
-    if (props.stats.includes("atk")) {
-      tempArray[1] = {
-        value: "atk",
-        label: props.label + "Atk",
-        color: props.color,
-      };
-    }
-    if (props.stats.includes("spd")) {
-      tempArray[2] = {
-        value: "spd",
-        label: props.label + "Spd",
-        color: props.color,
-      };
-    }
-    if (props.stats.includes("def")) {
-      tempArray[3] = {
-        value: "def",
-        label: props.label + "Def",
-        color: props.color,
-      };
-    }
-    if (props.stats.includes("res")) {
-      tempArray[4] = {
-        value: "res",
-        label: props.label + "Res",
-        color: props.color,
-      };
+    if (props.stats !== undefined) {
+      if (props.stats.includes("hp")) {
+        tempArray[0] = {
+          value: "hp",
+          label: props.label + "Hp",
+          color: props.color,
+        };
+      }
+      if (props.stats.includes("atk")) {
+        tempArray[1] = {
+          value: "atk",
+          label: props.label + "Atk",
+          color: props.color,
+        };
+      }
+      if (props.stats.includes("spd")) {
+        tempArray[2] = {
+          value: "spd",
+          label: props.label + "Spd",
+          color: props.color,
+        };
+      }
+      if (props.stats.includes("def")) {
+        tempArray[3] = {
+          value: "def",
+          label: props.label + "Def",
+          color: props.color,
+        };
+      }
+      if (props.stats.includes("res")) {
+        tempArray[4] = {
+          value: "res",
+          label: props.label + "Res",
+          color: props.color,
+        };
+      }
     }
     setTraitOptions(tempArray);
     setTrait(null);
@@ -135,9 +137,7 @@ export default function Traits(props) {
           </Box>
         )}
         isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => (
-          <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>
-        )}
+        renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />
     </div>
   );

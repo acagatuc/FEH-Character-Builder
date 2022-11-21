@@ -110,7 +110,7 @@ const AppInfo = (props) => {
           </Container>
         </Modal.Body>
         <Modal.Footer>
-          <IconButton href="https://github.com/acagatuc/FEH-Character-Builder/">
+          <IconButton onClick={() => window.open("https://github.com/acagatuc/FEH-Character-Builder/", "_blank", "noopener,noreferrer")}>
             <GitHubIcon />
           </IconButton>
           <Button variant="secondary" onClick={handleClose}>

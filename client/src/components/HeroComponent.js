@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
+import { Button } from "@mui/material";
 import "./../App.css";
 
 import BlessingComponent from "./BlessingComponent.js";
@@ -31,16 +32,15 @@ export default function HeroComponent(props) {
 
   // assets flaws and ascended stats info
   const levels = useSelector((state) => state.tabList.tabList[props.id].levels);
-  const superboon = useSelector((state) => state.tabList.tabList[props.id].superboon);
-  const superbane = useSelector((state) => state.tabList.tabList[props.id].superbane);
+  const superboon = useSelector((state) => state.tabList.tabList[props.id].hero.superboon);
+  const superbane = useSelector((state) => state.tabList.tabList[props.id].hero.superbane);
 
   // truthy values for resplendent and resplendent stat toggle buttons
   const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
   const resplendentStats = useSelector((state) => state.tabList.tabList[props.id].resplendentStats);
 
   // for beast units only
-  const [transformed, setTransformed] = useState(false);
-  const [transformedStats, setTransformedStats] = useState(0);
+  const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
 
   async function heroChange(newHero) {
     dispatch(actions.resetTab(props.id));
@@ -64,12 +64,49 @@ export default function HeroComponent(props) {
     dispatch(actions.changeStats(props.id));
   }, [hero, hp, atk, spd, def, res]);
 
-  const mergeChange = (number, order) => {
-    dispatch(actions.changeMerges(number, order, props.id));
+  // button features
+  const maximize = () => {
+    mergeChange(10);
+    var index = +hero.dragonflowers;
+    flowerChange(index);
+  };
+
+  const save = () => {
+    // add build to local storage
+  };
+
+  const load = () => {
+    // load build from local storage (loading the build into the tablist should proc a change on every component similar to the way maximize does with merge and flowers)
+    // this will also be used to load recommended builds hopefully.
+  };
+
+  const skills = () => {
+    // load in the top skills to the specified skill slots.
+  };
+
+  const mergeChange = (number) => {
+    var tempArray = [];
+    var mergeTemp = [];
+
+    tempArray.push(0);
+    tempArray.push(parseInt(hero.atk[levels[1]]));
+    tempArray.push(parseInt(hero.spd[levels[2]]));
+    tempArray.push(parseInt(hero.def[levels[3]]));
+    tempArray.push(parseInt(hero.res[levels[4]]));
+
+    mergeTemp.push(0);
+    var i = 0;
+    while (i < 4) {
+      var index = tempArray.indexOf(Math.max(...tempArray));
+      mergeTemp.push(index);
+      tempArray[index] = 0;
+      i += 1;
+    }
+    dispatch(actions.changeMerges(number, mergeTemp, props.id));
     dispatch(actions.changeStats(props.id));
   };
 
-  const flowerChange = (value, array) => {
+  const flowerChange = (value) => {
     dispatch(actions.changeDragonflowers(value, props.id));
     dispatch(actions.changeStats(props.id));
   };
@@ -144,13 +181,8 @@ export default function HeroComponent(props) {
   };
 
   const handleTransform = (event) => {
-    setTransformed(event);
-    if (event && hero.weapon_type.includes("Beast")) {
-      setTransformedStats(2);
-    } else {
-      setTransformedStats(0);
-    }
-    // props.changeTransformed(event);
+    dispatch(actions.changeTransformed(event, props.id));
+    dispatch(actions.changeStats(props.id));
   };
 
   const changeBackground = (bg) => {
@@ -178,7 +210,7 @@ export default function HeroComponent(props) {
             <h3>Stats:</h3>
             <Row>
               <Col>
-                <Dropdown onChange={heroChange} url={"http://localhost:5000/Heroes/"} title={"Select Hero"} hero={hero} id={props.id} />
+                <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
               </Col>
             </Row>
             <Row style={{ marginTop: "10px" }}>
@@ -190,13 +222,13 @@ export default function HeroComponent(props) {
               </Col>
             </Row>
             <Row>
-              <Col style={{ padding: "2px", margin: "10px" }}>
+              <Col>
                 <Traits hero={hero} stats={superboon} array={levels} color={"#79ba8e"} label={"+"} onChange={assetChange} placeholder={"Asset"} />
               </Col>
-              <Col style={{ padding: "2px", margin: "10px" }}>
+              <Col>
                 <Traits hero={hero} stats={superbane} array={levels} color={"#e68585"} label={"-"} onChange={flawChange} placeholder={"Flaw"} />
-              </Col>{" "}
-              <Col style={{ padding: "2px", margin: "10px" }}>
+              </Col>
+              <Col>
                 <Traits
                   hero={hero}
                   stats={superboon}
@@ -223,25 +255,41 @@ export default function HeroComponent(props) {
             <SkillComponent hero={hero} id={props.id} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
             <SkillComponent hero={hero} id={props.id} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
           </Col>
-          <Col md={3} style={{ marginTop: "10px", textAlign: "right" }}>
+          <Col md={4} style={{ marginTop: "30px", textAlign: "right" }}>
             <h5 style={{ marginTop: "10px" }}>Additional:</h5>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
+            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
+            <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
+            <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
+          </Col>
+          <Col style={{ marginTop: "5px", textAlign: "right" }}>
+            <Row style={{ justifyContent: "space-between" }}>
+              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={save}>
+                Save
+              </Button>
+              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={load}>
+                Load
+              </Button>
+            </Row>
+            <Row style={{ justifyContent: "space-between", marginTop: "5px" }}>
+              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={maximize}>
+                Maximize
+              </Button>
+              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={skills}>
+                Skills
+              </Button>
+            </Row>
+            buffs or debuffs stats
             <SwitchComponent
-              res={transformed}
+              res={transformed === 2}
               enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
               onChange={handleTransform}
               label={"Transformed?"}
             />
             <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
             <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
-            <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
-            <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} />
             <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} />
-          </Col>
-          <Col>
-            buffs or debuffs stats
-            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
           </Col>
         </Row>
         <Row style={{ marginTop: "5%" }}>

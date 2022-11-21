@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 
 // redux import
@@ -8,15 +8,10 @@ export default function Dropdown(props) {
   // whole hero list that contains all names, backpacks, and character ids
   const [heroList, setHeroList] = useState([]);
 
-  // the value of the current tab
-  const tabValue = useSelector((state) => state.tabList.tabValue);
-
   // list of heroes only used for display (uses parts of the hero list to creat this)
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const heroName = useSelector((state) => state.tabList.tabList[tabValue].label);
-  const heroValue = useSelector((state) => state.tabList.tabList[tabValue].value);
-  const dropdown = useRef({ label: heroName, value: heroValue });
+  const [dropdown, setDropdown] = useState({ value: null, label: "" });
 
   // display settings that affect the list
   const name_display = useSelector((state) => state.display.name_display);
@@ -26,7 +21,7 @@ export default function Dropdown(props) {
   // gets initial hero list with names and character ids
   useEffect(() => {
     async function fetchHeroList() {
-      let response = await fetch(props.url);
+      let response = await fetch("http://localhost:5000/Heroes/");
       response = await response.json();
 
       // concats hero list from response onto empty array and sets the hero list
@@ -44,7 +39,7 @@ export default function Dropdown(props) {
     }
 
     fetchHeroList();
-  }, [props.url]);
+  }, []);
 
   // creates a list with the given conditions outlined by the display state
   useEffect(() => {
@@ -67,8 +62,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.current.value) {
-                dropdown.current.label = name;
+              if (listItem.character_id === dropdown.value) {
+                setDropdown({ ...dropdown, label: name });
               }
               return {
                 value: listItem.character_id,
@@ -94,8 +89,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.current.value) {
-                dropdown.current.label = name;
+              if (listItem.character_id === dropdown.value) {
+                setDropdown({ ...dropdown, label: name });
               }
               return {
                 value: listItem.character_id,
@@ -123,8 +118,8 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.current.value) {
-                dropdown.current.label = name;
+              if (listItem.character_id === dropdown.value) {
+                setDropdown({ ...dropdown, label: name });
               }
               return {
                 value: listItem.character_id,
@@ -137,7 +132,7 @@ export default function Dropdown(props) {
 
     createList();
     setIsLoading(false);
-  }, [dropdown, heroList, name_display, grima_display, backpack_display]);
+  }, [heroList, name_display, grima_display, backpack_display]);
 
   // if the hero or tab focus changes, make sure the label and value also changes
   // useEffect(() => {
@@ -147,6 +142,7 @@ export default function Dropdown(props) {
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(event, value) {
+    setDropdown(value);
     props.onChange(value.value);
   }
 
@@ -158,7 +154,7 @@ export default function Dropdown(props) {
         openOnFocus
         selectOnFocus
         options={list}
-        value={dropdown.current}
+        value={dropdown}
         onChange={handleChange}
         loading={isLoading}
         getOptionLabel={(option) => option.label}

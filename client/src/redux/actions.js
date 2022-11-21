@@ -16,13 +16,6 @@ export const copyTab = (id, length) => ({
   },
 });
 
-export const updateTab = (list) => ({
-  type: actionTypes.UPDATE_TABLIST,
-  payload: {
-    list: list,
-  },
-});
-
 export const deleteTab = (i) => ({
   type: actionTypes.DELETE_TAB,
   payload: {
@@ -154,6 +147,14 @@ export const changeResplendentStats = (res, id) => ({
   type: actionTypes.CHANGE_RESPLENDENT_STATS,
   payload: {
     res: res,
+    id: id,
+  },
+});
+
+export const changeTransformed = (transformed, id) => ({
+  type: actionTypes.CHANGE_TRANSFORMED,
+  payload: {
+    transformed: transformed,
     id: id,
   },
 });

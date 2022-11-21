@@ -1,11 +1,8 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
-// redux import
-import { useSelector } from "react-redux";
-
 export default function BlessingComponent(props) {
-  const blessing = useRef({ value: null, label: "" });
+  const [blessing, setBlessing] = useState(null);
   const [isDisabled, setIsDisabled] = useState(true);
   const blessingOptions = [
     { value: "water", label: "Water" },
@@ -33,11 +30,7 @@ export default function BlessingComponent(props) {
   }, [props.hero.name, props.hero.hero_type]);
 
   const handleBlessing = (e, value) => {
-    if (value === null) {
-      blessing.current = { value: null, label: "" };
-    } else {
-      blessing.current = value;
-    }
+    setBlessing(value);
     props.onChange(value);
   };
 
@@ -46,10 +39,10 @@ export default function BlessingComponent(props) {
       <Autocomplete
         id="blessing dropdown"
         options={blessingOptions}
-        value={blessing.current}
+        value={blessing}
         onChange={handleBlessing}
         disabled={!props.hero.exists || isDisabled}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}

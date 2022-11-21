@@ -1,8 +1,12 @@
-import React, { useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField } from "@mui/material";
 
+//redux imports
+import { useSelector } from "react-redux";
+
 export default function Merges(props) {
-  const mergeSelector = useRef({ label: "", value: 0 });
+  const merges = useSelector((state) => state.tabList.tabList[props.id].merges);
+  const [mergeSelector, setMergeSelector] = useState(null);
   let mergeOptions = [
     { value: 0, label: "+0" },
     { value: 1, label: "+1" },
@@ -17,30 +21,19 @@ export default function Merges(props) {
     { value: 10, label: "+10" },
   ];
 
+  useEffect(() => {
+    if (merges === 0) {
+      setMergeSelector(null);
+    } else {
+      setMergeSelector({ value: merges, label: "+" + merges });
+    }
+  }, [merges]);
+
   const handleChange = (event, value) => {
     if (value !== null) {
-      var tempArray = [];
-      var mergeTemp = [];
-
-      tempArray.push(0);
-      tempArray.push(parseInt(props.hero.atk[props.levels[1]]));
-      tempArray.push(parseInt(props.hero.spd[props.levels[2]]));
-      tempArray.push(parseInt(props.hero.def[props.levels[3]]));
-      tempArray.push(parseInt(props.hero.res[props.levels[4]]));
-
-      mergeTemp.push(0);
-      var i = 0;
-      while (i < 4) {
-        var index = tempArray.indexOf(Math.max(...tempArray));
-        mergeTemp.push(index);
-        tempArray[index] = 0;
-        i += 1;
-      }
-      mergeSelector.current = value;
-      props.onChange(value.value, mergeTemp);
+      props.onChange(value.value);
     } else {
-      mergeSelector.current = { label: "", value: 0 };
-      props.onChange(0, [0, 0, 0, 0, 0]);
+      props.onChange(0);
     }
   };
 
@@ -49,10 +42,10 @@ export default function Merges(props) {
       <Autocomplete
         id="flower dropdown"
         options={mergeOptions}
-        value={mergeSelector.current}
+        value={mergeSelector}
         onChange={handleChange}
         disabled={!props.hero.exists}
-        getOptionLabel={(option) => option.label}
+        getOptionLabel={(option) => option.label || ""}
         isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder="Merges"></TextField>}
       />

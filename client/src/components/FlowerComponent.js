@@ -1,11 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
 // redux import
 import { useSelector } from "react-redux";
 
 export default function FlowerComponent(props) {
-  const flowerSelector = useRef({ label: "", value: 0 });
+  const dragonflowers = useSelector((state) => state.tabList.tabList[props.id].dragonflowers);
+  const [dragonflowerSelector, setDragonflowerSelector] = useState(null);
   const [flowerList, setFlowerList] = useState([]);
   const options = [
     { value: 0, label: "+0" },
@@ -41,12 +42,18 @@ export default function FlowerComponent(props) {
     setFlowerList(options.slice(0, index));
   }, [props.hero]);
 
+  useEffect(() => {
+    if (dragonflowers === 0) {
+      setDragonflowerSelector(null);
+    } else {
+      setDragonflowerSelector({ value: dragonflowers, label: "+" + dragonflowers });
+    }
+  }, [dragonflowers]);
+
   const handleDragonflowers = (event, value) => {
     if (value !== null) {
-      flowerSelector.current = value;
       props.onChange(value.value);
     } else {
-      flowerSelector.current = { label: "", value: 0 };
       props.onChange(0);
     }
   };
@@ -56,7 +63,7 @@ export default function FlowerComponent(props) {
       <Autocomplete
         id="flower dropdown"
         options={flowerList}
-        value={flowerSelector.current}
+        value={dragonflowerSelector}
         onChange={handleDragonflowers}
         disabled={!props.hero.exists}
         getOptionLabel={(option) => option.label || ""}

@@ -2,7 +2,6 @@ import {
   ADD_TAB,
   COPY_TAB,
   DELETE_TAB,
-  UPDATE_TABLIST,
   CHANGE_TAB,
   RESET_TAB,
   CHANGE_HERO,
@@ -20,6 +19,7 @@ import {
   CHANGE_DRAGONFLOWERS,
   CHANGE_RESPLENDENT,
   CHANGE_RESPLENDENT_STATS,
+  CHANGE_TRANSFORMED,
   CHANGE_BLESSING,
   CHANGE_BLESSING_STATS,
   CHANGE_SUMMONER_SUPPORT,
@@ -76,6 +76,7 @@ const initState = {
       resplendent: false,
       resplendentStats: false,
       resStats: [0, 0, 0, 0, 0],
+      transformed: 0,
       blessing: "",
       blessingStats: [0, 0, 0, 0, 0],
       summonerSupport: "",
@@ -175,6 +176,7 @@ export default function (state = initState, action) {
           resplendent: false,
           resplendentStats: false,
           resStats: [0, 0, 0, 0, 0],
+          transformed: 0,
           blessing: "",
           blessingStats: [0, 0, 0, 0, 0],
           summonerSupport: "",
@@ -226,108 +228,12 @@ export default function (state = initState, action) {
     case COPY_TAB: {
       const { id, length } = action.payload;
       state.key++;
-      var copiedHero = {
-        key: 0,
-        id: 0,
-        value: null,
-        label: "",
-        hero: {
-          name: "",
-          singleName: "",
-          title: "",
-          VA: "",
-          artist: "",
-          hp: [],
-          atk: [],
-          spd: [],
-          def: [],
-          res: [],
-          superboon: [],
-          superbane: [],
-          weapons: [],
-          assists: [],
-          specials: [],
-          passives: [],
-          weapon_type: "",
-          move_type: "",
-          hero_type: "",
-          dragonflowers: 0,
-          exists: false,
-        },
-        hp: "",
-        atk: "",
-        spd: "",
-        def: "",
-        res: "",
-        levels: [1, 1, 1, 1, 1],
-        merges: 0,
-        mergeOrder: [],
-        mergedStats: [0, 0, 0, 0, 0],
-        dragonflowers: 0,
-        dragonflowerStats: [0, 0, 0, 0, 0],
-        resplendent: false,
-        resplendentStats: false,
-        resStats: [0, 0, 0, 0, 0],
-        blessing: "",
-        blessingStats: [0, 0, 0, 0, 0],
-        summonerSupport: "",
-        allySupport: "",
-        background: "",
-        favorite: "",
-        weapon: {
-          name: "",
-          might: 0,
-          visibleStats: [0, 0, 0, 0, 0],
-          refine: false,
-          rearmed: false,
-        },
-        refine: {
-          name: "",
-          img: "",
-          stats: [0, 0, 0, 0, 0],
-        },
-        assist: {
-          name: "",
-          unique: false,
-        },
-        special: {
-          name: "",
-          unique: false,
-        },
-        aSkill: {
-          name: "",
-          visibleStats: [0, 0, 0, 0, 0],
-          unique: false,
-        },
-        bSkill: {
-          name: "",
-          unique: false,
-        },
-        cSkill: {
-          name: "",
-          unique: false,
-        },
-        sSkill: {
-          name: "",
-          visibleStats: [0, 0, 0, 0, 0],
-        },
-      };
-      Object.assign(copiedHero.hero, state.tabList[id].hero);
+      var copiedHero = {};
+      Object.assign(copiedHero, state.tabList[id]);
       copiedHero.key = state.key;
       copiedHero.id = length;
-      copiedHero.hero = state.tabList[id].hero;
-      copiedHero.blessing = state.tabList[id].blessing;
-      copiedHero.summonerSupport = state.tabList[id].summonerSupport;
-      copiedHero.allySupport = state.tabList[id].allySupport;
-      copiedHero.value = state.tabList[id].value;
-      copiedHero.label = state.tabList[id].label;
       state.tabList = [...state.tabList, copiedHero];
       return { ...state };
-    }
-    case UPDATE_TABLIST: {
-      const { list } = action.payload;
-      Object.assign(state.tabList, list);
-      return { ...state, tabList: list };
     }
     case DELETE_TAB: {
       return { ...state };
@@ -339,8 +245,8 @@ export default function (state = initState, action) {
     case RESET_TAB: {
       const { id } = action.payload;
       state.tabList[id] = {
-        key: 0,
-        id: 0,
+        key: state.tabList[id].key,
+        id: state.tabList[id].id,
         value: null,
         label: "",
         hero: {
@@ -380,6 +286,7 @@ export default function (state = initState, action) {
         resplendent: false,
         resplendentStats: false,
         resStats: [0, 0, 0, 0, 0],
+        transformed: 0,
         blessing: "",
         blessingStats: [0, 0, 0, 0, 0],
         summonerSupport: "",
@@ -476,7 +383,7 @@ export default function (state = initState, action) {
         state.tabList[id].refine.stats[1] +
         state.tabList[id].aSkill.visibleStats[1] +
         state.tabList[id].summonerSupportStats[1] +
-        // transformedStats +
+        state.tabList[id].transformed +
         state.tabList[id].resStats[1];
 
       // calculates hero spd
@@ -650,6 +557,15 @@ export default function (state = initState, action) {
       }
       state.tabList[id].resplendentStats = res;
       state.tabList[id].resStats = tempArray;
+      return { ...state };
+    }
+    case CHANGE_TRANSFORMED: {
+      const { transformed, id } = action.payload;
+      if (transformed && state.tabList[id].hero.weapon_type.includes("Beast")) {
+        state.tabList[id].transformed = 2;
+      } else {
+        state.tabList[id].transformed = 0;
+      }
       return { ...state };
     }
     case CHANGE_BLESSING: {

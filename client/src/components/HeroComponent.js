@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import { Button } from "@mui/material";
 import "./../App.css";
@@ -17,12 +17,19 @@ import ToggleComponent from "./ToggleComponent.js";
 import BackgroundDropdown from "./BackgroundDropdown.js";
 import FavoriteComponent from "./FavoriteComponent.js";
 
+// save and load modals
+import BarracksModal from "./BarracksModal.js";
+import SaveBuildModal from "./SaveBuildModal.js";
+
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../redux/actions";
 
 export default function HeroComponent(props) {
   const dispatch = useDispatch();
+  const tab = useSelector((state) => state.tabList.tabList[props.id]);
+
+  // hero info
   const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
   const hp = useSelector((state) => state.tabList.tabList[props.id].hero.hp);
   const atk = useSelector((state) => state.tabList.tabList[props.id].hero.atk);
@@ -30,10 +37,25 @@ export default function HeroComponent(props) {
   const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
   const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
+  // skill info
+  const assist = useSelector((state) => state.tabList.tabList[props.id].assist);
+  const special = useSelector((state) => state.tabList.tabList[props.id].special);
+  const aSlot = useSelector((state) => state.tabList.tabList[props.id].aSkill);
+  const bSlot = useSelector((state) => state.tabList.tabList[props.id].bSkill);
+  const cSlot = useSelector((state) => state.tabList.tabList[props.id].cSkill);
+  const sSlot = useSelector((state) => state.tabList.tabList[props.id].sSkill);
+
+  // support info
+  const SummonerSupport = useSelector((state) => state.tabList.tabList[props.id].summonerSupport);
+  const AllySupport = useSelector((state) => state.tabList.tabList[props.id].allySupport);
+
   // assets flaws and ascended stats info
   const levels = useSelector((state) => state.tabList.tabList[props.id].levels);
   const superboon = useSelector((state) => state.tabList.tabList[props.id].hero.superboon);
   const superbane = useSelector((state) => state.tabList.tabList[props.id].hero.superbane);
+  const asset = useSelector((state) => state.tabList.tabList[props.id].asset);
+  const flaw = useSelector((state) => state.tabList.tabList[props.id].flaw);
+  const ascended = useSelector((state) => state.tabList.tabList[props.id].ascended);
 
   // truthy values for resplendent and resplendent stat toggle buttons
   const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
@@ -41,6 +63,14 @@ export default function HeroComponent(props) {
 
   // for beast units only
   const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
+
+  // for load modal
+  const [showLoad, setShowLoad] = useState(false);
+  const [showSave, setShowSave] = useState(false);
+  const handleShowLoad = () => setShowLoad(true);
+  const handleCloseLoad = () => setShowLoad(false);
+  const handleShowSave = () => setShowSave(true);
+  const handleCloseSave = () => setShowSave(false);
 
   async function heroChange(newHero) {
     dispatch(actions.resetTab(props.id));
@@ -53,9 +83,6 @@ export default function HeroComponent(props) {
     response[0].VA = response[0].EVA;
     response[0].character_id = newHero;
     dispatch(actions.changeHero(response[0], props.id));
-
-    // setTransformed(false);
-    // props.changeTransformed(false);
 
     dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
@@ -71,18 +98,14 @@ export default function HeroComponent(props) {
     flowerChange(index);
   };
 
-  const save = () => {
-    // add build to local storage
-  };
-
-  const load = () => {
-    // load build from local storage (loading the build into the tablist should proc a change on every component similar to the way maximize does with merge and flowers)
-    // this will also be used to load recommended builds hopefully.
-  };
-
-  const skills = () => {
+  async function skills() {
     // load in the top skills to the specified skill slots.
-  };
+    let response = await fetch(`http://localhost:5000/Loadout/` + hero._id);
+    response = await response.json();
+    console.log(response);
+    // dispatch(actions.changeWeapon(response[0], props.id));
+    // dispatch(actions.changeStats(props.id));
+  }
 
   const mergeChange = (number) => {
     var tempArray = [];
@@ -111,18 +134,18 @@ export default function HeroComponent(props) {
     dispatch(actions.changeStats(props.id));
   };
 
-  const assetChange = (array, asset) => {
-    dispatch(actions.changeLevels(array, props.id));
+  const assetChange = (array, a) => {
+    dispatch(actions.changeLevels(array, props.id, a, flaw, ascended));
     dispatch(actions.changeStats(props.id));
   };
 
-  const flawChange = (array, flaw) => {
-    dispatch(actions.changeLevels(array, props.id));
+  const flawChange = (array, f) => {
+    dispatch(actions.changeLevels(array, props.id, asset, f, ascended));
     dispatch(actions.changeStats(props.id));
   };
 
-  const ascendedChange = (array, ascended) => {
-    dispatch(actions.changeLevels(array, props.id));
+  const ascendedChange = (array, a) => {
+    dispatch(actions.changeLevels(array, props.id, asset, flaw, a));
     dispatch(actions.changeStats(props.id));
   };
 
@@ -132,6 +155,7 @@ export default function HeroComponent(props) {
   };
 
   const changeRefine = (r) => {
+    console.log(r);
     dispatch(actions.changeRefine(r, props.id));
     dispatch(actions.changeStats(props.id));
   };
@@ -166,8 +190,8 @@ export default function HeroComponent(props) {
     dispatch(actions.changeBlessing(b.value, props.id));
   };
 
-  const changeBlessingStats = (buffs) => {
-    dispatch(actions.changeBlessingStats(buffs, props.id));
+  const changeBlessingStats = (buffs, heroes) => {
+    dispatch(actions.changeBlessingStats(buffs, heroes, props.id));
     dispatch(actions.changeStats(props.id));
   };
 
@@ -223,14 +247,33 @@ export default function HeroComponent(props) {
             </Row>
             <Row>
               <Col>
-                <Traits hero={hero} stats={superboon} array={levels} color={"#79ba8e"} label={"+"} onChange={assetChange} placeholder={"Asset"} />
-              </Col>
-              <Col>
-                <Traits hero={hero} stats={superbane} array={levels} color={"#e68585"} label={"-"} onChange={flawChange} placeholder={"Flaw"} />
+                <Traits
+                  hero={hero}
+                  stat={asset}
+                  stats={superboon}
+                  array={levels}
+                  color={"#79ba8e"}
+                  label={"+"}
+                  onChange={assetChange}
+                  placeholder={"Asset"}
+                />
               </Col>
               <Col>
                 <Traits
                   hero={hero}
+                  stat={flaw}
+                  stats={superbane}
+                  array={levels}
+                  color={"#e68585"}
+                  label={"-"}
+                  onChange={flawChange}
+                  placeholder={"Flaw"}
+                />
+              </Col>
+              <Col>
+                <Traits
+                  hero={hero}
+                  stat={ascended}
                   stats={superboon}
                   array={levels}
                   color={"#79ba8e"}
@@ -241,35 +284,73 @@ export default function HeroComponent(props) {
               </Col>
             </Row>
             <h3>Skills:</h3>
-            <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} />
-            <SkillComponent hero={hero} id={props.id} onChange={changeAssist} url={`http://localhost:5000/Assist/`} placeholder={"Choose Assist"} />
+            <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} id={props.id} />
             <SkillComponent
               hero={hero}
+              skill={assist}
+              id={props.id}
+              onChange={changeAssist}
+              url={`http://localhost:5000/Assist/`}
+              placeholder={"Choose Assist"}
+            />
+            <SkillComponent
+              hero={hero}
+              skill={special}
               id={props.id}
               onChange={changeSpecial}
               url={`http://localhost:5000/Specials/`}
               placeholder={"Choose Special"}
             />
-            <SkillComponent hero={hero} id={props.id} onChange={changeASkill} url={`http://localhost:5000/A_Slot/`} placeholder={"Choose A Skill"} />
-            <SkillComponent hero={hero} id={props.id} onChange={changeBSkill} url={`http://localhost:5000/B_Slot/`} placeholder={"Choose B Skill"} />
-            <SkillComponent hero={hero} id={props.id} onChange={changeCSkill} url={`http://localhost:5000/C_Slot/`} placeholder={"Choose C Skill"} />
-            <SkillComponent hero={hero} id={props.id} onChange={changeSSkill} url={`http://localhost:5000/S_Slot/`} placeholder={"Choose S Skill"} />
+            <SkillComponent
+              hero={hero}
+              skill={aSlot}
+              id={props.id}
+              onChange={changeASkill}
+              url={`http://localhost:5000/A_Slot/`}
+              placeholder={"Choose A Skill"}
+            />
+            <SkillComponent
+              hero={hero}
+              skill={bSlot}
+              id={props.id}
+              onChange={changeBSkill}
+              url={`http://localhost:5000/B_Slot/`}
+              placeholder={"Choose B Skill"}
+            />
+            <SkillComponent
+              hero={hero}
+              skill={cSlot}
+              id={props.id}
+              onChange={changeCSkill}
+              url={`http://localhost:5000/C_Slot/`}
+              placeholder={"Choose C Skill"}
+            />
+            <SkillComponent
+              hero={hero}
+              skill={sSlot}
+              id={props.id}
+              onChange={changeSSkill}
+              url={`http://localhost:5000/S_Slot/`}
+              placeholder={"Choose S Skill"}
+            />
           </Col>
           <Col md={4} style={{ marginTop: "30px", textAlign: "right" }}>
             <h5 style={{ marginTop: "10px" }}>Additional:</h5>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
             <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
-            <ToggleComponent exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
-            <ToggleComponent exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
+            <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
+            <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
           </Col>
           <Col style={{ marginTop: "5px", textAlign: "right" }}>
             <Row style={{ justifyContent: "space-between" }}>
-              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={save}>
+              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={handleShowSave}>
                 Save
               </Button>
-              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={load}>
+              <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
+              <Button variant="contained" color="primary" style={{ width: "48%" }} onClick={handleShowLoad}>
                 Load
               </Button>
+              <BarracksModal show={showLoad} onClose={handleCloseLoad} id={props.id} />
             </Row>
             <Row style={{ justifyContent: "space-between", marginTop: "5px" }}>
               <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={maximize}>
@@ -288,8 +369,8 @@ export default function HeroComponent(props) {
             />
             <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
             <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
-            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} />
-            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} />
+            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
+            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
           </Col>
         </Row>
         <Row style={{ marginTop: "5%" }}>

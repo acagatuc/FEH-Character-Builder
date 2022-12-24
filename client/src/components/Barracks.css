@@ -1,0 +1,25 @@
+.buildCard {
+  position: relative;
+  padding-bottom: 10px !important;
+}
+
+.titleRow {
+  height: 75px;
+}
+
+.expandIcon {
+  padding-left: 0px;
+  max-width: 50%;
+}
+
+.loadButton {
+  padding-left: 0px;
+  max-width: 50%;
+}
+
+.buildIcons {
+  height: 50px;
+  max-width: 50px;
+  object-fit: cover;
+  padding-right: 10%;
+}

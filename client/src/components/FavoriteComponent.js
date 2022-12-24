@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
+
+//redux imports
+import { useSelector } from "react-redux";
 
 export default function FavoriteComponent(props) {
   const favoriteList = [
@@ -12,15 +15,18 @@ export default function FavoriteComponent(props) {
     { value: 7, label: "7" },
     { value: 8, label: "8" },
   ];
+  const reduxFav = useSelector((state) => state.tabList.tabList[props.id].favorite);
   const [fav, setFav] = useState("");
+
+  useEffect(() => {
+    setFav({ value: reduxFav, label: reduxFav.toString() });
+  }, [reduxFav]);
 
   const handleFavoriteChange = (event, value) => {
     if (value === null) {
       props.onChange(0);
-      setFav("");
     } else {
       props.onChange(value.value);
-      setFav(value);
     }
   };
   return (

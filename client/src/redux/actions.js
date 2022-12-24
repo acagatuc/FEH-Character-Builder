@@ -46,6 +46,11 @@ export const changeHero = (hero, id) => ({
   },
 });
 
+export const loadBuildFromBarracks = (b, id) => ({
+  type: actionTypes.LOAD_BUILD_FROM_BARRACKS,
+  payload: { build: b, id: id },
+});
+
 export const changeStats = (id) => ({
   type: actionTypes.CHANGE_STATS,
   payload: {
@@ -110,11 +115,14 @@ export const changeSSlot = (s, id) => ({
   },
 });
 
-export const changeLevels = (levels, id) => ({
+export const changeLevels = (levels, id, asset, flaw, ascended) => ({
   type: actionTypes.CHANGE_LEVELS,
   payload: {
     levels: levels,
     id: id,
+    asset: asset,
+    flaw: flaw,
+    ascended: ascended,
   },
 });
 
@@ -166,10 +174,11 @@ export const changeBlessing = (blessing, id) => ({
     id: id,
   },
 });
-export const changeBlessingStats = (blessing, id) => ({
+export const changeBlessingStats = (blessing, heroes, id) => ({
   type: actionTypes.CHANGE_BLESSING_STATS,
   payload: {
     stats: blessing,
+    heroes: heroes,
     id: id,
   },
 });
@@ -240,4 +249,14 @@ export const changeTabImageDisplay = (i) => ({
   payload: {
     display: i,
   },
+});
+
+// barracks actions
+export const addBuildToBarracks = (i) => ({
+  type: actionTypes.SAVE_BUILD_TO_BARRACKS,
+  payload: { build: i },
+});
+export const deleteBuildFromBarracks = (i) => ({
+  type: actionTypes.DELETE_BUILD_FROM_BARRACKS,
+  payload: { id: i },
 });

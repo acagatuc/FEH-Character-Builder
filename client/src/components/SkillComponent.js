@@ -96,8 +96,11 @@ export default function SkillComponent(props) {
     }
   }, [rearmed]);
 
+  useEffect(() => {
+    setSkill({ value: props.skill, label: props.skill.name });
+  }, [props.skill]);
+
   const handleChange = (event, value) => {
-    setSkill(value);
     if (value === null) {
       props.onChange(emptySkill);
     } else {

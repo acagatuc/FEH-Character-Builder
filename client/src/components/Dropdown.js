@@ -11,6 +11,7 @@ export default function Dropdown(props) {
   // list of heroes only used for display (uses parts of the hero list to creat this)
   const [list, setList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
   const [dropdown, setDropdown] = useState({ value: null, label: "" });
 
   // display settings that affect the list
@@ -62,7 +63,7 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value) {
+              if (listItem.character_id === dropdown.value._id) {
                 setDropdown({ ...dropdown, label: name });
               }
               return {
@@ -89,7 +90,7 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value) {
+              if (listItem.character_id === dropdown.value._id) {
                 setDropdown({ ...dropdown, label: name });
               }
               return {
@@ -118,7 +119,7 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value) {
+              if (listItem.character_id === dropdown.value._id) {
                 setDropdown({ ...dropdown, label: name });
               }
               return {
@@ -134,15 +135,14 @@ export default function Dropdown(props) {
     setIsLoading(false);
   }, [heroList, name_display, grima_display, backpack_display]);
 
-  // if the hero or tab focus changes, make sure the label and value also changes
-  // useEffect(() => {
-  //   dropdown.current = { label: heroName, value: heroValue };
-  //   console.log(dropdown.current);
-  // }, [tabValue, heroName, heroValue]);
+  useEffect(() => {
+    // change name based on current name display settings
+    // @TODO
+    setDropdown({ value: hero, label: hero.name });
+  }, [hero]);
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(event, value) {
-    setDropdown(value);
     props.onChange(value.value);
   }
 

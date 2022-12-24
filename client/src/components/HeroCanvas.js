@@ -30,8 +30,10 @@ import { useSelector } from "react-redux";
 const numberArray = [520, 555, 590, 624, 656, 692, 725, 759, 793, 828];
 
 const BackgroundComponent = ({ image, summonerSupport, width, height }) => {
-  if (image === "") {
+  if (image.label === "" || image === "" || image === undefined) {
     image = "normal";
+  } else {
+    image = image.value;
   }
   if (summonerSupport[2] !== "No" && summonerSupport[2] !== null && summonerSupport[2] !== "") {
     image += "_summoner";
@@ -785,7 +787,7 @@ export default function HeroCanvas(props) {
           <LargeTextComponent text={hero.single_name} color="white" stroke="black" x={58} y={470} width={214} />
           <LargeTextComponent text={hero.title} color="white" x={15} y={412} width={260} />
           <MergeComponent merges={merges} />
-          <WMComponent weapon={hero.weaponType} movement={hero.moveType} />
+          <WMComponent weapon={hero.weapon_type} movement={hero.move_type} />
           <TextComponent text={"HP"} color={levels} merges={merges} x={88} y={604} />
           <TextComponent text={"Atk"} color={levels} merges={merges} x={87} y={641} />
           <TextComponent text={"Spd"} color={levels} merges={merges} x={85} y={678} />

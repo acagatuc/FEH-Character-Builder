@@ -5,6 +5,7 @@ import {
   CHANGE_TAB,
   RESET_TAB,
   CHANGE_HERO,
+  LOAD_BUILD_FROM_BARRACKS,
   CHANGE_STATS,
   CHANGE_WEAPON,
   CHANGE_REFINE,
@@ -68,6 +69,9 @@ const initState = {
       def: "",
       res: "",
       levels: [1, 1, 1, 1, 1],
+      asset: "",
+      flaw: "",
+      ascended: "",
       merges: 0,
       mergeOrder: [],
       mergedStats: [0, 0, 0, 0, 0],
@@ -79,6 +83,7 @@ const initState = {
       transformed: 0,
       blessing: "",
       blessingStats: [0, 0, 0, 0, 0],
+      blessingHeroList: [],
       summonerSupport: "",
       summonerSupportStats: [0, 0, 0, 0, 0],
       allySupport: "",
@@ -168,6 +173,9 @@ export default function (state = initState, action) {
           def: "",
           res: "",
           levels: [1, 1, 1, 1, 1],
+          asset: "",
+          flaw: "",
+          ascended: "",
           merges: 0,
           mergeOrder: [],
           mergedStats: [0, 0, 0, 0, 0],
@@ -179,6 +187,7 @@ export default function (state = initState, action) {
           transformed: 0,
           blessing: "",
           blessingStats: [0, 0, 0, 0, 0],
+          blessingHeroList: [],
           summonerSupport: "",
           summonerSupportStats: [0, 0, 0, 0, 0],
           allySupport: "",
@@ -278,6 +287,9 @@ export default function (state = initState, action) {
         def: "",
         res: "",
         levels: [1, 1, 1, 1, 1],
+        asset: "",
+        flaw: "",
+        ascended: "",
         merges: 0,
         mergeOrder: [],
         mergedStats: [0, 0, 0, 0, 0],
@@ -289,6 +301,7 @@ export default function (state = initState, action) {
         transformed: 0,
         blessing: "",
         blessingStats: [0, 0, 0, 0, 0],
+        blessingHeroList: [],
         summonerSupport: "",
         summonerSupportStats: [0, 0, 0, 0, 0],
         allySupport: "",
@@ -345,6 +358,17 @@ export default function (state = initState, action) {
       state.tabList[id].value = hero.character_id;
       state.tabList[id].resplendent = false;
 
+      return { ...state };
+    }
+
+    case LOAD_BUILD_FROM_BARRACKS: {
+      const { build, id } = action.payload;
+      state.key++;
+      var barracksHero = {};
+      Object.assign(barracksHero, build);
+      barracksHero.key = state.key;
+      barracksHero.id = id;
+      state.tabList[id] = barracksHero;
       return { ...state };
     }
     case CHANGE_STATS: {
@@ -523,8 +547,11 @@ export default function (state = initState, action) {
       return { ...state };
     }
     case CHANGE_LEVELS: {
-      const { levels, id } = action.payload;
+      const { levels, id, asset, flaw, ascended } = action.payload;
       state.tabList[id].levels = levels;
+      state.tabList[id].asset = asset;
+      state.tabList[id].flaw = flaw;
+      state.tabList[id].ascended = ascended;
       return { ...state };
     }
     case CHANGE_DRAGONFLOWERS: {
@@ -574,8 +601,9 @@ export default function (state = initState, action) {
       return { ...state };
     }
     case CHANGE_BLESSING_STATS: {
-      const { stats, id } = action.payload;
+      const { stats, heroes, id } = action.payload;
       state.tabList[id].blessingStats = stats;
+      state.tabList[id].blessingHeroList = heroes;
       return { ...state };
     }
     case CHANGE_SUMMONER_SUPPORT: {

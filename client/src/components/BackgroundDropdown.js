@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
+
+//redux imports
+import { useSelector } from "react-redux";
 
 export default function BackgroundDropdown(props) {
   const backgroundList = [
     { value: "study", label: "Study" },
     { value: "beach", label: "Beach" },
   ];
+  const reduxBg = useSelector((state) => state.tabList.tabList[props.id].background);
   const [bg, setBg] = useState("");
+
+  useEffect(() => {
+    setBg(reduxBg);
+  }, [reduxBg]);
 
   const handleBackgroundChange = (event, value) => {
     if (value === null) {
-      props.onChange("normal");
-      setBg("");
+      props.onChange({ value: "normal", label: "" });
     } else {
-      props.onChange(value.value);
-      setBg(value);
+      props.onChange(value);
     }
   };
   return (

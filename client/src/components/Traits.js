@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
+//redux imports
+import { useSelector } from "react-redux";
+
 export default function Traits(props) {
   const [trait, setTrait] = useState(null);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -75,8 +78,16 @@ export default function Traits(props) {
       }
     }
     setTraitOptions(tempArray);
-    setTrait(null);
+    setTrait({ label: "" });
   }, [props.hero, props.color, props.label, props.stats, traitOptions]);
+
+  useEffect(() => {
+    if (props.stat !== undefined && props.stat !== null && props.stat !== "") {
+      setTrait({ value: props.stat, label: props.label + props.stat.charAt(0).toUpperCase() + props.stat.slice(1) });
+    } else {
+      setTrait({ label: "" });
+    }
+  }, [props.stat]);
 
   const handleChange = (event, value) => {
     var tempArray = props.array;
@@ -114,10 +125,8 @@ export default function Traits(props) {
         tempArray[4] = statLevel;
       }
 
-      setTrait(value);
       props.onChange(tempArray, value.value);
     } else {
-      setTrait(value);
       props.onChange(tempArray, "");
     }
   };
@@ -130,7 +139,7 @@ export default function Traits(props) {
         value={trait}
         onChange={handleChange}
         disabled={isDisabled}
-        getOptionLabel={(option) => option.label || null}
+        getOptionLabel={(option) => option.label}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
             {option.label}

@@ -10,12 +10,7 @@ export default function BlessingHeroSelectionComponent(props) {
   const [stats, setStats] = useState([0, 0, 0, 0, 0]);
   const [isDisabled, setIsDisabled] = useState(true);
   const blessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
-
-  useEffect(() => {
-    setIsDisabled(true);
-    setSelectedHeroList([]);
-    setStats([0, 0, 0, 0, 0]);
-  }, [props.hero.name]);
+  const blessingHeroList = useSelector((state) => state.tabList.tabList[props.id].blessingHeroList);
 
   useEffect(() => {
     setIsDisabled(true);
@@ -34,30 +29,29 @@ export default function BlessingHeroSelectionComponent(props) {
           })
       );
 
-      setSelectedHeroList([]);
       setStats([0, 0, 0, 0, 0]);
     }
     if (blessing !== null && blessing !== "" && blessing !== "normal" && blessing !== "duo" && blessing !== "harmonic") {
       fetchMyAPI();
       setIsDisabled(false);
-      setSelectedHeroList([]);
-      setStats([0, 0, 0, 0, 0]);
-      calculateHeroBuffs(stats, false);
     }
     // not sure why its yelling because i dont understand this error.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blessing]);
 
+  useEffect(() => {
+    setSelectedHeroList(blessingHeroList);
+  }, [blessingHeroList]);
+
   const handleAdd = (chip) => {
     if (chip.currentTarget.title === "Clear") {
-      setSelectedHeroList([]);
-      calculateHeroBuffs(stats, false);
+      calculateHeroBuffs(stats, [], false);
     } else if (selectedHeroList.length < 6) {
       var hero = heroList.find((element) => {
         return element.label === chip.target.innerHTML;
       });
-      setSelectedHeroList([...selectedHeroList, { label: chip.target.innerHTML, index: selectedHeroList.length }]);
-      calculateHeroBuffs(hero.value.stats, true);
+      var array = [...selectedHeroList, { label: chip.target.innerHTML, index: selectedHeroList.length }];
+      calculateHeroBuffs(hero.value.stats, array, true);
     }
   };
 
@@ -65,13 +59,12 @@ export default function BlessingHeroSelectionComponent(props) {
     var hero = heroList.find((element) => {
       return element.label === option.label;
     });
-    const arr = [...selectedHeroList];
-    arr.splice(index, 1);
-    setSelectedHeroList(arr);
-    calculateHeroBuffs(hero.value.stats, false);
+    const array = [...selectedHeroList];
+    array.splice(index, 1);
+    calculateHeroBuffs(hero.value.stats, array, false);
   };
 
-  const calculateHeroBuffs = (heroStats, addOrSubtract) => {
+  const calculateHeroBuffs = (heroStats, heroArray, addOrSubtract) => {
     // true for add, false for subtract
     var arr = stats;
     if (addOrSubtract) {
@@ -88,7 +81,7 @@ export default function BlessingHeroSelectionComponent(props) {
       arr[3] -= +heroStats[3];
       arr[4] -= +heroStats[4];
     }
-    props.onChange(arr);
+    props.onChange(arr, heroArray);
   };
 
   return (

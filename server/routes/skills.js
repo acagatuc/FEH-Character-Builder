@@ -11,6 +11,31 @@ const dbo = require("../db/conn");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
 
+// get one skill back based on skill name
+skillRoutes.route("/Loadout/:id").get(async function (req, res) {
+  let db_connect = dbo.getDb();
+  // get hero to access skills
+  var hero = db_connect
+    .collection("Heroes")
+    .find({ _id: ObjectId(req.params.id) })
+    .toArray(function (err, result) {
+      if (err) throw err;
+      res.json(result);
+    });
+
+  console.log(hero);
+
+  // get weapon
+  var weapon = await db_connect.collection("PrefWeapons").find({ heroesList: { $regex: "," + req.params.name + "," } });
+
+  // get assist
+  // var assist = await db_connect.collection("Assist").find({name: })
+
+  var finalSkillArray = [];
+  finalSkillArray.append(weapon.toArray());
+  res.json(finalSkillArray);
+});
+
 //id is the weapontype, name is the hero name for prefs
 skillRoutes.route("/GenericWeapons/:id/:name").get(async function (req, res) {
   let db_connect = dbo.getDb();
@@ -51,7 +76,7 @@ skillRoutes.route("/GenericWeapons/:id/:name").get(async function (req, res) {
 skillRoutes.route("/Refines/:name").get(async function (req, res) {
   let db_connect = dbo.getDb();
   var element = await db_connect.collection("Refines").findOne({ name: req.params.name });
-
+  console.log(element);
   res.json({ name: element.name, uniqueRefine: element.uniqueRefine, genericRefine: element.genericRefine });
 });
 

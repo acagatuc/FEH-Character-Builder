@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
+//redux imports
+import { useSelector } from "react-redux";
+
 export default function BlessingComponent(props) {
+  const reduxBlessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
   const [blessing, setBlessing] = useState(null);
   const [isDisabled, setIsDisabled] = useState(true);
   const blessingOptions = [
@@ -29,8 +33,11 @@ export default function BlessingComponent(props) {
     }
   }, [props.hero.name, props.hero.hero_type]);
 
+  useEffect(() => {
+    setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
+  }, [reduxBlessing]);
+
   const handleBlessing = (e, value) => {
-    setBlessing(value);
     props.onChange(value);
   };
 

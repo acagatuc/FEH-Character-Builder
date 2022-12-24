@@ -12,12 +12,13 @@ import AppInfo from "./components/AppInfo.js";
 
 import { useSelector } from "react-redux";
 import { store } from "./redux/store";
-import { saveState } from "./redux/localStorage";
+import { saveState, saveBuilds } from "./redux/localStorage";
 import bg from "./background.png";
 
 store.subscribe(() => {
   saveState({
     display: store.getState().display,
+    barracks: store.getState().barracks,
   });
 });
 
@@ -31,7 +32,6 @@ const App = (props) => {
 
   // this is to set the width of the col so the form does not overflow
   const [canvasWidth, setWidth] = useState(0);
-  const [displayFloret, setDisplayFloret] = useState(false);
 
   return (
     <div className="App">

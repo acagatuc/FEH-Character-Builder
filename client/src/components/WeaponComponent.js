@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
+//redux imports
+import { useSelector } from "react-redux";
+
 export default function WeaponComponent(props) {
   const [weaponList, setWeaponList] = useState([]);
   const [weapon, setWeapon] = useState("");
+  const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
   const [refineList, setRefineList] = useState([]);
   const [refine, setRefine] = useState("");
+  const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
   const [fetchRefine, setFetchRefine] = useState("");
   const genericRefineList = [
     { value: "atk_refine", label: "+Atk" },
@@ -72,15 +77,15 @@ export default function WeaponComponent(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/Refines/` + weapon.label);
+      let response = await fetch(`http://localhost:5000/Refines/` + reduxWeapon.name);
       response = await response.json();
       console.log(response);
       setFetchRefine(response);
-      if (weapon.value.refine) {
+      if (reduxWeapon.refine && response.uniqueRefine.length !== 1) {
         var list = [
           {
             value: "unique",
-            label: "+Unique Effect: " + weapon.value.name,
+            label: "+Unique Effect: " + reduxWeapon.name,
           },
         ];
         setRefineList(list.concat(genericRefineList));
@@ -89,8 +94,8 @@ export default function WeaponComponent(props) {
       }
     }
 
-    if (weapon !== null && weapon !== "") {
-      if (weapon.value.refine === "TRUE") {
+    if (reduxWeapon !== null && reduxWeapon !== "") {
+      if (reduxWeapon.refine === "TRUE") {
         fetchMyAPI();
         setIsDisabled(false);
       } else {
@@ -98,7 +103,23 @@ export default function WeaponComponent(props) {
       }
       setRefine(null);
     }
-  }, [weapon]);
+  }, [reduxWeapon]);
+
+  useEffect(() => {
+    if (reduxWeapon.name !== "") {
+      setWeapon({ value: reduxWeapon, label: reduxWeapon.name });
+    } else {
+      setWeapon(emptyWeapon);
+    }
+  }, [reduxWeapon]);
+
+  useEffect(() => {
+    if (reduxRefine.name !== "") {
+      setRefine({ value: reduxRefine, label: reduxRefine.name });
+    } else {
+      setRefine({ name: "", img: "", stats: [0, 0, 0, 0, 0] });
+    }
+  }, [reduxRefine]);
 
   const handleWeapon = (event, value) => {
     if (value === null) {
@@ -117,13 +138,12 @@ export default function WeaponComponent(props) {
       stats: [0, 0, 0, 0, 0],
     };
     if (value === null) {
-      props.onChangeR({
-        refine,
-      });
+      props.onChangeR(refine);
     } else {
+      refine.name = value.label;
       if (value.value === "unique") {
+        refine.img = "https://fehskills.s3.amazonaws.com/" + reduxWeapon.name + ".png";
         refine.stats = fetchRefine.uniqueRefine;
-        refine.img = "https://fehskills.s3.amazonaws.com/" + weapon.value.name + ".png";
       } else if (value.value === "atk_refine") {
         refine.stats[0] = fetchRefine.genericRefine[0];
         refine.stats[1] = fetchRefine.genericRefine[1];

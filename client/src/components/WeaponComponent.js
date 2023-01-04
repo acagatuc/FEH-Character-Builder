@@ -30,7 +30,7 @@ export default function WeaponComponent(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/GenericWeapons/` + weapon_type + "/" + props.hero.name);
+      let response = await fetch(`http://localhost:5000/GenericWeapons/` + weapon_type + "/" + props.hero._id);
       response = await response.json();
       setWeaponList(
         []

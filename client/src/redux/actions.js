@@ -252,9 +252,9 @@ export const changeTabImageDisplay = (i) => ({
 });
 
 // barracks actions
-export const addBuildToBarracks = (i) => ({
+export const addBuildToBarracks = (title, i) => ({
   type: actionTypes.SAVE_BUILD_TO_BARRACKS,
-  payload: { build: i },
+  payload: { name: title, build: i },
 });
 export const deleteBuildFromBarracks = (i) => ({
   type: actionTypes.DELETE_BUILD_FROM_BARRACKS,

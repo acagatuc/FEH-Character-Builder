@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Modal, Button, Container, Col, Row } from "react-bootstrap";
-import { IconButton, Collapse } from "@mui/material";
+import { IconButton, Collapse, Menu, MenuItem } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 
 //css and icons
@@ -11,6 +12,7 @@ import "./Barracks.css";
 import Close from "@mui/icons-material/Close";
 import ExpandIcon from "@mui/icons-material/ExpandMore";
 import CollapseIcon from "@mui/icons-material/ExpandLess";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
@@ -21,8 +23,23 @@ const SavedBuildInBarracks = (props) => {
   const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = (event) => {
+    setAnchorEl(null);
+  };
+
+  const overwriteBuild = (item, id) => {
+    props.copyTab(props.id);
+    setAnchorEl(null);
+  };
   const openDeleteConfirmation = (i) => {
+    console.log(i);
     dispatch(actions.deleteBuildFromBarracks(i));
+    setAnchorEl(null);
   };
   const showCollapsedInfo = (bool) => {
     setIsCollapsed(!bool);
@@ -34,6 +51,34 @@ const SavedBuildInBarracks = (props) => {
 
   return (
     <Card variant="outlined" sx={{ margin: "6px", maxWidth: "150px", minHeight: "100px", padding: "0px" }}>
+      <CardHeader
+        action={
+          <>
+            <IconButton
+              // component="div"
+              // aria-controls={open ? "basic-menu" : undefined}
+              // aria-haspopup="true"
+              // aria-expanded={open ? "true" : undefined}
+              // id={props.id}
+              onClick={() => openDeleteConfirmation(props.item.key)}
+            >
+              <Close />
+            </IconButton>
+            {/* <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={() => overwriteBuild(props.item.key, props.id)}>Overwrite Build</MenuItem>
+              <MenuItem onClick={() => openDeleteConfirmation(props.item.key)}>Delete Build</MenuItem>
+            </Menu> */}
+          </>
+        }
+      />
       <CardContent className="buildCard">
         <Row className="titleRow">
           <Col>
@@ -46,8 +91,7 @@ const SavedBuildInBarracks = (props) => {
           </Col>
           <Col>
             <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              {props.item.label}
-              {props.id}
+              {props.item.build_name}
             </Typography>
           </Col>
         </Row>
@@ -82,16 +126,15 @@ const BarracksModal = (props) => {
       </Modal.Header>
       <Modal.Body>
         <Container>
-          <Row>
-            <Col>
-              <h5>Henlo {props.id}</h5>
-            </Col>
-          </Row>
-          <Row>
-            {barracks.map(function (item) {
-              return <SavedBuildInBarracks key={item.key} afterLoad={() => props.onClose()} item={item} id={props.id} />;
-            })}
-          </Row>
+          {barracks.length === 0 ? (
+            <Row>Your Barracks are empty! Make sure to save builds to grow your barracks to up to 12 builds!</Row>
+          ) : (
+            <Row>
+              {barracks.map(function (item) {
+                return <SavedBuildInBarracks key={item.key} afterLoad={() => props.onClose()} item={item} id={props.id} />;
+              })}
+            </Row>
+          )}
         </Container>
       </Modal.Body>
       <Modal.Footer>

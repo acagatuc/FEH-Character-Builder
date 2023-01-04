@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Button, Container, Col, Row } from "react-bootstrap";
+import TextField from "@mui/material/TextField";
 
 //css
 import "../App.css";
@@ -10,10 +11,13 @@ import * as actions from "../redux/actions";
 import { store } from "../redux/store";
 
 const SaveBuildModal = (props) => {
+  const [name, setName] = useState("");
   const dispatch = useDispatch();
 
   const addBuild = () => {
-    dispatch(actions.addBuildToBarracks(props.tab));
+    dispatch(actions.addBuildToBarracks(name, props.tab));
+    setName("");
+    props.onClose();
   };
 
   return (
@@ -27,6 +31,7 @@ const SaveBuildModal = (props) => {
             <Col>
               <h5>Hello</h5>
             </Col>
+            <TextField value={name} onChange={(e) => setName(e.target.value)} />
             <Button onClick={addBuild}>Add</Button>
           </Row>
         </Container>

@@ -63,8 +63,10 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value._id) {
-                setDropdown({ ...dropdown, label: name });
+              if (hero.name !== "") {
+                if (listItem.character_id === dropdown.value._id) {
+                  setDropdown({ ...dropdown, label: name });
+                }
               }
               return {
                 value: listItem.character_id,
@@ -90,8 +92,10 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value._id) {
-                setDropdown({ ...dropdown, label: name });
+              if (hero.name !== "") {
+                if (listItem.character_id === dropdown.value._id) {
+                  setDropdown({ ...dropdown, label: name });
+                }
               }
               return {
                 value: listItem.character_id,
@@ -119,8 +123,10 @@ export default function Dropdown(props) {
                 name = name + " (+" + listItem.backpack + ")";
               }
               // if the listItem is the currently selected hero, change the
-              if (listItem.character_id === dropdown.value._id) {
-                setDropdown({ ...dropdown, label: name });
+              if (hero.name !== "") {
+                if (listItem.character_id === dropdown.value._id) {
+                  setDropdown({ ...dropdown, label: name });
+                }
               }
               return {
                 value: listItem.character_id,
@@ -138,7 +144,18 @@ export default function Dropdown(props) {
   useEffect(() => {
     // change name based on current name display settings
     // @TODO
-    setDropdown({ value: hero, label: hero.name });
+    if (hero.name === "") {
+      setDropdown({ label: "" });
+    } else {
+      var name = heroList.filter((h) => h.full_name === hero.name)[0];
+      if (name_display === "full") {
+        setDropdown({ value: hero, label: name.full_name });
+      } else if (name_display === "title") {
+        setDropdown({ value: hero, label: name.name_title });
+      } else if (name_display === "abbrev") {
+        setDropdown({ value: hero, label: name.abbreviated });
+      }
+    }
   }, [hero]);
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label

@@ -288,6 +288,7 @@ export default function HeroComponent(props) {
             <SkillComponent
               hero={hero}
               skill={assist}
+              heroSkills={hero.assists}
               id={props.id}
               onChange={changeAssist}
               url={`http://localhost:5000/Assist/`}
@@ -296,6 +297,7 @@ export default function HeroComponent(props) {
             <SkillComponent
               hero={hero}
               skill={special}
+              heroSkills={hero.specials}
               id={props.id}
               onChange={changeSpecial}
               url={`http://localhost:5000/Specials/`}
@@ -304,6 +306,7 @@ export default function HeroComponent(props) {
             <SkillComponent
               hero={hero}
               skill={aSlot}
+              heroSkills={hero.a}
               id={props.id}
               onChange={changeASkill}
               url={`http://localhost:5000/A_Slot/`}
@@ -312,6 +315,7 @@ export default function HeroComponent(props) {
             <SkillComponent
               hero={hero}
               skill={bSlot}
+              heroSkills={hero.b}
               id={props.id}
               onChange={changeBSkill}
               url={`http://localhost:5000/B_Slot/`}
@@ -320,19 +324,20 @@ export default function HeroComponent(props) {
             <SkillComponent
               hero={hero}
               skill={cSlot}
+              heroSkills={hero.c}
               id={props.id}
               onChange={changeCSkill}
               url={`http://localhost:5000/C_Slot/`}
               placeholder={"Choose C Skill"}
             />
-            <SkillComponent
+            {/* <SkillComponent
               hero={hero}
               skill={sSlot}
               id={props.id}
               onChange={changeSSkill}
               url={`http://localhost:5000/S_Slot/`}
               placeholder={"Choose S Skill"}
-            />
+            /> */}
           </Col>
           <Col md={4} style={{ marginTop: "30px", textAlign: "right" }}>
             <h5 style={{ marginTop: "10px" }}>Additional:</h5>

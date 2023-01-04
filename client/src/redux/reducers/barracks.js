@@ -8,28 +8,24 @@ const initState = {
 export default function (state = initState, action) {
   switch (action.type) {
     case SAVE_BUILD_TO_BARRACKS: {
-      const { build } = action.payload;
+      const { name, build } = action.payload;
       var copiedHero = {};
       Object.assign(copiedHero, build);
       copiedHero.key = state.key;
+      copiedHero.build_name = name;
       state.key++;
       state.builds = [...state.builds, copiedHero];
       return { ...state };
     }
-    // case LOAD_BUILD_FROM_BARRACKS: {
-    //   const { id } = action.payload;
-    //   console.log(id);
-    //   // change tablist state from here?
-    //   return { ...state };
-    // }
     case DELETE_BUILD_FROM_BARRACKS: {
       const { id } = action.payload;
-      state.builds.splice(id, 1);
+      console.log(id);
       for (var i = id; i < state.builds.length; i++) {
         state.builds[i].key--;
         console.log(state.builds[i].key);
       }
-      state.key--;
+      state.builds.splice(id, 1);
+      state.key = state.builds.length;
       return { ...state };
     }
     default: {

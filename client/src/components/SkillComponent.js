@@ -17,68 +17,29 @@ export default function SkillComponent(props) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      var urlAddon = props.hero.move_type + "/" + props.hero.weapon_type + "/" + props.hero.name;
+      var urlAddon = props.hero.move_type + "/" + props.hero.weapon_type + "/" + props.hero._id;
       let response = await fetch(props.url + urlAddon);
       response = await response.json();
-      if (props.url.includes("Assist")) {
-        setSkillList(
-          []
-            .concat(response)
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map(function (listItem) {
-              var color;
-              if (props.hero.assists.includes(listItem.name)) {
-                color = "#daf5e5";
-              } else {
-                color = "white";
-              }
-              return {
-                value: listItem,
-                label: listItem.name,
-                color: color,
-              };
-            })
-        );
-      } else if (props.url.includes("Special")) {
-        setSkillList(
-          []
-            .concat(response)
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map(function (listItem) {
-              var color;
-              if (props.hero.specials.includes(listItem.name)) {
-                color = "#daf5e5";
-              } else {
-                color = "white";
-              }
-              return {
-                value: listItem,
-                label: listItem.name,
-                color: color,
-              };
-            })
-        );
-      } else {
-        setSkillList(
-          []
-            .concat(response)
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map(function (listItem) {
-              var color;
-              if (props.hero.passives.includes(listItem.name)) {
-                color = "#daf5e5";
-              } else {
-                color = "white";
-              }
-              return {
-                value: listItem,
-                label: listItem.name,
-                color: color,
-              };
-            })
-        );
-      }
-
+      setSkillList(
+        []
+          .concat(response)
+          .sort((a, b) => (a.name > b.name ? 1 : -1))
+          .map(function (listItem) {
+            var color;
+            if (props.heroSkills[props.heroSkills.length - 1].includes(listItem.name)) {
+              color = "#daf5e5";
+            } else if (props.heroSkills.includes(listItem.name) && props.heroSkills[props.heroSkills.indexOf(listItem.name) + 1].includes("1")) {
+              color = "#daf5e5";
+            } else {
+              color = "white";
+            }
+            return {
+              value: listItem,
+              label: listItem.name,
+              color: color,
+            };
+          })
+      );
       setIsLoading(false);
     }
     if (props.hero.exists) {

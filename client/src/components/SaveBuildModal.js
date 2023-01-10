@@ -29,9 +29,9 @@ const SaveBuildModal = (props) => {
         <Container>
           <Row>
             <Col>
-              <h5>Hello</h5>
+              <h5>Save Build?</h5>
             </Col>
-            <TextField value={name} onChange={(e) => setName(e.target.value)} />
+            <TextField value={name} onChange={(e) => setName(e.target.value)} label={"Build Name"} />
             <Button onClick={addBuild}>Add</Button>
           </Row>
         </Container>

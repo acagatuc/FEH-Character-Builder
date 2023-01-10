@@ -1,3 +1,6 @@
+// hero list actions
+export const FETCH_HERO_LIST = "FETCH_HERO_LIST";
+
 // tabs actions
 export const ADD_TAB = "ADD_TAB";
 export const COPY_TAB = "COPY_TAB";

@@ -10,9 +10,11 @@ import HeroTabs from "./HeroTabs.js";
 import HeroCanvas from "./components/HeroCanvas.js";
 import AppInfo from "./components/AppInfo.js";
 
-import { useSelector } from "react-redux";
+//redux imports
 import { store } from "./redux/store";
 import { saveState, saveBuilds } from "./redux/localStorage";
+import { useSelector, useDispatch } from "react-redux";
+import * as actions from "./redux/actions";
 import bg from "./background.png";
 
 store.subscribe(() => {
@@ -32,6 +34,38 @@ const App = (props) => {
 
   // this is to set the width of the col so the form does not overflow
   const [canvasWidth, setWidth] = useState(0);
+  const dispatch = useDispatch();
+  const [heroes, setHeroes] = useState([]);
+
+  // gets initial hero list with names and character ids
+  useEffect(() => {
+    async function fetchHeroList() {
+      let response = await fetch("http://localhost:5000/Heroes/");
+      response = await response.json();
+
+      // concats hero list from response onto empty array and sets the hero list
+      setHeroes(
+        [].concat(response).map(function (listItem) {
+          return {
+            character_id: listItem.character_id,
+            full_name: listItem.full_name,
+            name_title: listItem.name_title,
+            abbreviated: listItem.abbreviated,
+            backpack: listItem.backpack,
+          };
+        })
+      );
+    }
+
+    fetchHeroList();
+  }, []);
+
+  useEffect(() => {
+    dispatch(actions.fetchHeroList(heroes));
+    dispatch(actions.changeNameDisplay(""));
+    dispatch(actions.changeGrima(""));
+    dispatch(actions.changeBackpack(""));
+  }, [heroes]);
 
   return (
     <div className="App">

@@ -1,5 +1,13 @@
 import * as actionTypes from "./actionTypes";
 
+// herolist actions
+export const fetchHeroList = (heroes) => ({
+  type: actionTypes.FETCH_HERO_LIST,
+  payload: {
+    heroes: heroes,
+  },
+});
+
 // tablist actions
 export const addTab = (i) => ({
   type: actionTypes.ADD_TAB,

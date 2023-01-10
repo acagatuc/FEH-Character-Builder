@@ -35,7 +35,7 @@ const BackgroundComponent = ({ image, summonerSupport, width, height }) => {
   } else {
     image = image.value;
   }
-  if (summonerSupport[2] !== "No" && summonerSupport[2] !== null && summonerSupport[2] !== "") {
+  if (summonerSupport !== "No" && summonerSupport !== null && summonerSupport !== "") {
     image += "_summoner";
   }
   var url = "https://fehportraits.s3.amazonaws.com/bg_" + image + ".png";
@@ -647,14 +647,15 @@ const AssistOrSpecial = ({ text, x, y, offsetX, offsetY }) => {
 const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
   var url = "";
   if (text === "") {
-    url = "default";
+    url = "";
   } else {
     url = text.replace("+", "%2B");
     url = url.replace(" ", "+");
     url = url.replace("%20", "+");
     url = url.replace("/", "");
+    url = "https://fehskills.s3.amazonaws.com/" + url + ".png";
   }
-  const [imgElement] = useImage("https://fehskills.s3.amazonaws.com/" + url + ".png", "Anonymous");
+  const [imgElement] = useImage(url, "Anonymous");
   if (text === undefined) {
     return null;
   }
@@ -703,13 +704,10 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
 
 export default function HeroCanvas(props) {
   const stageRef = React.useRef();
-  // const [stageWidth, setStageWidth] = useState(window.innerWidth);
-  // const [stageHeight, setStageHeight] = useState((960 / 540) * window.innerWidth);
   const [stageWidth, setStageWidth] = useState((540 / 960) * window.innerHeight);
   const [stageHeight, setStageHeight] = useState(window.innerHeight);
 
   // global redux state
-  // const global = useSelector((state) => state.tabList.tabList[state.tabList.tabValue]);
   const hero = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].hero);
   const merges = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].merges);
   const levels = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].levels);
@@ -761,7 +759,7 @@ export default function HeroCanvas(props) {
     <div id="wrapper" className="wrapper">
       <Stage width={stageWidth} height={stageHeight} ref={stageRef} onClick={handleExport} scaleX={stageWidth / 540} scaleY={stageHeight / 960}>
         <Layer id="img layer">
-          <BackgroundComponent image={background} summonerSupport={[blessing, hero.hero_type, ss, as]} width={540} height={960} />
+          <BackgroundComponent image={background} summonerSupport={ss} width={540} height={960} />
           <ImageComponent
             image={
               resplendent
@@ -825,7 +823,7 @@ export default function HeroCanvas(props) {
           />
         </Layer>
         <Layer id="skill layer">
-          <WeaponComponent text={`${weapon.name}`} image={`${refine}`} x={280} y={596} offsetX={33} offsetY={8} />
+          <WeaponComponent text={`${weapon.name}`} image={`${refine.img}`} x={280} y={596} offsetX={33} offsetY={8} />
           <AssistOrSpecial text={`${assist.name}`} x={280} y={631} offsetX={33} offsetY={9} />
           <AssistOrSpecial text={`${special.name}`} x={278} y={671} offsetX={35} offsetY={7} />
           <SkillComponent text={`${aSkill.name}`} x={275} y={707} offsetX={38} offsetY={8} />

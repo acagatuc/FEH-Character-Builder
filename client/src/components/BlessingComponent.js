@@ -34,11 +34,19 @@ export default function BlessingComponent(props) {
   }, [props.hero.name, props.hero.hero_type]);
 
   useEffect(() => {
-    setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
+    if (reduxBlessing === "") {
+      setBlessing({ value: null, label: "" });
+    } else {
+      setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
+    }
   }, [reduxBlessing]);
 
   const handleBlessing = (e, value) => {
-    props.onChange(value);
+    if (value === null) {
+      props.onChange("");
+    } else {
+      props.onChange(value.value);
+    }
   };
 
   return (

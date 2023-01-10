@@ -26,7 +26,9 @@ export default function SkillComponent(props) {
           .sort((a, b) => (a.name > b.name ? 1 : -1))
           .map(function (listItem) {
             var color;
-            if (props.heroSkills[props.heroSkills.length - 1].includes(listItem.name)) {
+            if (props.heroSkills.length === 0) {
+              color = "white";
+            } else if (props.heroSkills[props.heroSkills.length - 1].includes(listItem.name)) {
               color = "#daf5e5";
             } else if (props.heroSkills.includes(listItem.name) && props.heroSkills[props.heroSkills.indexOf(listItem.name) + 1].includes("1")) {
               color = "#daf5e5";

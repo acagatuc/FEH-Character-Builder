@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
-import { Button } from "@mui/material";
+import { Button, Tooltip } from "@mui/material";
 import "./../App.css";
 
 import BlessingComponent from "./BlessingComponent.js";
@@ -63,6 +63,9 @@ export default function HeroComponent(props) {
 
   // for beast units only
   const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
+
+  // length check on barracks for disabled state of save button
+  const barracksLength = useSelector((state) => state.barracks.key);
 
   // for load modal
   const [showLoad, setShowLoad] = useState(false);
@@ -187,7 +190,7 @@ export default function HeroComponent(props) {
   };
 
   const changeBlessing = (b) => {
-    dispatch(actions.changeBlessing(b.value, props.id));
+    dispatch(actions.changeBlessing(b, props.id));
   };
 
   const changeBlessingStats = (buffs, heroes) => {
@@ -348,9 +351,19 @@ export default function HeroComponent(props) {
           </Col>
           <Col style={{ marginTop: "5px", textAlign: "right" }}>
             <Row style={{ justifyContent: "space-between" }}>
-              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={handleShowSave}>
-                Save
-              </Button>
+              <Tooltip title="Barracks is full!" placement="top" disableHoverListener={barracksLength !== 12}>
+                <div>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{ width: "48%" }}
+                    disabled={!hero.exists || barracksLength === 12}
+                    onClick={handleShowSave}
+                  >
+                    Save
+                  </Button>
+                </div>
+              </Tooltip>
               <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
               <Button variant="contained" color="primary" style={{ width: "48%" }} onClick={handleShowLoad}>
                 Load

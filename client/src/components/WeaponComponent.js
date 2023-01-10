@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
+import { Row } from "react-bootstrap";
 
 //redux imports
 import { useSelector } from "react-redux";
@@ -167,7 +168,7 @@ export default function WeaponComponent(props) {
   };
 
   return (
-    <div>
+    <Row>
       <Autocomplete
         id="weapon dropdown"
         options={weaponList}
@@ -183,6 +184,7 @@ export default function WeaponComponent(props) {
         )}
         isOptionEqualToValue={(option, value) => option.value === value.value}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={"Weapon"}></TextField>}
+        sx={{ width: 3 / 5 }}
       />
       <Autocomplete
         id="refine dropdown"
@@ -194,7 +196,8 @@ export default function WeaponComponent(props) {
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={"Refine"}></TextField>}
+        sx={{ width: 2 / 5 }}
       />
-    </div>
+    </Row>
   );
 }

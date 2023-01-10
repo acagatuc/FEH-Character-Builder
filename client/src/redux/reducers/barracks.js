@@ -12,7 +12,11 @@ export default function (state = initState, action) {
       var copiedHero = {};
       Object.assign(copiedHero, build);
       copiedHero.key = state.key;
-      copiedHero.build_name = name;
+      if (name === "") {
+        copiedHero.build_name = build.label;
+      } else {
+        copiedHero.build_name = name;
+      }
       state.key++;
       state.builds = [...state.builds, copiedHero];
       return { ...state };
@@ -22,7 +26,6 @@ export default function (state = initState, action) {
       console.log(id);
       for (var i = id; i < state.builds.length; i++) {
         state.builds[i].key--;
-        console.log(state.builds[i].key);
       }
       state.builds.splice(id, 1);
       state.key = state.builds.length;

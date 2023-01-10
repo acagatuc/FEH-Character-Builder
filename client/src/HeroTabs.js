@@ -34,7 +34,7 @@ const TabLabel = (props) => {
 
   let url = "";
   if (label === "") {
-    url = "https://fehskills.s3.amazonaws.com/default.png";
+    url = "";
     // } else if (props.transform) {
     //   url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + "+Transform.png").replace(" ", "+");
   } else if ((hero_type === "harmonic" || hero_type === "duo") && duo !== "") {

@@ -16,7 +16,11 @@
 }
 
 .modal-size {
-  max-width: 50% !important;
+  max-width: 60% !important;
+}
+
+.save-modal-size {
+  max-width: 30% !important;
 }
 
 .modal-layout {
@@ -32,10 +36,43 @@ div.noPadding {
   padding-right: 0;
 }
 
+.tab-row {
+  display: inline-flex;
+  justify-content: left;
+  flex-wrap: nowrap;
+}
+
+.tab-label {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tab-menu-button:hover {
+  background-color: gray;
+}
+
 .chibis {
   height: 45px;
   max-width: 50px;
   object-fit: cover;
+  padding-right: 5px;
+}
+
+.header-row {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0%;
+}
+.headers {
+  font-size: 30px;
+  font-weight: 500;
+  display: inline-block;
+}
+.inline-row {
+  display: inline-flex;
+  justify-content: right;
 }
 
 @media screen and (max-width: 600px) {

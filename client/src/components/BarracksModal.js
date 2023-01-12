@@ -22,7 +22,7 @@ import { store } from "../redux/store";
 const SavedBuildInBarracks = (props) => {
   const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
-
+  console.log(props.item);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -50,7 +50,7 @@ const SavedBuildInBarracks = (props) => {
   };
 
   return (
-    <Card variant="outlined" sx={{ margin: "6px", maxWidth: "150px", minHeight: "100px", padding: "0px" }}>
+    <Card variant="outlined" sx={{ margin: "6px", maxWidth: "200px" }}>
       <CardHeader
         action={
           <>
@@ -78,37 +78,33 @@ const SavedBuildInBarracks = (props) => {
             </Menu> */}
           </>
         }
+        avatar={
+          <img
+            className="buildIcons"
+            src={"https://fehchibis.s3.amazonaws.com/" + props.item.label + ".png".replace(" ", "+")}
+            align="left"
+            alt="preview"
+          />
+        }
+        title={
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            {props.item.build_name}
+          </Typography>
+        }
       />
       <CardContent className="buildCard">
-        <Row className="titleRow">
-          <Col>
-            <img
-              className="buildIcons"
-              src={"https://fehchibis.s3.amazonaws.com/" + props.item.label + ".png".replace(" ", "+")}
-              align="left"
-              alt="preview"
-            />
-          </Col>
-          <Col>
-            <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-              {props.item.build_name}
-            </Typography>
-          </Col>
-        </Row>
         <Collapse in={isCollapsed}>
-          {props.item.label}
-          {/* <IconButton onClick={() => openDeleteConfirmation(props.item.key)}>
-          <Close />
-        </IconButton> */}
+          {props.item.weapon.name}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
+          {props.item.cSkill.name}
         </Collapse>
-        <Row>
-          <Col className="expandIcon">
+        <div className="buildCardBottomRow">
+          <div className="expandIcon">
             <IconButton onClick={() => showCollapsedInfo(isCollapsed)}>{isCollapsed ? <CollapseIcon /> : <ExpandIcon />}</IconButton>
-          </Col>
-          <Col className="loadButton">
+          </div>
+          <div className="loadButton">
             <Button onClick={() => loadBuildFromBarracks(props.item, props.id)}>Load</Button>
-          </Col>
-        </Row>
+          </div>
+        </div>
       </CardContent>
     </Card>
   );
@@ -127,13 +123,13 @@ const BarracksModal = (props) => {
       <Modal.Body>
         <Container>
           {barracks.length === 0 ? (
-            <Row>Your Barracks are empty! Make sure to save builds to grow your barracks to up to 12 builds!</Row>
+            <div>Your Barracks are empty! Make sure to save builds to grow your barracks to up to 12 builds!</div>
           ) : (
-            <Row>
+            <div className="barracksCards">
               {barracks.map(function (item) {
                 return <SavedBuildInBarracks key={item.key} afterLoad={() => props.onClose()} item={item} id={props.id} />;
               })}
-            </Row>
+            </div>
           )}
         </Container>
       </Modal.Body>

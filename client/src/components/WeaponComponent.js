@@ -80,7 +80,6 @@ export default function WeaponComponent(props) {
     async function fetchMyAPI() {
       let response = await fetch(`http://localhost:5000/Refines/` + reduxWeapon.name);
       response = await response.json();
-      console.log(response);
       setFetchRefine(response);
       if (reduxWeapon.refine && response.uniqueRefine.length !== 1) {
         var list = [
@@ -107,7 +106,12 @@ export default function WeaponComponent(props) {
   }, [reduxWeapon]);
 
   useEffect(() => {
-    if (reduxWeapon.name !== "") {
+    if (typeof reduxWeapon === "string") {
+      var wep = weaponList.find((e) => e.label === reduxWeapon);
+      if (wep !== undefined) {
+        props.onChangeW(wep.value);
+      }
+    } else if (reduxWeapon.name !== "") {
       setWeapon({ value: reduxWeapon, label: reduxWeapon.name });
     } else {
       setWeapon(emptyWeapon);

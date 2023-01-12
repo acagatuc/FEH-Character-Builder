@@ -85,7 +85,7 @@ export default function BlessingHeroSelectionComponent(props) {
   };
 
   return (
-    <div style={{ marginTop: "30px" }}>
+    <div>
       <Autocomplete
         multiple
         id="tags-outlined"

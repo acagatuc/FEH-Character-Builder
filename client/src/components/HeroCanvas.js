@@ -646,7 +646,7 @@ const AssistOrSpecial = ({ text, x, y, offsetX, offsetY }) => {
 
 const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
   var url = "";
-  if (text === "") {
+  if (text === "" || text.includes("undefined")) {
     url = "";
   } else {
     url = text.replace("+", "%2B");
@@ -656,10 +656,9 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
     url = "https://fehskills.s3.amazonaws.com/" + url + ".png";
   }
   const [imgElement] = useImage(url, "Anonymous");
-  if (text === undefined) {
+  if (url.includes("undefined")) {
     return null;
-  }
-  if (!text.includes("undefined")) {
+  } else {
     if (imgElement && imgElement.width >= 75) {
       return (
         <Group>

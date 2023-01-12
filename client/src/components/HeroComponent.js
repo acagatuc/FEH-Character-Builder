@@ -38,6 +38,7 @@ export default function HeroComponent(props) {
   const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
   // skill info
+  const weapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
   const assist = useSelector((state) => state.tabList.tabList[props.id].assist);
   const special = useSelector((state) => state.tabList.tabList[props.id].special);
   const aSlot = useSelector((state) => state.tabList.tabList[props.id].aSkill);
@@ -67,6 +68,10 @@ export default function HeroComponent(props) {
   // length check on barracks for disabled state of save button
   const barracksLength = useSelector((state) => state.barracks.key);
 
+  // loading variable to ensure that no state skill changes are committed while loading a new hero
+  const [isLoading, setIsLoading] = useState([true, true, true, true, true]);
+  const [disabledButton, setDisabledButton] = useState(true);
+
   // for load modal
   const [showLoad, setShowLoad] = useState(false);
   const [showSave, setShowSave] = useState(false);
@@ -76,6 +81,8 @@ export default function HeroComponent(props) {
   const handleCloseSave = () => setShowSave(false);
 
   async function heroChange(newHero) {
+    setIsLoading([true, true, true, true, true]);
+    setDisabledButton(true);
     dispatch(actions.resetTab(props.id));
     let response = await fetch("http://localhost:5000/Heroes/" + newHero);
     response = await response.json();
@@ -94,6 +101,16 @@ export default function HeroComponent(props) {
     dispatch(actions.changeStats(props.id));
   }, [hero, hp, atk, spd, def, res]);
 
+  const checkLoading = (index) => {
+    var temp = isLoading;
+    temp[index] = false;
+    setIsLoading(temp);
+    if (!isLoading.includes(true)) {
+      setDisabledButton(false);
+    }
+  };
+  useEffect(() => {}, [disabledButton]);
+
   // button features
   const maximize = () => {
     mergeChange(10);
@@ -101,14 +118,29 @@ export default function HeroComponent(props) {
     flowerChange(index);
   };
 
-  async function skills() {
+  const skills = () => {
+    // must find a way to have the program take a fuckin chill pill when clicked before the hero is properly loaded in
     // load in the top skills to the specified skill slots.
-    let response = await fetch(`http://localhost:5000/Loadout/` + hero._id);
-    response = await response.json();
-    console.log(response);
-    // dispatch(actions.changeWeapon(response[0], props.id));
-    // dispatch(actions.changeStats(props.id));
-  }
+    if (weapon.name !== hero.weapons[hero.weapons.length - 1]) {
+      dispatch(actions.changeWeapon(hero.weapons[hero.weapons.length - 1], props.id));
+    }
+
+    if (hero.assists[0] !== "" && hero.assists[0] !== undefined && assist.name !== hero.assists[hero.assists.length - 1]) {
+      dispatch(actions.changeAssist(hero.assists[hero.assists.length - 1], props.id));
+    }
+    if (hero.specials[0] !== "" && hero.specials[0] !== undefined && special.name !== hero.specials[hero.specials.length - 1]) {
+      dispatch(actions.changeSpecial(hero.specials[hero.specials.length - 1], props.id));
+    }
+    if (hero.a[0] !== "" && hero.a[0] !== undefined && aSlot.name !== hero.a[hero.a.length - 1]) {
+      dispatch(actions.changeASlot(hero.a[hero.a.length - 1], props.id));
+    }
+    if (hero.b[0] !== "" && hero.b[0] !== undefined && bSlot.name !== hero.b[hero.b.length - 1]) {
+      dispatch(actions.changeBSlot(hero.b[hero.b.length - 1], props.id));
+    }
+    if (hero.c[0] !== "" && hero.c[0] !== undefined && cSlot.name !== hero.c[hero.c.length - 1]) {
+      dispatch(actions.changeCSlot(hero.c[hero.c.length - 1], props.id));
+    }
+  };
 
   const mergeChange = (number) => {
     var tempArray = [];
@@ -232,9 +264,32 @@ export default function HeroComponent(props) {
   return (
     <div>
       <Container className="noMargin" style={{ height: "100%" }}>
+        <Row style={{ marginTop: "5px" }}>
+          <div className="inline-row">
+            <Button variant="contained" color="primary" style={{ marginRight: "5px" }} onClick={handleShowLoad}>
+              Load
+            </Button>
+            <Tooltip title="Barracks are full!" placement="top" disableHoverListener={barracksLength !== 12}>
+              <div>
+                <Button variant="contained" color="primary" disabled={!hero.exists || barracksLength === 12} onClick={handleShowSave}>
+                  Save
+                </Button>
+              </div>
+            </Tooltip>
+            <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
+            <BarracksModal show={showLoad} onClose={handleCloseLoad} id={props.id} />
+          </div>
+        </Row>
         <Row>
-          <Col md={5}>
-            <h3>Stats:</h3>
+          <Col md={5} style={{ marginTop: "-2%" }}>
+            <Row style={{ justifyContent: "space-between" }}>
+              <div className="header-row">
+                <div className="headers">Stats:</div>
+                <Button variant="contained" color="primary" style={{ width: "20%", height: "60%" }} disabled={!hero.exists} onClick={maximize}>
+                  Maximize
+                </Button>
+              </div>
+            </Row>
             <Row>
               <Col>
                 <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
@@ -286,7 +341,14 @@ export default function HeroComponent(props) {
                 />
               </Col>
             </Row>
-            <h3>Skills:</h3>
+            <Row style={{ justifyContent: "space-between" }}>
+              <div className="header-row">
+                <div className="headers">Skills:</div>
+                <Button variant="contained" color="primary" style={{ width: "15%", height: "60%" }} disabled={disabledButton} onClick={skills}>
+                  Skills
+                </Button>
+              </div>
+            </Row>
             <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} id={props.id} />
             <SkillComponent
               hero={hero}
@@ -294,6 +356,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.assists}
               id={props.id}
               onChange={changeAssist}
+              onLoad={checkLoading}
               url={`http://localhost:5000/Assist/`}
               placeholder={"Choose Assist"}
             />
@@ -303,6 +366,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.specials}
               id={props.id}
               onChange={changeSpecial}
+              onLoad={checkLoading}
               url={`http://localhost:5000/Specials/`}
               placeholder={"Choose Special"}
             />
@@ -312,6 +376,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.a}
               id={props.id}
               onChange={changeASkill}
+              onLoad={checkLoading}
               url={`http://localhost:5000/A_Slot/`}
               placeholder={"Choose A Skill"}
             />
@@ -321,6 +386,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.b}
               id={props.id}
               onChange={changeBSkill}
+              onLoad={checkLoading}
               url={`http://localhost:5000/B_Slot/`}
               placeholder={"Choose B Skill"}
             />
@@ -330,6 +396,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.c}
               id={props.id}
               onChange={changeCSkill}
+              onLoad={checkLoading}
               url={`http://localhost:5000/C_Slot/`}
               placeholder={"Choose C Skill"}
             />
@@ -342,43 +409,19 @@ export default function HeroComponent(props) {
               placeholder={"Choose S Skill"}
             /> */}
           </Col>
-          <Col md={4} style={{ marginTop: "30px", textAlign: "right" }}>
-            <h5 style={{ marginTop: "10px" }}>Additional:</h5>
+          <Col md={4} style={{ marginTop: "15px", textAlign: "right" }}>
+            <h5>Additional:</h5>
             <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
-            <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
-            <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
-            <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
+            <div style={{ marginTop: "5px", height: "150px" }}>
+              <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
+            </div>
+            buffs or debuffs stats
           </Col>
           <Col style={{ marginTop: "5px", textAlign: "right" }}>
-            <Row style={{ justifyContent: "space-between" }}>
-              <Tooltip title="Barracks is full!" placement="top" disableHoverListener={barracksLength !== 12}>
-                <div>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{ width: "48%" }}
-                    disabled={!hero.exists || barracksLength === 12}
-                    onClick={handleShowSave}
-                  >
-                    Save
-                  </Button>
-                </div>
-              </Tooltip>
-              <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
-              <Button variant="contained" color="primary" style={{ width: "48%" }} onClick={handleShowLoad}>
-                Load
-              </Button>
-              <BarracksModal show={showLoad} onClose={handleCloseLoad} id={props.id} />
+            <Row style={{ marginTop: "35px" }}>
+              <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
             </Row>
-            <Row style={{ justifyContent: "space-between", marginTop: "5px" }}>
-              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={maximize}>
-                Maximize
-              </Button>
-              <Button variant="contained" color="primary" style={{ width: "48%" }} disabled={!hero.exists} onClick={skills}>
-                Skills
-              </Button>
-            </Row>
-            buffs or debuffs stats
+            <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
             <SwitchComponent
               res={transformed === 2}
               enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
@@ -387,8 +430,12 @@ export default function HeroComponent(props) {
             />
             <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
             <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
-            <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
-            <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
+            <Row style={{ width: "85%", display: "inline-flex", justifyContent: "right" }}>
+              <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
+            </Row>
+            <Row style={{ width: "85%", display: "inline-flex", justifyContent: "right" }}>
+              <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
+            </Row>
           </Col>
         </Row>
         <Row style={{ marginTop: "5%" }}>

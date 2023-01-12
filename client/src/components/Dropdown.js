@@ -18,7 +18,6 @@ export default function Dropdown(props) {
       setDropdown({ label: "" });
     } else {
       var name = heroList.find((h) => h.value === hero._id);
-      console.log(name);
       setDropdown({ value: hero, label: name.label });
     }
   }, [hero, heroList]);

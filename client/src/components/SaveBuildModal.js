@@ -21,7 +21,7 @@ const SaveBuildModal = (props) => {
   };
 
   return (
-    <Modal show={props.show} onHide={props.onClose} dialogClassName="modal-size">
+    <Modal show={props.show} onHide={props.onClose} dialogClassName="save-modal-size">
       <Modal.Header closeButton>
         <Modal.Title>Barracks</Modal.Title>
       </Modal.Header>
@@ -31,15 +31,21 @@ const SaveBuildModal = (props) => {
             <Col>
               <h5>Save Build?</h5>
             </Col>
-            <TextField value={name} onChange={(e) => setName(e.target.value)} label={"Build Name"} />
-            <Button onClick={addBuild}>Add</Button>
+          </Row>
+          <Row>
+            <Col>
+              <TextField value={name} onChange={(e) => setName(e.target.value)} label={"Build Name"} variant="outlined" />
+            </Col>
+            <Col>
+              {" "}
+              Overwrite Specific build? add dropdown containing builds here (leave blank for new build) not sure if this will actually work, but i
+              guess it might be possible to determine whetherthe user is capable of making a new build in the barracks vs when they are not.
+            </Col>
           </Row>
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={props.onClose}>
-          Close
-        </Button>
+        <Button onClick={addBuild}>Add</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -43,6 +43,17 @@ export default function SkillComponent(props) {
           })
       );
       setIsLoading(false);
+      if (props.url.includes("Assist")) {
+        props.onLoad(0);
+      } else if (props.url.includes("Special")) {
+        props.onLoad(1);
+      } else if (props.url.includes("A_Slot")) {
+        props.onLoad(2);
+      } else if (props.url.includes("B_Slot")) {
+        props.onLoad(3);
+      } else if (props.url.includes("C_Slot")) {
+        props.onLoad(4);
+      }
     }
     if (props.hero.exists) {
       setSkill(null);
@@ -60,7 +71,14 @@ export default function SkillComponent(props) {
   }, [rearmed]);
 
   useEffect(() => {
-    setSkill({ value: props.skill, label: props.skill.name });
+    if (typeof props.skill === "string") {
+      var temp = skillList.find((e) => e.label === props.skill);
+      if (temp !== undefined) {
+        props.onChange(temp.value);
+      }
+    } else {
+      setSkill({ value: props.skill, label: props.skill.name });
+    }
   }, [props.skill]);
 
   const handleChange = (event, value) => {

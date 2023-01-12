@@ -42,10 +42,9 @@ const TabLabel = (props) => {
   } else {
     url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + ".png").replace(" ", "+");
   }
-
   return (
-    <div className="d-flex justify-content-between align-items-center noPadding" style={{ width: "115%" }}>
-      <img className="chibis" src={url} align="left" alt="Chibi" />
+    <div className="tab-label noPadding" style={{ width: "115%" }}>
+      {url === "" ? <div></div> : <img className="chibis" src={url} align="left" alt="Chibi" />}
       <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>
         {label === "" || label === undefined ? "Build " + (props.id + 1) : label}
       </div>
@@ -90,6 +89,7 @@ function HeroTabs(props) {
   const dispatch = useDispatch();
 
   const tabValue = useSelector((state) => state.tabList.tabValue);
+  const length = useSelector((state) => state.tabList.tabList.length);
 
   const handleTabChange = (event, value) => {
     if (value !== -1) {
@@ -119,42 +119,8 @@ function HeroTabs(props) {
       return;
     }
 
-    // parse the int from the event
-    let tabIDIndex = 0;
-
-    // find the id of the index to delete and remove it
-    let tabs = t.filter((value, index) => {
-      if (value.id === tabId) {
-        tabIDIndex = index;
-      }
-      return value.id !== tabId;
-    });
-
-    // find the current value of the tab component, and change it if the tab to delete is the current tab
-    let curValue = parseInt(tabValue);
-    if (curValue === tabId) {
-      if (tabIDIndex === 0) {
-        curValue = t[tabIDIndex + 1].id;
-      } else {
-        curValue = t[tabIDIndex].id;
-      }
-    } else if (curValue > tabId) {
-      curValue = curValue - 1;
-    }
-
-    // if the current value is too large, set it equal to the rightmost tab
-    if (curValue >= tabs.length) {
-      curValue = tabs.length - 1;
-    }
-
-    // loop through tabs and change ids
-    for (let i = tabId; i < tabs.length; i++) {
-      tabs[i].id = tabs[i].id - 1;
-    }
-
     // set current tab and tab list
     dispatch(actions.deleteTab(tabId));
-    dispatch(actions.changeTab(curValue));
   };
 
   return (
@@ -167,21 +133,22 @@ function HeroTabs(props) {
         TabIndicatorProps={{ style: { background: "#282c34", transition: "none" } }}
         TabScrollButtonProps={{ style: { background: "#282c34", color: "white" } }}
         sx={{
+          display: "inline-flex",
+          justifyContent: "left",
+          width: "90%",
           height: 10,
-          maxWidth: "90%",
           borderTopLeftRadius: 10,
         }}
       >
-        >
         {t.map((tab) => (
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={<TabLabel id={tab.id} copyTab={copyTab} deleteTab={deleteTab} length={t.length} />}
+            label={<TabLabel id={tab.id} copyTab={copyTab} deleteTab={deleteTab} length={length} />}
             wrapped
             sx={{
               backgroundColor: "white",
-              width: 1 / 4,
+              width: 1 / 5,
               minHeight: 0,
               pt: 0,
               pb: 0,
@@ -189,7 +156,7 @@ function HeroTabs(props) {
             disableRipple
           />
         ))}
-        <Tab value={-1} label={<AddTabLabel />} sx={{ width: 10 }} />
+        <Tab value={-1} label={<AddTabLabel />} sx={{ pr: 0, pl: 0, width: 1 / 10 }} />
       </Tabs>
       <Divider />
       {t.map((tab, index) => (

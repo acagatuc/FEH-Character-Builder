@@ -23,7 +23,6 @@ export default function (state = initState, action) {
     }
     case DELETE_BUILD_FROM_BARRACKS: {
       const { id } = action.payload;
-      console.log(id);
       for (var i = id; i < state.builds.length; i++) {
         state.builds[i].key--;
       }

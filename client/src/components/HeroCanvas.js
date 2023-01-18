@@ -576,8 +576,8 @@ const WMComponent = ({ weapon, movement }) => {
 };
 
 const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
-  if (image === "https://fehskills.s3.amazonaws.com/.png") {
-    image = "";
+  if (image === "") {
+    image = sheet;
   }
   const [imgElement] = useImage(image, "Anonymous");
   if (text.includes("Falchion (")) {
@@ -589,7 +589,11 @@ const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
   if (!text.includes(undefined)) {
     return (
       <Group>
-        <Image image={imgElement} x={x - 4} y={y - 1} width={33} height={34} />
+        {image === sheet ? (
+          <Image image={imgElement} x={x - 4} y={y - 1} cropX={311} cropY={329} cropWidth={38} cropHeight={39} width={33} height={34} />
+        ) : (
+          <Image image={imgElement} x={x - 4} y={y - 1} width={33} height={34} />
+        )}
         <Text
           text={text}
           fontFamily="nintendoP_Skip-D_003"
@@ -607,19 +611,21 @@ const WeaponComponent = ({ text, image, x, y, offsetX, offsetY }) => {
     );
   }
   return (
-    <Text
-      text={text}
-      fontFamily="nintendoP_Skip-D_003"
-      fontSize={18}
-      stroke="black"
-      strokeWidth={4}
-      lineJoin="round"
-      fill="white"
-      fillAfterStrokeEnabled={true}
-      x={x + offsetX}
-      y={y + offsetY}
-      textAlign="left"
-    />
+    <Group>
+      <Text
+        text={text}
+        fontFamily="nintendoP_Skip-D_003"
+        fontSize={18}
+        stroke="black"
+        strokeWidth={4}
+        lineJoin="round"
+        fill="white"
+        fillAfterStrokeEnabled={true}
+        x={x + offsetX}
+        y={y + offsetY}
+        textAlign="left"
+      />
+    </Group>
   );
 };
 

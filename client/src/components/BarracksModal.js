@@ -22,7 +22,6 @@ import { store } from "../redux/store";
 const SavedBuildInBarracks = (props) => {
   const dispatch = useDispatch();
   const [isCollapsed, setIsCollapsed] = useState(false);
-  console.log(props.item);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -45,7 +44,7 @@ const SavedBuildInBarracks = (props) => {
     setIsCollapsed(!bool);
   };
   const loadBuildFromBarracks = (build, id) => {
-    dispatch(actions.loadBuildFromBarracks(build, id));
+    props.loadBuild(build);
     props.afterLoad();
   };
 
@@ -94,7 +93,7 @@ const SavedBuildInBarracks = (props) => {
       />
       <CardContent className="buildCard">
         <Collapse in={isCollapsed}>
-          {props.item.weapon.name}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
+          {props.item.weapon}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
           {props.item.cSkill.name}
         </Collapse>
         <div className="buildCardBottomRow">
@@ -127,7 +126,9 @@ const BarracksModal = (props) => {
           ) : (
             <div className="barracksCards">
               {barracks.map(function (item) {
-                return <SavedBuildInBarracks key={item.key} afterLoad={() => props.onClose()} item={item} id={props.id} />;
+                return (
+                  <SavedBuildInBarracks key={item.key} loadBuild={props.loadBuild} afterLoad={() => props.onClose()} item={item} id={props.id} />
+                );
               })}
             </div>
           )}

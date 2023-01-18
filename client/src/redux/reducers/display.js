@@ -1,22 +1,35 @@
-import { FETCH_HERO_LIST, CHANGE_NAME_DISPLAY, CHANGE_GRIMA, CHANGE_BACKPACK, CHANGE_DUO_DISPLAY, CHANGE_TAB_IMAGE_DISPLAY } from "../actionTypes";
+import {
+  FETCH_HERO_LIST,
+  CHANGE_NAME_DISPLAY,
+  CHANGE_GRIMA,
+  CHANGE_BACKPACK,
+  CHANGE_FEHNIX,
+  CHANGE_DUO_DISPLAY,
+  CHANGE_TAB_IMAGE_DISPLAY,
+} from "../actionTypes";
 
 const initState = {
   name_display: "full",
   grima: false,
   backpack: false,
+  fehnix: false,
   duo_display: "",
   tab_image: "chibis",
   fullHeroList: [],
   heroList: [],
+  loaded: false,
 };
 
 export default function (state = initState, action) {
   switch (action.type) {
+    // herolist actions
     case FETCH_HERO_LIST: {
       const { heroes } = action.payload;
       state.fullHeroList = heroes;
+      state.loaded = true;
       return { ...state };
     }
+
     // tabs actions
     case CHANGE_NAME_DISPLAY: {
       const { nameDisplay } = action.payload;
@@ -132,6 +145,11 @@ export default function (state = initState, action) {
           label: name,
         };
       });
+      return { ...state };
+    }
+    case CHANGE_FEHNIX: {
+      const { fehnix } = action.payload;
+      state.fehnix = fehnix;
       return { ...state };
     }
     case CHANGE_DUO_DISPLAY: {

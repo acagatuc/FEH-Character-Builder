@@ -17,6 +17,7 @@ const AppInfo = (props) => {
   const nameDisplay = useSelector((state) => state.display.name_display);
   const backpack = useSelector((state) => state.display.backpack);
   const grima = useSelector((state) => state.display.grima);
+  const fehnix = useSelector((state) => state.display.fehnix);
   const duo = useSelector((state) => state.display.duo_display);
   const tab_image = useSelector((state) => state.display.tab_image);
   const dispatch = useDispatch();
@@ -35,6 +36,10 @@ const AppInfo = (props) => {
   const changeGrima = (e, value) => {
     dispatch(actions.changeGrima(value));
   };
+  const changeFehnix = (e, value) => {
+    dispatch(actions.changeFehnix(value));
+  };
+
   const changeDuoDisplay = (e, value) => {
     if (value !== null) {
       dispatch(actions.changeDuoDisplay(value));
@@ -70,17 +75,36 @@ const AppInfo = (props) => {
             <Row>
               <Col>
                 <h5>Hero Name Display</h5>
-                <ToggleButtonGroup value={nameDisplay} onChange={handleChange} exclusive color="warning">
-                  <ToggleButton value="full">Full Name</ToggleButton>
-                  <ToggleButton value="title">Name and Title</ToggleButton>
-                  <ToggleButton value="abbrev">Abbreviated</ToggleButton>
-                </ToggleButtonGroup>
-                <FormControlLabel
-                  control={<Switch checked={backpack} onChange={changeBackpack} />}
-                  label={"Display Backpack"}
-                  labelPlacement="start"
-                />
-                <FormControlLabel control={<Switch checked={grima} onChange={changeGrima} />} label={"Display Grima"} labelPlacement="start" />
+                <Row style={{ width: "100%" }}>
+                  <ToggleButtonGroup value={nameDisplay} onChange={handleChange} exclusive color="warning">
+                    <ToggleButton value="full">Full Name</ToggleButton>
+                    <ToggleButton value="title">Name and Title</ToggleButton>
+                    <ToggleButton value="abbrev">Abbreviated</ToggleButton>
+                  </ToggleButtonGroup>
+                </Row>
+                <Row style={{ width: "92%" }}>
+                  <div style={{ display: "inline-flex", justifyContent: "right" }}>
+                    <FormControlLabel
+                      control={<Switch checked={backpack} onChange={changeBackpack} />}
+                      label={"Display Backpack"}
+                      labelPlacement="start"
+                    />
+                  </div>
+                </Row>
+                <Row style={{ width: "92%" }}>
+                  <div style={{ display: "inline-flex", justifyContent: "right" }}>
+                    <FormControlLabel control={<Switch checked={grima} onChange={changeGrima} />} label={"Display Grima"} labelPlacement="start" />
+                  </div>
+                </Row>
+                <Row style={{ width: "92%" }}>
+                  <div style={{ display: "inline-flex", justifyContent: "right" }}>
+                    <FormControlLabel
+                      control={<Switch checked={fehnix} onChange={changeFehnix} />}
+                      label={"Display Fehnix?"}
+                      labelPlacement="start"
+                    />
+                  </div>
+                </Row>
               </Col>
               <Col>
                 <Row>

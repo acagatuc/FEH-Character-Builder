@@ -132,6 +132,11 @@ export default function WeaponComponent(props) {
       setRefine(null);
     } else {
       props.onChangeW(value.value);
+      props.onChangeR({
+        name: "",
+        img: "",
+        stats: [0, 0, 0, 0, 0],
+      });
     }
     setWeapon(value);
   };

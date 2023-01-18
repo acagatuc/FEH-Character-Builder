@@ -245,6 +245,13 @@ export const changeBackpack = (i) => ({
   },
 });
 
+export const changeFehnix = (i) => ({
+  type: actionTypes.CHANGE_FEHNIX,
+  payload: {
+    fehnix: i,
+  },
+});
+
 export const changeDuoDisplay = (i) => ({
   type: actionTypes.CHANGE_DUO_DISPLAY,
   payload: {

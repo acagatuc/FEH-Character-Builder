@@ -20,10 +20,14 @@ import FavoriteComponent from "./FavoriteComponent.js";
 // save and load modals
 import BarracksModal from "./BarracksModal.js";
 import SaveBuildModal from "./SaveBuildModal.js";
+import HeroInfoModal from "./HeroInfoModal.js";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
 import * as actions from "../redux/actions";
+
+// text arrows
+import { left, right } from "./../assets";
 
 export default function HeroComponent(props) {
   const dispatch = useDispatch();
@@ -71,14 +75,21 @@ export default function HeroComponent(props) {
   // loading variable to ensure that no state skill changes are committed while loading a new hero
   const [isLoading, setIsLoading] = useState([true, true, true, true, true]);
   const [disabledButton, setDisabledButton] = useState(true);
+  const [tempWeapon, setTempWeapon] = useState("");
 
   // for load modal
   const [showLoad, setShowLoad] = useState(false);
   const [showSave, setShowSave] = useState(false);
+  const [showHeroInfo, setShowHeroInfo] = useState(false);
+  const [showRecommendedBuilds, setShowRecommendedBuilds] = useState(false);
   const handleShowLoad = () => setShowLoad(true);
   const handleCloseLoad = () => setShowLoad(false);
   const handleShowSave = () => setShowSave(true);
   const handleCloseSave = () => setShowSave(false);
+  const handleShowHeroInfo = () => setShowHeroInfo(true);
+  const handleCloseHeroInfo = () => setShowHeroInfo(false);
+  const handleShowRecommendedBuilds = () => setShowRecommendedBuilds(true);
+  const handleCloseRecommendedBuilds = () => setShowRecommendedBuilds(false);
 
   async function heroChange(newHero) {
     setIsLoading([true, true, true, true, true]);
@@ -96,6 +107,40 @@ export default function HeroComponent(props) {
 
     dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
+
+  async function loadBuild(build) {
+    setIsLoading([true, true, true, true, true]);
+    setDisabledButton(true);
+
+    // resets the tab to accomodate a different build
+    dispatch(actions.resetTab(props.id));
+    var buildFromBarracks = {};
+    Object.assign(buildFromBarracks, build);
+
+    // gets the hero from the db to check if there have been any changes (like skills)
+    let response = await fetch("http://localhost:5000/Heroes/" + buildFromBarracks.value);
+    response = await response.json();
+
+    // sets the gotten character as the builds hero
+    console.log(buildFromBarracks.weapon);
+    response[0]["exists"] = true;
+    response[0].artist = response[0].Artist.split(",");
+    response[0].VA = response[0].EVA;
+    setTempWeapon(buildFromBarracks.weapon);
+    buildFromBarracks.weapon = "";
+    buildFromBarracks.hero = response[0];
+
+    // load the hero and build into the current tab
+    dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
+  }
+
+  useEffect(() => {
+    // wait for the
+    if (tempWeapon !== "" && !isLoading[0]) {
+      dispatch(actions.changeWeapon(tempWeapon, props.id));
+      setTempWeapon("");
+    }
+  }, [isLoading[0]]);
 
   useEffect(() => {
     dispatch(actions.changeStats(props.id));
@@ -190,7 +235,6 @@ export default function HeroComponent(props) {
   };
 
   const changeRefine = (r) => {
-    console.log(r);
     dispatch(actions.changeRefine(r, props.id));
     dispatch(actions.changeStats(props.id));
   };
@@ -277,7 +321,7 @@ export default function HeroComponent(props) {
               </div>
             </Tooltip>
             <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
-            <BarracksModal show={showLoad} onClose={handleCloseLoad} id={props.id} />
+            <BarracksModal show={showLoad} onClose={handleCloseLoad} loadBuild={loadBuild} id={props.id} />
           </div>
         </Row>
         <Row>
@@ -438,9 +482,30 @@ export default function HeroComponent(props) {
             </Row>
           </Col>
         </Row>
-        <Row style={{ marginTop: "5%" }}>
-          <Col> put whole vs battle ui vs echoes here, also put recommended builds or bookmarks here</Col>
-        </Row>
+        <div
+          style={{
+            marginTop: "30px",
+            marginBottom: "30px",
+            width: "100%",
+            display: "inline-flex",
+            justifyContent: "space-evenly",
+            alignItems: "center",
+          }}
+        >
+          <img src={left} alt="left arrow" style={{ width: "30%", height: "20px" }} />
+          <div style={{ fontSize: "20px", fontStyle: "italic" }}>Additional Information</div>
+          <img src={right} alt="right arrow" style={{ width: "30%", height: "20px" }} />
+        </div>
+        <div style={{ width: "100%", display: "inline-flex", justifyContent: "space-between", marginBottom: "10px" }}>
+          <Button variant="contained">UI Changes</Button>
+          <Button variant="contained" disabled={!hero.exists}>
+            Recommended Builds
+          </Button>
+          <Button variant="contained" onClick={handleShowHeroInfo} disabled={!hero.exists}>
+            Hero info
+          </Button>
+          <HeroInfoModal show={showHeroInfo} onClose={handleCloseHeroInfo} hero={hero} />
+        </div>
       </Container>
     </div>
   );

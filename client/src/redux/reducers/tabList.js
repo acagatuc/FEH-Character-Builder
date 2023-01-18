@@ -399,6 +399,10 @@ export default function (state = initState, action) {
       if (state.tabList[id].aSkill.visibleStats !== undefined) {
         visible = state.tabList[id].aSkill.visibleStats;
       }
+      var weaponStats = [0, 0, 0, 0, 0];
+      if (state.tabList[id].weapon.visibleStats !== undefined) {
+        weaponStats = state.tabList[id].weapon.visibleStats;
+      }
 
       // calculates hero hp
       state.tabList[id].hp =
@@ -406,7 +410,7 @@ export default function (state = initState, action) {
         state.tabList[id].mergedStats[0] +
         state.tabList[id].dragonflowerStats[0] +
         state.tabList[id].blessingStats[0] +
-        state.tabList[id].weapon.visibleStats[0] +
+        weaponStats[0] +
         state.tabList[id].refine.stats[0] +
         visible[0] +
         state.tabList[id].summonerSupportStats[0] +
@@ -419,7 +423,7 @@ export default function (state = initState, action) {
         state.tabList[id].dragonflowerStats[1] +
         state.tabList[id].blessingStats[1] +
         state.tabList[id].weapon.might +
-        state.tabList[id].weapon.visibleStats[1] +
+        weaponStats[1] +
         state.tabList[id].refine.stats[1] +
         visible[1] +
         state.tabList[id].summonerSupportStats[1] +
@@ -432,7 +436,7 @@ export default function (state = initState, action) {
         state.tabList[id].mergedStats[2] +
         state.tabList[id].dragonflowerStats[2] +
         state.tabList[id].blessingStats[2] +
-        state.tabList[id].weapon.visibleStats[2] +
+        weaponStats[2] +
         state.tabList[id].refine.stats[2] +
         visible[2] +
         state.tabList[id].summonerSupportStats[2] +
@@ -444,7 +448,7 @@ export default function (state = initState, action) {
         state.tabList[id].mergedStats[3] +
         state.tabList[id].dragonflowerStats[3] +
         state.tabList[id].blessingStats[3] +
-        state.tabList[id].weapon.visibleStats[3] +
+        weaponStats[3] +
         state.tabList[id].refine.stats[3] +
         visible[3] +
         state.tabList[id].summonerSupportStats[3] +
@@ -456,7 +460,7 @@ export default function (state = initState, action) {
         state.tabList[id].mergedStats[4] +
         state.tabList[id].dragonflowerStats[4] +
         state.tabList[id].blessingStats[4] +
-        state.tabList[id].weapon.visibleStats[4] +
+        weaponStats[4] +
         state.tabList[id].refine.stats[4] +
         visible[4] +
         state.tabList[id].summonerSupportStats[4] +

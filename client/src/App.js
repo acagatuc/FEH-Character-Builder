@@ -52,6 +52,7 @@ const App = (props) => {
             name_title: listItem.name_title,
             abbreviated: listItem.abbreviated,
             backpack: listItem.backpack,
+            origin: listItem.origin,
           };
         })
       );

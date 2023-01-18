@@ -37,7 +37,6 @@ const SaveBuildModal = (props) => {
               <TextField value={name} onChange={(e) => setName(e.target.value)} label={"Build Name"} variant="outlined" />
             </Col>
             <Col>
-              {" "}
               Overwrite Specific build? add dropdown containing builds here (leave blank for new build) not sure if this will actually work, but i
               guess it might be possible to determine whetherthe user is capable of making a new build in the barracks vs when they are not.
             </Col>

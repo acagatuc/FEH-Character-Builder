@@ -54,7 +54,7 @@ div.noPadding {
 
 .chibis {
   height: 45px;
-  max-width: 50px;
+  max-width: 55px;
   object-fit: cover;
   padding-right: 5px;
 }
@@ -73,6 +73,23 @@ div.noPadding {
 .inline-row {
   display: inline-flex;
   justify-content: right;
+}
+
+.hero-info-modal-size {
+  max-width: 50% !important;
+}
+.description-box {
+  position: relative;
+  border-style: solid;
+  border-width: 2px;
+  border-radius: 20px;
+  padding: 20px;
+  font-size: larger;
+  font-style: italic;
+}
+
+.owl-messenger {
+  height: 100px;
 }
 
 @media screen and (max-width: 600px) {

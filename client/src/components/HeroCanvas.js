@@ -815,7 +815,7 @@ export default function HeroCanvas(props) {
             fillAfterStrokeEnabled={true}
           />
           <Text
-            text={resplendent ? `${hero.artist[1]}` : `${hero.artist[0]}`}
+            text={resplendent ? `${hero.artist[1]}` : hero.artist[0] !== undefined ? `${hero.artist[0]}` : ""}
             x={34}
             y={932}
             fontFamily="nintendoP_Skip-D_003"

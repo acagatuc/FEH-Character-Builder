@@ -21,6 +21,7 @@ import FavoriteComponent from "./FavoriteComponent.js";
 import BarracksModal from "./BarracksModal.js";
 import SaveBuildModal from "./SaveBuildModal.js";
 import HeroInfoModal from "./HeroInfoModal.js";
+import RecommendedBuildsModal from "./RecommendedBuildsModal.js";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
@@ -41,14 +42,15 @@ export default function HeroComponent(props) {
   const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
   const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
-  // skill info
-  const weapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
-  const assist = useSelector((state) => state.tabList.tabList[props.id].assist);
-  const special = useSelector((state) => state.tabList.tabList[props.id].special);
-  const aSlot = useSelector((state) => state.tabList.tabList[props.id].aSkill);
-  const bSlot = useSelector((state) => state.tabList.tabList[props.id].bSkill);
-  const cSlot = useSelector((state) => state.tabList.tabList[props.id].cSkill);
-  const sSlot = useSelector((state) => state.tabList.tabList[props.id].sSkill);
+  // skill info for string loaded builds (recommended mostly)
+  const [weapon, setWeapon] = useState("");
+  const [refine, setRefine] = useState("");
+  const [assist, setAssist] = useState("");
+  const [special, setSpecial] = useState("");
+  const [aSlot, setASlot] = useState("");
+  const [bSlot, setBSlot] = useState("");
+  const [cSlot, setCSlot] = useState("");
+  const [sSlot, setSSlot] = useState("");
 
   // support info
   const SummonerSupport = useSelector((state) => state.tabList.tabList[props.id].summonerSupport);
@@ -73,9 +75,15 @@ export default function HeroComponent(props) {
   const barracksLength = useSelector((state) => state.barracks.key);
 
   // loading variable to ensure that no state skill changes are committed while loading a new hero
-  const [isLoading, setIsLoading] = useState([true, true, true, true, true]);
-  const [disabledButton, setDisabledButton] = useState(true);
-  const [tempWeapon, setTempWeapon] = useState("");
+  const [recommendedBuilds, setRecommendedBuilds] = useState([]);
+
+  // skill lists from fetch request
+  const [loadedWeapons, setLoadedWeapons] = useState([]);
+  const [loadedAssists, setLoadedAssists] = useState([]);
+  const [loadedSpecials, setLoadedSpecials] = useState([]);
+  const [loadedA, setLoadedA] = useState([]);
+  const [loadedB, setLoadedB] = useState([]);
+  const [loadedC, setLoadedC] = useState([]);
 
   // for load modal
   const [showLoad, setShowLoad] = useState(false);
@@ -92,69 +100,131 @@ export default function HeroComponent(props) {
   const handleCloseRecommendedBuilds = () => setShowRecommendedBuilds(false);
 
   async function heroChange(newHero) {
-    setIsLoading([true, true, true, true, true]);
-    setDisabledButton(true);
+    // resets tab state in redux and all skill lists
     dispatch(actions.resetTab(props.id));
+    setLoadedWeapons([]);
+    setLoadedAssists([]);
+    setLoadedSpecials([]);
+    setLoadedA([]);
+    setLoadedB([]);
+    setLoadedC([]);
+    setWeapon({ weapon: "", refine: "" });
+    setAssist("");
+    setSpecial("");
+    setASlot("");
+    setBSlot("");
+    setCSlot("");
+
     let response = await fetch("http://localhost:5000/Heroes/" + newHero);
     response = await response.json();
 
+    // if there are no recommended builds, just set it equal to an empty array
+    if (response["recommended"] !== null) {
+      setRecommendedBuilds(response["recommended"]);
+    }
     //get all possible skills on call? Instead of in multiple calls in children?
-    response[0]["exists"] = true;
-    response[0].artist = response[0].Artist.split(",");
-    response[0].VA = response[0].EVA;
-    response[0].character_id = newHero;
-    dispatch(actions.changeHero(response[0], props.id));
+    response["hero"]["exists"] = true;
+    response["hero"].VA = response["hero"].EVA;
+    response["hero"].character_id = newHero;
+
+    dispatch(actions.changeHero(response["hero"], props.id));
+
+    var weapon = response["hero"]["weapon_type"];
+    if (response["hero"]["weapon_type"].includes("Dragon") || response["hero"]["weapon_type"].includes("Beast")) {
+      weapon = response["hero"]["weapon_type"].split(" ")[1];
+    } else if (response["hero"]["weapon_type"].includes("Dagger") || response["hero"]["weapon_type"].includes("Bow")) {
+      weapon = response["hero"]["weapon_type"].split(" ")[1] + "s";
+    }
+
+    var urlAddon = response["hero"]["move_type"] + "/" + weapon + "/" + newHero;
+    let skills = await fetch("http://localhost:5000/AllSkills/" + urlAddon);
+    skills = await skills.json();
+    setLoadedWeapons(skills["weaponList"]);
+    setLoadedAssists(skills["assistList"]);
+    setLoadedSpecials(skills["specialList"]);
+    setLoadedA(skills["aList"]);
+    setLoadedB(skills["bList"]);
+    setLoadedC(skills["cList"]);
 
     dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
 
   async function loadBuild(build) {
-    setIsLoading([true, true, true, true, true]);
-    setDisabledButton(true);
-
     // resets the tab to accomodate a different build
+    console.log(build);
     dispatch(actions.resetTab(props.id));
     var buildFromBarracks = {};
-    Object.assign(buildFromBarracks, build);
 
     // gets the hero from the db to check if there have been any changes (like skills)
-    let response = await fetch("http://localhost:5000/Heroes/" + buildFromBarracks.value);
-    response = await response.json();
+    await heroChange(buildFromBarracks.value);
 
-    // sets the gotten character as the builds hero
-    console.log(buildFromBarracks.weapon);
-    response[0]["exists"] = true;
-    response[0].artist = response[0].Artist.split(",");
-    response[0].VA = response[0].EVA;
-    setTempWeapon(buildFromBarracks.weapon);
-    buildFromBarracks.weapon = "";
-    buildFromBarracks.hero = response[0];
+    // setWeapon({ weapon: build.weapon, refine: build.refine });
+    // setAssist(build.assist);
+    // setSpecial(build.special);
+    // setASlot(build.a);
+    // setBSlot(build.b);
+    // setCSlot(build.c);
 
     // load the hero and build into the current tab
     dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
   }
 
-  useEffect(() => {
-    // wait for the
-    if (tempWeapon !== "" && !isLoading[0]) {
-      dispatch(actions.changeWeapon(tempWeapon, props.id));
-      setTempWeapon("");
+  function loadRecommendedBuild(build) {
+    // console.log(build);
+    maximize();
+    setWeapon({ weapon: build.weapon, refine: build.refine });
+    setAssist(build.assist);
+    setSpecial(build.special);
+    setASlot(build.a);
+    setBSlot(build.b);
+    setCSlot(build.c);
+
+    var tempLevels = [1, 1, 1, 1, 1];
+    switch (build.asset) {
+      case "hp":
+        tempLevels[0] = 2;
+        break;
+      case "atk":
+        tempLevels[1] = 2;
+        break;
+      case "spd":
+        tempLevels[2] = 2;
+        break;
+      case "def":
+        tempLevels[3] = 2;
+        break;
+      case "res":
+        tempLevels[4] = 2;
+        break;
+      default:
+        break;
     }
-  }, [isLoading[0]]);
+    switch (build.ascended) {
+      case "hp":
+        tempLevels[0] = 2;
+        break;
+      case "atk":
+        tempLevels[1] = 2;
+        break;
+      case "spd":
+        tempLevels[2] = 2;
+        break;
+      case "def":
+        tempLevels[3] = 2;
+        break;
+      case "res":
+        tempLevels[4] = 2;
+        break;
+      default:
+        break;
+    }
+
+    dispatch(actions.changeLevels(tempLevels, props.id, build.asset, build.flaw, build.ascended));
+  }
 
   useEffect(() => {
     dispatch(actions.changeStats(props.id));
   }, [hero, hp, atk, spd, def, res]);
-
-  const checkLoading = (index) => {
-    var temp = isLoading;
-    temp[index] = false;
-    setIsLoading(temp);
-    if (!isLoading.includes(true)) {
-      setDisabledButton(false);
-    }
-  };
-  useEffect(() => {}, [disabledButton]);
 
   // button features
   const maximize = () => {
@@ -167,23 +237,22 @@ export default function HeroComponent(props) {
     // must find a way to have the program take a fuckin chill pill when clicked before the hero is properly loaded in
     // load in the top skills to the specified skill slots.
     if (weapon.name !== hero.weapons[hero.weapons.length - 1]) {
-      dispatch(actions.changeWeapon(hero.weapons[hero.weapons.length - 1], props.id));
+      setWeapon({ weapon: hero.weapons[hero.weapons.length - 1], refine: "Effect" });
     }
-
-    if (hero.assists[0] !== "" && hero.assists[0] !== undefined && assist.name !== hero.assists[hero.assists.length - 1]) {
-      dispatch(actions.changeAssist(hero.assists[hero.assists.length - 1], props.id));
+    if (hero.assists[0] !== undefined && assist !== hero.assists[hero.assists.length - 1]) {
+      setAssist(hero.assists[hero.assists.length - 1]);
     }
-    if (hero.specials[0] !== "" && hero.specials[0] !== undefined && special.name !== hero.specials[hero.specials.length - 1]) {
-      dispatch(actions.changeSpecial(hero.specials[hero.specials.length - 1], props.id));
+    if (hero.specials[0] !== undefined && special !== hero.specials[hero.specials.length - 1]) {
+      setSpecial(hero.specials[hero.specials.length - 1]);
     }
-    if (hero.a[0] !== "" && hero.a[0] !== undefined && aSlot.name !== hero.a[hero.a.length - 1]) {
-      dispatch(actions.changeASlot(hero.a[hero.a.length - 1], props.id));
+    if (hero.a[0] !== undefined && aSlot !== hero.a[hero.a.length - 1]) {
+      setASlot(hero.a[hero.a.length - 1]);
     }
-    if (hero.b[0] !== "" && hero.b[0] !== undefined && bSlot.name !== hero.b[hero.b.length - 1]) {
-      dispatch(actions.changeBSlot(hero.b[hero.b.length - 1], props.id));
+    if (hero.b[0] !== undefined && bSlot !== hero.b[hero.b.length - 1]) {
+      setBSlot(hero.b[hero.b.length - 1]);
     }
-    if (hero.c[0] !== "" && hero.c[0] !== undefined && cSlot.name !== hero.c[hero.c.length - 1]) {
-      dispatch(actions.changeCSlot(hero.c[hero.c.length - 1], props.id));
+    if (hero.c[0] !== undefined && cSlot !== hero.c[hero.c.length - 1]) {
+      setCSlot(hero.c[hero.c.length - 1]);
     }
   };
 
@@ -234,8 +303,17 @@ export default function HeroComponent(props) {
     dispatch(actions.changeStats(props.id));
   };
 
-  const changeRefine = (r) => {
-    dispatch(actions.changeRefine(r, props.id));
+  const changeRefine = (r, weapon) => {
+    // determine stats for array from here
+    if (r === null) {
+      dispatch(actions.changeRefine({ name: "", img: "", stats: [0, 0, 0, 0, 0] }, props.id));
+    } else {
+      var url = r.label.replace("+", "%2B");
+      if (r.label.includes("Effect")) {
+        url = weapon;
+      }
+      dispatch(actions.changeRefine({ name: r.label, stats: r.value, img: "https://fehskills.s3.amazonaws.com/" + url + ".png" }, props.id));
+    }
     dispatch(actions.changeStats(props.id));
   };
 
@@ -253,6 +331,7 @@ export default function HeroComponent(props) {
   };
 
   const changeBSkill = (b) => {
+    setBSlot(b.name);
     dispatch(actions.changeBSlot(b, props.id));
   };
 
@@ -388,20 +467,26 @@ export default function HeroComponent(props) {
             <Row style={{ justifyContent: "space-between" }}>
               <div className="header-row">
                 <div className="headers">Skills:</div>
-                <Button variant="contained" color="primary" style={{ width: "15%", height: "60%" }} disabled={disabledButton} onClick={skills}>
+                <Button variant="contained" color="primary" style={{ width: "15%", height: "60%" }} disabled={!hero.exists} onClick={skills}>
                   Skills
                 </Button>
               </div>
             </Row>
-            <WeaponComponent hero={hero} onChangeW={changeWeapon} onChangeR={changeRefine} id={props.id} />
+            <WeaponComponent
+              hero={hero}
+              weapons={loadedWeapons}
+              onChangeW={changeWeapon}
+              onChangeR={changeRefine}
+              stringWeapon={weapon}
+              id={props.id}
+            />
             <SkillComponent
               hero={hero}
               skill={assist}
               heroSkills={hero.assists}
               id={props.id}
               onChange={changeAssist}
-              onLoad={checkLoading}
-              url={`http://localhost:5000/Assist/`}
+              skills={loadedAssists}
               placeholder={"Choose Assist"}
             />
             <SkillComponent
@@ -410,8 +495,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.specials}
               id={props.id}
               onChange={changeSpecial}
-              onLoad={checkLoading}
-              url={`http://localhost:5000/Specials/`}
+              skills={loadedSpecials}
               placeholder={"Choose Special"}
             />
             <SkillComponent
@@ -420,8 +504,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.a}
               id={props.id}
               onChange={changeASkill}
-              onLoad={checkLoading}
-              url={`http://localhost:5000/A_Slot/`}
+              skills={loadedA}
               placeholder={"Choose A Skill"}
             />
             <SkillComponent
@@ -430,8 +513,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.b}
               id={props.id}
               onChange={changeBSkill}
-              onLoad={checkLoading}
-              url={`http://localhost:5000/B_Slot/`}
+              skills={loadedB}
               placeholder={"Choose B Skill"}
             />
             <SkillComponent
@@ -440,8 +522,7 @@ export default function HeroComponent(props) {
               heroSkills={hero.c}
               id={props.id}
               onChange={changeCSkill}
-              onLoad={checkLoading}
-              url={`http://localhost:5000/C_Slot/`}
+              skills={loadedC}
               placeholder={"Choose C Skill"}
             />
             {/* <SkillComponent
@@ -493,14 +574,21 @@ export default function HeroComponent(props) {
           }}
         >
           <img src={left} alt="left arrow" style={{ width: "30%", height: "20px" }} />
-          <div style={{ fontSize: "20px", fontStyle: "italic" }}>Additional Information</div>
+          <div style={{ fontSize: "20px", fontStyle: "italic", textAlign: "center" }}>Additional Information</div>
           <img src={right} alt="right arrow" style={{ width: "30%", height: "20px" }} />
         </div>
         <div style={{ width: "100%", display: "inline-flex", justifyContent: "space-between", marginBottom: "10px" }}>
           <Button variant="contained">UI Changes</Button>
-          <Button variant="contained" disabled={!hero.exists}>
+          <Button variant="contained" onClick={handleShowRecommendedBuilds} disabled={!hero.exists}>
             Recommended Builds
           </Button>
+          <RecommendedBuildsModal
+            show={showRecommendedBuilds}
+            onClose={handleCloseRecommendedBuilds}
+            hero={hero}
+            recommended={recommendedBuilds}
+            loadBuild={loadRecommendedBuild}
+          />
           <Button variant="contained" onClick={handleShowHeroInfo} disabled={!hero.exists}>
             Hero info
           </Button>

@@ -83,7 +83,7 @@ export default function Traits(props) {
 
   useEffect(() => {
     if (props.stat !== undefined && props.stat !== null && props.stat !== "") {
-      setTrait({ value: props.stat, label: props.label + props.stat.charAt(0).toUpperCase() + props.stat.slice(1) });
+      setTrait(traitOptions.find((e) => e.value === props.stat));
     } else {
       setTrait({ label: "" });
     }

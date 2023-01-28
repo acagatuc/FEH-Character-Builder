@@ -36,6 +36,129 @@ skillRoutes.route("/Loadout/:id").get(async function (req, res) {
   res.json(finalSkillArray);
 });
 
+skillRoutes.route("/AllSkills/:move/:weapon/:character_id").get(async function (req, res) {
+  const start = Date.now();
+  let db = dbo.getDb();
+
+  Promise.all([
+    queryPromise(
+      "GenericWeapons",
+      {
+        type: req.params.weapon,
+        maxSkill: "TRUE",
+      },
+      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, maxSkill: 1, rearmed: 1, uniqueRefine: 1, genericRefine: 1 }
+    ),
+    queryPromise(
+      "PrefWeapons",
+      {
+        heroesList: req.params.character_id,
+      },
+      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, uniqueRefine: 1, genericRefine: 1 }
+    ),
+    queryPromise(
+      "Assist",
+      {
+        $or: [
+          {
+            maxSkill: "TRUE",
+            weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+          },
+          { heroesList: req.params.character_id },
+        ],
+      },
+      { _id: 0, name: 1, unique: 1 }
+    ),
+    queryPromise(
+      "Specials",
+      {
+        $or: [
+          {
+            maxSkill: "TRUE",
+            weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+            movementRestrictions: { $regex: req.params.move.toLowerCase() },
+          },
+          { heroesList: req.params.character_id },
+        ],
+      },
+      { _id: 0, name: 1, unique: 1 }
+    ),
+    queryPromise(
+      "A_Slot",
+      {
+        $or: [
+          {
+            maxSkill: "TRUE",
+            weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+            movementRestrictions: { $regex: req.params.move.toLowerCase() },
+          },
+          { heroesList: req.params.character_id },
+        ],
+      },
+      { _id: 0, name: 1, visibleStats: 1, unique: 1 }
+    ),
+    queryPromise(
+      "B_Slot",
+      {
+        $or: [
+          {
+            maxSkill: "TRUE",
+            weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+            movementRestrictions: { $regex: req.params.move.toLowerCase() },
+          },
+          { heroesList: req.params.character_id },
+        ],
+      },
+      { _id: 0, name: 1, unique: 1 }
+    ),
+    queryPromise(
+      "C_Slot",
+      {
+        $or: [
+          {
+            maxSkill: "TRUE",
+            weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+            movementRestrictions: { $regex: req.params.move.toLowerCase() },
+          },
+          { heroesList: req.params.character_id },
+        ],
+      },
+      { _id: 0, name: 1, unique: 1 }
+    ),
+  ])
+    .then(function (result) {
+      // result is an array of responses here
+      console.log("getting skills took " + (Date.now() - start) + " milliseconds");
+      res.json({
+        weaponList: result[0].concat(result[1]),
+        assistList: result[2],
+        specialList: result[3],
+        aList: result[4],
+        bList: result[5],
+        cList: result[6],
+      });
+    })
+    .catch(function (err) {
+      console.log(err);
+      db.close();
+    });
+
+  function queryPromise(collection, query, fields) {
+    return new Promise(function (resolve, reject) {
+      db.collection(collection)
+        .find(query)
+        .project(fields)
+        .toArray(function (err, resp) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(resp);
+          }
+        });
+    });
+  }
+});
+
 //id is the weapontype, name is the hero name for prefs
 skillRoutes.route("/GenericWeapons/:weapon_type/:character_id").get(async function (req, res) {
   let db_connect = dbo.getDb();
@@ -74,20 +197,25 @@ skillRoutes.route("/Refines/:name").get(async function (req, res) {
 skillRoutes.route("/Assist/:move/:weapon/:character_id").get(async function (req, res) {
   var w = req.params.weapon.toLowerCase();
   let db_connect = dbo.getDb();
-  var nonUniqueSkills = await db_connect
+  var skills = await db_connect
     .collection("Assist")
     .find({
-      maxSkill: "TRUE",
-      weaponRestrictions: { $regex: w },
+      $or: [
+        {
+          maxSkill: "TRUE",
+          weaponRestrictions: { $regex: w },
+        },
+        { heroesList: req.params.character_id },
+      ],
     })
     .toArray();
-  var uniqueSkills = await db_connect.collection("Assist").find({ heroesList: req.params.character_id }).toArray();
+  // var uniqueSkills = await db_connect.collection("Assist").find({ heroesList: req.params.character_id }).toArray();
 
-  var finalArray = [];
-  nonUniqueSkills.forEach((element) => finalArray.push({ name: element.name, unique: "FALSE" }));
-  uniqueSkills.forEach((element) => finalArray.push({ name: element.name, unique: "TRUE" }));
+  // var finalArray = [];
+  // nonUniqueSkills.forEach((element) => finalArray.push({ name: element.name, unique: "FALSE" }));
+  // uniqueSkills.forEach((element) => finalArray.push({ name: element.name, unique: "TRUE" }));
 
-  res.json(finalArray);
+  res.json(skills);
 });
 
 // This section will help you get a list of all the Special skills.

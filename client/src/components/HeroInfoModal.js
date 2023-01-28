@@ -83,7 +83,6 @@ const HeroInfoModal = (props) => {
       default:
         break;
     }
-    console.log(imgSrc);
     return <img style={{ width: "100px", height: "auto" }} src={imgSrc} alt="origin" key={element} />;
   });
 
@@ -130,7 +129,7 @@ const HeroInfoModal = (props) => {
           <Row>
             <div style={{ display: "inline-flex", justifyContent: "space-evenly", alignItems: "center" }}>
               <img src={left} alt="left arrow" style={{ width: "30%", height: "20px" }} />
-              <div style={{ fontSize: "20px", fontStyle: "italic" }}>Appears in:</div>
+              <div style={{ fontSize: "20px", fontStyle: "italic", textAlign: "center" }}>Appears in:</div>
               <img src={right} alt="right arrow" style={{ width: "30%", height: "20px" }} />
             </div>
           </Row>

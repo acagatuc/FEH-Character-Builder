@@ -6,20 +6,24 @@ import { Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 export default function WeaponComponent(props) {
-  const [weaponList, setWeaponList] = useState([]);
-  const [weapon, setWeapon] = useState("");
+  // redux selectors to check for state changes
   const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
-  const [refineList, setRefineList] = useState([]);
-  const [refine, setRefine] = useState("");
   const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
-  const [fetchRefine, setFetchRefine] = useState("");
-  const genericRefineList = [
-    { value: "atk_refine", label: "+Atk" },
-    { value: "spd_refine", label: "+Spd" },
-    { value: "def_refine", label: "+Def" },
-    { value: "res_refine", label: "+Res" },
-  ];
+
+  // lists that contain the info from the fetch call in HeroComponent in dropdown format
+  const [weaponList, setWeaponList] = useState([]);
+
+  // list that contains the dropdown information for the selected weapon refine
+  const [selectedWeaponRefines, setSelectedWeaponRefines] = useState([]);
+
+  // variable that fills in the dropdown
+  const [weapon, setWeapon] = useState(null);
+  const [refine, setRefine] = useState(null);
+
+  // disabling/loading constants for both dropdowns
   const [isLoading, setIsLoading] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
+
   const emptyWeapon = {
     name: "",
     might: 0,
@@ -27,153 +31,87 @@ export default function WeaponComponent(props) {
     refine: false,
     rearmed: false,
   };
-  const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
-    async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/GenericWeapons/` + weapon_type + "/" + props.hero._id);
-      response = await response.json();
-      setWeaponList(
-        []
-          .concat(response)
-          .sort((a, b) => (a.name > b.name ? 1 : -1))
-          .map(function (listItem) {
-            var color;
-            if (props.hero.weapons.includes(listItem.name)) {
-              color = "#daf5e5";
-            } else {
-              color = "white";
-            }
-            return {
-              value: listItem,
-              label: listItem.name,
-              color: color,
-            };
-          })
-      );
-      setIsLoading(false);
-    }
-    var weapon_type = "";
-    if (props.hero.exists) {
-      if (props.hero.weapon_type.includes("Beast") || props.hero.weapon_type.includes("Dragon")) {
-        weapon_type = props.hero.weapon_type.split(" ")[1];
-      } else if (props.hero.weapon_type.includes("Dagger") || props.hero.weapon_type.includes("Bow")) {
-        weapon_type = props.hero.weapon_type.split(" ")[1] + "s";
-      } else {
-        weapon_type = props.hero.weapon_type;
+    if (props.stringWeapon.weapon !== "" && typeof props.stringWeapon.weapon === "string") {
+      var tempWeapon = weaponList.find((e) => e.label === props.stringWeapon.weapon);
+      handleWeapon(null, tempWeapon);
+      if (tempWeapon.value.refine === "TRUE" && props.stringWeapon.refine !== "") {
+        var tempRefine = null;
+        if (props.stringWeapon.refine === "Effect" && tempWeapon.value.uniqueRefine.length !== 0) {
+          tempRefine = { value: tempWeapon.value.uniqueRefine, label: "Effect" };
+        } else if (props.stringWeapon.refine === "+Atk") {
+          tempRefine = { value: [tempWeapon.value.genericRefine[0], tempWeapon.value.genericRefine[1], 0, 0, 0], label: "+Atk" };
+        } else if (props.stringWeapon.refine === "+Spd") {
+          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, tempWeapon.value.genericRefine[2], 0, 0], label: "+Spd" };
+        } else if (props.stringWeapon.refine === "+Def") {
+          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, 0, tempWeapon.value.genericRefine[3], 0], label: "+Def" };
+        } else if (props.stringWeapon.refine === "+Res") {
+          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, 0, 0, tempWeapon.value.genericRefine[4]], label: "+Res" };
+        }
+        setRefine(tempRefine);
+        props.onChangeR(tempRefine, props.stringWeapon.weapon);
       }
-      if (weapon_type !== "") {
-        setIsLoading(false);
-        setWeapon(null);
-        setRefine(null);
-        fetchMyAPI();
-        setIsDisabled(true);
-      } else {
-        setWeapon(emptyWeapon);
-        setRefine(null);
-        setIsDisabled(true);
-      }
+    } else if (props.stringWeapon.weapon === "") {
+      handleWeapon(null, null);
     }
-  }, [props.hero.name]);
+  }, [props.stringWeapon]);
 
   useEffect(() => {
-    async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/Refines/` + reduxWeapon.name);
-      response = await response.json();
-      setFetchRefine(response);
-      if (reduxWeapon.refine && response.uniqueRefine.length !== 1) {
-        var list = [
-          {
-            value: "unique",
-            label: "+Unique Effect: " + reduxWeapon.name,
-          },
-        ];
-        setRefineList(list.concat(genericRefineList));
-      } else {
-        setRefineList(genericRefineList);
-      }
-    }
+    setWeaponList(
+      []
+        .concat(props.weapons)
+        .sort((a, b) => (a.name > b.name ? 1 : -1))
+        .map(function (listItem) {
+          var color;
+          if (props.hero.weapons.includes(listItem.name)) {
+            color = "#daf5e5";
+          } else {
+            color = "white";
+          }
+          return {
+            value: listItem,
+            label: listItem.name,
+            color: color,
+          };
+        })
+    );
+  }, [props.weapons]);
 
-    if (reduxWeapon !== null && reduxWeapon !== "") {
-      if (reduxWeapon.refine === "TRUE") {
-        fetchMyAPI();
-        setIsDisabled(false);
-      } else {
-        setIsDisabled(true);
-      }
-      setRefine(null);
-    }
-  }, [reduxWeapon]);
-
-  useEffect(() => {
-    if (typeof reduxWeapon === "string") {
-      var wep = weaponList.find((e) => e.label === reduxWeapon);
-      if (wep !== undefined) {
-        props.onChangeW(wep.value);
-      }
-    } else if (reduxWeapon.name !== "") {
-      setWeapon({ value: reduxWeapon, label: reduxWeapon.name });
+  const setRefineDropdown = (unique, generic) => {
+    const genericRefineList = [
+      { value: [generic[0], generic[1], 0, 0, 0], label: "+Atk" },
+      { value: [generic[0], 0, generic[2], 0, 0], label: "+Spd" },
+      { value: [generic[0], 0, 0, generic[3], 0], label: "+Def" },
+      { value: [generic[0], 0, 0, 0, generic[4]], label: "+Res" },
+    ];
+    if (unique.length === 1) {
+      setSelectedWeaponRefines(genericRefineList);
     } else {
-      setWeapon(emptyWeapon);
+      const uniqueEffect = [{ value: unique, label: "Effect" }];
+      setSelectedWeaponRefines(uniqueEffect.concat(genericRefineList));
     }
-  }, [reduxWeapon]);
-
-  useEffect(() => {
-    if (reduxRefine.name !== "") {
-      setRefine({ value: reduxRefine, label: reduxRefine.name });
-    } else {
-      setRefine({ name: "", img: "", stats: [0, 0, 0, 0, 0] });
-    }
-  }, [reduxRefine]);
+  };
 
   const handleWeapon = (event, value) => {
     if (value === null) {
+      setSelectedWeaponRefines([]);
+      setWeapon(null);
       props.onChangeW(emptyWeapon);
-      setRefine(null);
     } else {
+      if (value.value.refine === "TRUE") {
+        setRefineDropdown(value.value.uniqueRefine, value.value.genericRefine);
+      }
+      setWeapon(value);
       props.onChangeW(value.value);
-      props.onChangeR({
-        name: "",
-        img: "",
-        stats: [0, 0, 0, 0, 0],
-      });
     }
-    setWeapon(value);
+    setRefine(null);
+    props.onChangeR(null, null);
   };
 
   const handleRefine = (event, value) => {
-    var refine = {
-      name: "",
-      img: "",
-      stats: [0, 0, 0, 0, 0],
-    };
-    if (value === null) {
-      props.onChangeR(refine);
-    } else {
-      refine.name = value.label;
-      if (value.value === "unique") {
-        refine.img = "https://fehskills.s3.amazonaws.com/" + reduxWeapon.name + ".png";
-        refine.stats = fetchRefine.uniqueRefine;
-      } else if (value.value === "atk_refine") {
-        refine.stats[0] = fetchRefine.genericRefine[0];
-        refine.stats[1] = fetchRefine.genericRefine[1];
-        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
-      } else if (value.value === "spd_refine") {
-        refine.stats[0] = fetchRefine.genericRefine[0];
-        refine.stats[2] = fetchRefine.genericRefine[2];
-        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
-      } else if (value.value === "def_refine") {
-        refine.stats[0] = fetchRefine.genericRefine[0];
-        refine.stats[3] = fetchRefine.genericRefine[3];
-        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
-      } else if (value.value === "res_refine") {
-        refine.stats[0] = fetchRefine.genericRefine[0];
-        refine.stats[4] = fetchRefine.genericRefine[4];
-        refine.img = "https://fehskills.s3.amazonaws.com/" + value.value + ".png";
-      }
-      props.onChangeR(refine);
-    }
     setRefine(value);
+    props.onChangeR(value, weapon.value.name);
   };
 
   return (
@@ -197,10 +135,10 @@ export default function WeaponComponent(props) {
       />
       <Autocomplete
         id="refine dropdown"
-        options={refineList}
+        options={selectedWeaponRefines}
         value={refine}
         onChange={handleRefine}
-        disabled={isDisabled}
+        disabled={weapon?.value.refine !== "TRUE"}
         getOptionLabel={(option) => option.label || ""}
         renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}

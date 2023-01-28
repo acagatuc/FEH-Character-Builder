@@ -56,15 +56,38 @@ heroRoutes.route("/Heroes").get(function (req, res) {
     });
 });
 
-heroRoutes.route("/Heroes/:id").get(function (req, res) {
-  let db_connect = dbo.getDb();
-  db_connect
-    .collection("Heroes")
-    .find({ _id: ObjectId(req.params.id) })
-    .toArray(function (err, result) {
-      if (err) throw err;
-      res.json(result);
+heroRoutes.route("/Heroes/:id").get(async function (req, res) {
+  const start = Date.now();
+  let db = dbo.getDb();
+
+  Promise.all([queryPromise("Heroes", { _id: ObjectId(req.params.id) }, {}), queryPromise("RecommendedBuilds", { character_id: req.params.id }, {})])
+    .then(function (result) {
+      // result is an array of responses here
+      console.log("getting hero took " + (Date.now() - start) + " milliseconds");
+      res.json({
+        hero: result[0][0],
+        recommended: result[1],
+      });
+    })
+    .catch(function (err) {
+      console.log(err);
+      db.close();
     });
+
+  function queryPromise(collection, query, fields) {
+    return new Promise(function (resolve, reject) {
+      db.collection(collection)
+        .find(query)
+        .project(fields)
+        .toArray(function (err, resp) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(resp);
+          }
+        });
+    });
+  }
 });
 
 heroRoutes.route("/LegendaryMythic/add").post(function (req, response) {

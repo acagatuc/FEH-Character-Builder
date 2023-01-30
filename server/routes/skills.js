@@ -45,85 +45,79 @@ skillRoutes.route("/AllSkills/:move/:weapon/:character_id").get(async function (
       "GenericWeapons",
       {
         type: req.params.weapon,
-        maxSkill: "TRUE",
       },
-      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, maxSkill: 1, rearmed: 1, uniqueRefine: 1, genericRefine: 1 }
+      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, maxSkill: 1, rearmed: 1, uniqueRefine: 1, genericRefine: 1, maxSkill: 1 }
     ),
     queryPromise(
       "PrefWeapons",
       {
         heroesList: req.params.character_id,
       },
-      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, uniqueRefine: 1, genericRefine: 1 }
+      { _id: 0, name: 1, might: 1, visibleStats: 1, refine: 1, uniqueRefine: 1, genericRefine: 1, maxSkill: 1 }
     ),
     queryPromise(
       "Assist",
       {
         $or: [
           {
-            maxSkill: "TRUE",
             weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
           },
           { heroesList: req.params.character_id },
         ],
       },
-      { _id: 0, name: 1, unique: 1 }
+      { _id: 0, name: 1, unique: 1, maxSkill: 1 }
     ),
     queryPromise(
       "Specials",
       {
         $or: [
           {
-            maxSkill: "TRUE",
             weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
             movementRestrictions: { $regex: req.params.move.toLowerCase() },
           },
           { heroesList: req.params.character_id },
         ],
       },
-      { _id: 0, name: 1, unique: 1 }
+      { _id: 0, name: 1, unique: 1, maxSkill: 1 }
     ),
     queryPromise(
       "A_Slot",
       {
         $or: [
           {
-            maxSkill: "TRUE",
             weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
             movementRestrictions: { $regex: req.params.move.toLowerCase() },
           },
           { heroesList: req.params.character_id },
         ],
       },
-      { _id: 0, name: 1, visibleStats: 1, unique: 1 }
+      { _id: 0, name: 1, visibleStats: 1, unique: 1, maxSkill: 1 }
     ),
     queryPromise(
       "B_Slot",
       {
         $or: [
           {
-            maxSkill: "TRUE",
             weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
             movementRestrictions: { $regex: req.params.move.toLowerCase() },
           },
           { heroesList: req.params.character_id },
         ],
       },
-      { _id: 0, name: 1, unique: 1 }
+      { _id: 0, name: 1, unique: 1, maxSkill: 1 }
     ),
     queryPromise(
       "C_Slot",
       {
         $or: [
           {
-            maxSkill: "TRUE",
             weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
             movementRestrictions: { $regex: req.params.move.toLowerCase() },
           },
           { heroesList: req.params.character_id },
         ],
       },
-      { _id: 0, name: 1, unique: 1 }
+      { _id: 0, name: 1, unique: 1, maxSkill: 1 }
     ),
   ])
     .then(function (result) {

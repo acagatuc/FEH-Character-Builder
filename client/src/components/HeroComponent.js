@@ -130,11 +130,6 @@ export default function HeroComponent(props) {
     dispatch(actions.changeHero(response["hero"], props.id));
 
     var weapon = response["hero"]["weapon_type"];
-    if (response["hero"]["weapon_type"].includes("Dragon") || response["hero"]["weapon_type"].includes("Beast")) {
-      weapon = response["hero"]["weapon_type"].split(" ")[1];
-    } else if (response["hero"]["weapon_type"].includes("Dagger") || response["hero"]["weapon_type"].includes("Bow")) {
-      weapon = response["hero"]["weapon_type"].split(" ")[1] + "s";
-    }
 
     var urlAddon = response["hero"]["move_type"] + "/" + weapon + "/" + newHero;
     let skills = await fetch("http://localhost:5000/AllSkills/" + urlAddon);
@@ -151,26 +146,25 @@ export default function HeroComponent(props) {
 
   async function loadBuild(build) {
     // resets the tab to accomodate a different build
-    console.log(build);
     dispatch(actions.resetTab(props.id));
     var buildFromBarracks = {};
+    Object.assign(buildFromBarracks, build);
+
+    // load the hero and build into the current tab
+    dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
 
     // gets the hero from the db to check if there have been any changes (like skills)
     await heroChange(buildFromBarracks.value);
 
-    // setWeapon({ weapon: build.weapon, refine: build.refine });
-    // setAssist(build.assist);
-    // setSpecial(build.special);
-    // setASlot(build.a);
-    // setBSlot(build.b);
-    // setCSlot(build.c);
-
-    // load the hero and build into the current tab
-    dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
+    setWeapon({ weapon: build.weapon, refine: build.refine });
+    setAssist(build.assist);
+    setSpecial(build.special);
+    setASlot(build.aSkill);
+    setBSlot(build.bSkill);
+    setCSlot(build.cSkill);
   }
 
   function loadRecommendedBuild(build) {
-    // console.log(build);
     maximize();
     setWeapon({ weapon: build.weapon, refine: build.refine });
     setAssist(build.assist);

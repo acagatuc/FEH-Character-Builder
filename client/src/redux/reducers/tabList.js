@@ -374,6 +374,7 @@ export default function (state = initState, action) {
 
     case LOAD_BUILD_FROM_BARRACKS: {
       const { build, id } = action.payload;
+      console.log(build);
       state.key++;
       var barracksHero = {};
       Object.assign(barracksHero, build);

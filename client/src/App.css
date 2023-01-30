@@ -36,16 +36,15 @@ div.noPadding {
   padding-right: 0;
 }
 
-.tab-row {
-  display: inline-flex;
-  justify-content: left;
-  flex-wrap: nowrap;
-}
-
 .tab-label {
   display: inline-flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.tab-indicator {
+  background-color: #3f50b5;
+  height: 5px;
 }
 
 .tab-menu-button:hover {

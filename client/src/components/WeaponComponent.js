@@ -33,34 +33,10 @@ export default function WeaponComponent(props) {
   };
 
   useEffect(() => {
-    if (props.stringWeapon.weapon !== "" && typeof props.stringWeapon.weapon === "string") {
-      var tempWeapon = weaponList.find((e) => e.label === props.stringWeapon.weapon);
-      handleWeapon(null, tempWeapon);
-      if (tempWeapon.value.refine === "TRUE" && props.stringWeapon.refine !== "") {
-        var tempRefine = null;
-        if (props.stringWeapon.refine === "Effect" && tempWeapon.value.uniqueRefine.length !== 0) {
-          tempRefine = { value: tempWeapon.value.uniqueRefine, label: "Effect" };
-        } else if (props.stringWeapon.refine === "+Atk") {
-          tempRefine = { value: [tempWeapon.value.genericRefine[0], tempWeapon.value.genericRefine[1], 0, 0, 0], label: "+Atk" };
-        } else if (props.stringWeapon.refine === "+Spd") {
-          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, tempWeapon.value.genericRefine[2], 0, 0], label: "+Spd" };
-        } else if (props.stringWeapon.refine === "+Def") {
-          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, 0, tempWeapon.value.genericRefine[3], 0], label: "+Def" };
-        } else if (props.stringWeapon.refine === "+Res") {
-          tempRefine = { value: [tempWeapon.value.genericRefine[0], 0, 0, 0, tempWeapon.value.genericRefine[4]], label: "+Res" };
-        }
-        setRefine(tempRefine);
-        props.onChangeR(tempRefine, props.stringWeapon.weapon);
-      }
-    } else if (props.stringWeapon.weapon === "") {
-      handleWeapon(null, null);
-    }
-  }, [props.stringWeapon]);
-
-  useEffect(() => {
     setWeaponList(
       []
         .concat(props.weapons)
+        .filter((e) => e.maxSkill === "TRUE")
         .sort((a, b) => (a.name > b.name ? 1 : -1))
         .map(function (listItem) {
           var color;
@@ -77,6 +53,31 @@ export default function WeaponComponent(props) {
         })
     );
   }, [props.weapons]);
+
+  useEffect(() => {
+    if (props.stringWeapon.weapon !== "" && typeof props.stringWeapon.weapon === "string") {
+      var tempWeapon = props.weapons.find((e) => e.name === props.stringWeapon.weapon);
+      handleWeapon(null, { label: tempWeapon.name, value: tempWeapon, color: "white" });
+      if (tempWeapon.refine === "TRUE" && props.stringWeapon.refine !== "") {
+        var tempRefine = null;
+        if (props.stringWeapon.refine === "Effect" && tempWeapon.uniqueRefine.length === 5) {
+          tempRefine = { value: tempWeapon.uniqueRefine, label: "Effect" };
+        } else if (props.stringWeapon.refine === "+Atk") {
+          tempRefine = { value: [tempWeapon.genericRefine[0], tempWeapon.genericRefine[1], 0, 0, 0], label: "+Atk" };
+        } else if (props.stringWeapon.refine === "+Spd") {
+          tempRefine = { value: [tempWeapon.genericRefine[0], 0, tempWeapon.genericRefine[2], 0, 0], label: "+Spd" };
+        } else if (props.stringWeapon.refine === "+Def") {
+          tempRefine = { value: [tempWeapon.genericRefine[0], 0, 0, tempWeapon.genericRefine[3], 0], label: "+Def" };
+        } else if (props.stringWeapon.refine === "+Res") {
+          tempRefine = { value: [tempWeapon.genericRefine[0], 0, 0, 0, tempWeapon.genericRefine[4]], label: "+Res" };
+        }
+        setRefine(tempRefine);
+        props.onChangeR(tempRefine, props.stringWeapon.weapon);
+      }
+    } else if (props.stringWeapon.weapon === "") {
+      handleWeapon(null, null);
+    }
+  }, [props.stringWeapon]);
 
   const setRefineDropdown = (unique, generic) => {
     const genericRefineList = [

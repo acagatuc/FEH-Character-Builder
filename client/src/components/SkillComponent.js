@@ -19,6 +19,7 @@ export default function SkillComponent(props) {
     setSkillList(
       []
         .concat(props.skills)
+        .filter((e) => e.maxSkill === "TRUE")
         .sort((a, b) => (a.name > b.name ? 1 : -1))
         .map(function (listItem) {
           var color;
@@ -42,7 +43,7 @@ export default function SkillComponent(props) {
   }, [props.skills]);
 
   useEffect(() => {
-    if (skill !== null && skill !== undefined && skill.name !== "" && rearmed === "TRUE") {
+    if (skill !== null && skill !== undefined && skill.name !== "" && rearmed === "TRUE" && props.hero.hero_type !== "rearmed") {
       if (skill.value.unique) {
         setSkill(null);
         props.onChange(emptySkill);
@@ -52,16 +53,19 @@ export default function SkillComponent(props) {
 
   // this useeffect should be used specifically to load builds from string skills and nothing else
   useEffect(() => {
-    if (props.skill !== "" && typeof props.skill === "string") {
-      var tempSkill = skillList.find((e) => e.label === props.skill);
-      handleChange(null, tempSkill);
+    if (props.skill !== "" && props.skill !== undefined && typeof props.skill === "string") {
+      var tempSkill = props.skills.find((e) => e.name === props.skill);
+      console.log(tempSkill);
+      handleChange(null, { label: tempSkill.name, value: tempSkill, color: "white" });
+    } else if (typeof props.skill === "object") {
+      handleChange(null, { label: props.skill.name, value: props.skill });
     } else if (props.skill === "") {
       handleChange(null, null);
     }
   }, [props.skill]);
 
   const handleChange = (event, value) => {
-    if (value === null) {
+    if (value === null || value === undefined) {
       setSkill(emptySkill);
       props.onChange(emptySkill);
     } else {
@@ -80,7 +84,7 @@ export default function SkillComponent(props) {
         loading={isLoading}
         disabled={!props.hero.exists}
         getOptionLabel={(option) => option.label || ""}
-        getOptionDisabled={(option) => option.value.unique && rearmed === "TRUE"}
+        getOptionDisabled={(option) => option.value.unique && rearmed === "TRUE" && props.hero.hero_type !== "rearmed"}
         renderOption={(props: object, option: any) => (
           <Box sx={{ backgroundColor: option.color }} {...props}>
             {option.label}

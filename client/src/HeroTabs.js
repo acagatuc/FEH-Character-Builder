@@ -44,10 +44,12 @@ const TabLabel = (props) => {
   }
   return (
     <div className="tab-label noPadding" style={{ width: "115%" }}>
-      {url === "" ? <div></div> : <img className="chibis" src={url} align="left" alt="Chibi" />}
+      {url === "" ? <div style={{ minWidth: "45px" }}></div> : <img className="chibis" src={url} align="left" alt="Chibi" />}
       <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>
         {label === "" || label === undefined ? "Build " + (props.id + 1) : label}
       </div>
+      {props.id === props.value ? <div className="tab-indicator"></div> : <div></div>}
+
       <IconButton
         component="div"
         aria-controls={open ? "basic-menu" : undefined}
@@ -130,13 +132,16 @@ function HeroTabs(props) {
         onChange={handleTabChange}
         variant="scrollable"
         scrollButtons="auto"
-        TabIndicatorProps={{ style: { background: "#282c34", transition: "none" } }}
+        TabIndicatorProps={{
+          style: { display: "none" },
+        }}
         TabScrollButtonProps={{ style: { background: "#282c34", color: "white" } }}
         sx={{
           display: "inline-flex",
           justifyContent: "left",
           width: "90%",
-          height: 10,
+          minHeight: "50px",
+          maxHeight: "80px",
           borderTopLeftRadius: 10,
         }}
       >
@@ -144,11 +149,12 @@ function HeroTabs(props) {
           <Tab
             key={tab.key.toString()}
             value={tab.id}
-            label={<TabLabel id={tab.id} copyTab={copyTab} deleteTab={deleteTab} length={length} />}
+            label={<TabLabel id={tab.id} value={tabValue} copyTab={copyTab} deleteTab={deleteTab} length={length} />}
             wrapped
             sx={{
               backgroundColor: "white",
               width: 1 / 5,
+              minWidth: 1 / 5,
               minHeight: 0,
               pt: 0,
               pb: 0,

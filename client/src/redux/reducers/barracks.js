@@ -13,6 +13,7 @@ export default function (state = initState, action) {
       Object.assign(copiedHero, build);
       copiedHero.key = state.key;
       copiedHero.weapon = copiedHero.weapon.name;
+      copiedHero.refine = copiedHero.refine.name;
       if (name === "") {
         copiedHero.build_name = build.label;
       } else {

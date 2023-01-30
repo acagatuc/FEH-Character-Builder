@@ -36,7 +36,6 @@ const SavedBuildInBarracks = (props) => {
     setAnchorEl(null);
   };
   const openDeleteConfirmation = (i) => {
-    console.log(i);
     dispatch(actions.deleteBuildFromBarracks(i));
     setAnchorEl(null);
   };
@@ -93,7 +92,7 @@ const SavedBuildInBarracks = (props) => {
       />
       <CardContent className="buildCard">
         <Collapse in={isCollapsed}>
-          {props.item.weapon}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
+          {props.item.weapon.name}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
           {props.item.cSkill.name}
         </Collapse>
         <div className="buildCardBottomRow">

@@ -123,6 +123,9 @@ skillRoutes.route("/AllSkills/:move/:weapon/:character_id").get(async function (
     .then(function (result) {
       // result is an array of responses here
       console.log("getting skills took " + (Date.now() - start) + " milliseconds");
+      if (result[1][0]) {
+        result[1][0].maxSkill = "TRUE";
+      }
       res.json({
         weaponList: result[0].concat(result[1]),
         assistList: result[2],

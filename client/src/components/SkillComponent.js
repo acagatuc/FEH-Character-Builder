@@ -55,7 +55,6 @@ export default function SkillComponent(props) {
   useEffect(() => {
     if (props.skill !== "" && props.skill !== undefined && typeof props.skill === "string") {
       var tempSkill = props.skills.find((e) => e.name === props.skill);
-      console.log(tempSkill);
       handleChange(null, { label: tempSkill.name, value: tempSkill, color: "white" });
     } else if (typeof props.skill === "object") {
       handleChange(null, { label: props.skill.name, value: props.skill });

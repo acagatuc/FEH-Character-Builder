@@ -81,8 +81,8 @@ const App = (props) => {
           <Col md={4} style={{ width: canvasWidth, paddingTop: "5px", paddingLeft: "5px" }}>
             <HeroCanvas sendWidth={(width) => setWidth(width + 5)} />
           </Col>
-          <Col style={{ padding: 0, paddingTop: "5px" }}>
-            <HeroTabs />
+          <Col style={{ maxWidth: window.innerWidth - canvasWidth, padding: 0, paddingTop: "5px" }}>
+            <HeroTabs maxWidth={window.innerWidth - canvasWidth} />
           </Col>
         </Row>
       </Container>

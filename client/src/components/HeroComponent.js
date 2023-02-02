@@ -42,6 +42,15 @@ export default function HeroComponent(props) {
   const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
   const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
+  // redux skill info
+  const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
+  const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
+  const reduxAssist = useSelector((state) => state.tabList.tabList[props.id].assist);
+  const reduxSpecial = useSelector((state) => state.tabList.tabList[props.id].special);
+  const reduxA = useSelector((state) => state.tabList.tabList[props.id].aSkill);
+  const reduxB = useSelector((state) => state.tabList.tabList[props.id].bSkill);
+  const reduxC = useSelector((state) => state.tabList.tabList[props.id].cSkill);
+
   // skill info for string loaded builds (recommended mostly)
   const [weapon, setWeapon] = useState("");
   const [refine, setRefine] = useState("");
@@ -99,6 +108,9 @@ export default function HeroComponent(props) {
   const handleShowRecommendedBuilds = () => setShowRecommendedBuilds(true);
   const handleCloseRecommendedBuilds = () => setShowRecommendedBuilds(false);
 
+  //test thingy for loading on copy
+  const [test, setTest] = useState(false);
+
   async function heroChange(newHero) {
     // resets tab state in redux and all skill lists
     dispatch(actions.resetTab(props.id));
@@ -127,9 +139,13 @@ export default function HeroComponent(props) {
     response["hero"].VA = response["hero"].EVA;
     response["hero"].character_id = newHero;
 
+    setTest(true);
     dispatch(actions.changeHero(response["hero"], props.id));
 
     var weapon = response["hero"]["weapon_type"];
+    if (weapon.includes("Dragon") || weapon.includes("Beast") || weapon.includes("Bow") || weapon.includes("Dagger")) {
+      weapon = weapon.split(" ")[1];
+    }
 
     var urlAddon = response["hero"]["move_type"] + "/" + weapon + "/" + newHero;
     let skills = await fetch("http://localhost:5000/AllSkills/" + urlAddon);
@@ -143,6 +159,50 @@ export default function HeroComponent(props) {
 
     dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
+
+  // this useeffect occurs if the tab is copied from another tab, and doesnt undergo the heroChange function
+  useEffect(() => {
+    async function loadSkillLists() {
+      var weapon = hero.weapon_type;
+      if (weapon.includes("Dragon") || weapon.includes("Beast") || weapon.includes("Bow") || weapon.includes("Dagger")) {
+        weapon = weapon.split(" ")[1];
+      }
+
+      var urlAddon = hero.move_type + "/" + weapon + "/" + hero._id;
+      let skills = await fetch("http://localhost:5000/AllSkills/" + urlAddon);
+      skills = await skills.json();
+      setLoadedWeapons(skills["weaponList"]);
+      setLoadedAssists(skills["assistList"]);
+      setLoadedSpecials(skills["specialList"]);
+      setLoadedA(skills["aList"]);
+      setLoadedB(skills["bList"]);
+      setLoadedC(skills["cList"]);
+
+      dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
+    }
+
+    if (!test && hero.name !== "") {
+      loadSkillLists();
+      if (reduxWeapon.name !== "") {
+        setWeapon({ weapon: reduxWeapon, refine: reduxRefine });
+      }
+      if (reduxAssist.name !== "") {
+        setAssist(reduxAssist);
+      }
+      if (reduxSpecial.name !== "") {
+        setSpecial(reduxSpecial);
+      }
+      if (reduxA.name !== "") {
+        setASlot(reduxA);
+      }
+      if (reduxB.name !== "") {
+        setBSlot(reduxB);
+      }
+      if (reduxC.name !== "") {
+        setCSlot(reduxC);
+      }
+    }
+  }, [hero.name]);
 
   async function loadBuild(build) {
     // resets the tab to accomodate a different build
@@ -230,7 +290,9 @@ export default function HeroComponent(props) {
   const skills = () => {
     // must find a way to have the program take a fuckin chill pill when clicked before the hero is properly loaded in
     // load in the top skills to the specified skill slots.
+    // find a way to load skills more than once lol ????
     if (weapon.name !== hero.weapons[hero.weapons.length - 1]) {
+      // if (reduxWeapon.name !== weapon.weapon) {
       setWeapon({ weapon: hero.weapons[hero.weapons.length - 1], refine: "Effect" });
     }
     if (hero.assists[0] !== undefined && assist !== hero.assists[hero.assists.length - 1]) {
@@ -325,7 +387,6 @@ export default function HeroComponent(props) {
   };
 
   const changeBSkill = (b) => {
-    setBSlot(b.name);
     dispatch(actions.changeBSlot(b, props.id));
   };
 
@@ -380,7 +441,7 @@ export default function HeroComponent(props) {
 
   return (
     <div>
-      <Container className="noMargin" style={{ height: "100%" }}>
+      <Container className="noMargin" style={{ maxWidth: "100%", height: "100%" }}>
         <Row style={{ marginTop: "5px" }}>
           <div className="inline-row">
             <Button variant="contained" color="primary" style={{ marginRight: "5px" }} onClick={handleShowLoad}>

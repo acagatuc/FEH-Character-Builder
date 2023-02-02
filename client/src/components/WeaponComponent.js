@@ -6,10 +6,6 @@ import { Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 
 export default function WeaponComponent(props) {
-  // redux selectors to check for state changes
-  const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
-  const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
-
   // lists that contain the info from the fetch call in HeroComponent in dropdown format
   const [weaponList, setWeaponList] = useState([]);
 
@@ -22,7 +18,6 @@ export default function WeaponComponent(props) {
 
   // disabling/loading constants for both dropdowns
   const [isLoading, setIsLoading] = useState(true);
-  const [isDisabled, setIsDisabled] = useState(true);
 
   const emptyWeapon = {
     name: "",
@@ -33,6 +28,7 @@ export default function WeaponComponent(props) {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     setWeaponList(
       []
         .concat(props.weapons)
@@ -52,6 +48,7 @@ export default function WeaponComponent(props) {
           };
         })
     );
+    setIsLoading(false);
   }, [props.weapons]);
 
   useEffect(() => {
@@ -73,6 +70,11 @@ export default function WeaponComponent(props) {
         }
         setRefine(tempRefine);
         props.onChangeR(tempRefine, props.stringWeapon.weapon);
+      }
+    } else if (typeof props.stringWeapon.weapon === "object") {
+      setWeapon({ label: props.stringWeapon.weapon.name, value: props.stringWeapon.weapon });
+      if (typeof props.stringWeapon.refine === "object") {
+        setRefine({ label: props.stringWeapon.refine.name, value: props.stringWeapon.refine });
       }
     } else if (props.stringWeapon.weapon === "") {
       handleWeapon(null, null);

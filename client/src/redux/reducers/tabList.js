@@ -238,10 +238,10 @@ export default function (state = initState, action) {
       const { id, length } = action.payload;
       var copiedHero = {};
       Object.assign(copiedHero, state.tabList[id]);
+      state.key++;
       copiedHero.key = state.key;
       copiedHero.id = length;
       state.tabList = [...state.tabList, copiedHero];
-      state.key++;
       return { ...state };
     }
     case DELETE_TAB: {

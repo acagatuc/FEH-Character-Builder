@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
@@ -93,6 +93,11 @@ function HeroTabs(props) {
   const tabValue = useSelector((state) => state.tabList.tabValue);
   const length = useSelector((state) => state.tabList.tabList.length);
 
+  const ref = useRef();
+  // useEffect(() => {
+  //   props.sendHeight(ref.current.clientHeight);
+  // });
+
   const handleTabChange = (event, value) => {
     if (value !== -1) {
       dispatch(actions.changeTab(value));
@@ -130,7 +135,7 @@ function HeroTabs(props) {
     dispatch(actions.deleteTab(tabId));
   };
   return (
-    <div style={{ maxWidth: props.maxWidth, borderRadius: 10, backgroundColor: "white" }}>
+    <div ref={ref} style={{ maxWidth: props.maxWidth, height: "fit-content", borderRadius: 10, backgroundColor: "white" }}>
       <div className="tab-row">
         {t.map((tab) => (
           <TabLabel key={tab.id} id={tab.id} value={tabValue} changeTab={handleTabChange} copyTab={copyTab} deleteTab={deleteTab} length={length} />
@@ -139,7 +144,7 @@ function HeroTabs(props) {
           <Add />
         </IconButton>
       </div>
-      <Divider />
+      <div className="divider"></div>
       {t.map((tab, index) => (
         <HeroTabContent key={tab.key} id={tab.id} value={tabValue} index={index} />
       ))}

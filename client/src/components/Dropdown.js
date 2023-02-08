@@ -28,19 +28,17 @@ export default function Dropdown(props) {
   }
 
   return (
-    <div>
-      <Autocomplete
-        id="hero list"
-        disableClearable
-        openOnFocus
-        selectOnFocus
-        options={heroList}
-        value={dropdown}
-        onChange={handleChange}
-        getOptionLabel={(option) => option.label}
-        isOptionEqualToValue={(option, option2) => option.value === option2.value}
-        renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
-      />
-    </div>
+    <Autocomplete
+      id="hero list"
+      disableClearable
+      openOnFocus
+      selectOnFocus
+      options={heroList}
+      value={dropdown}
+      onChange={handleChange}
+      getOptionLabel={(option) => option.label}
+      isOptionEqualToValue={(option, option2) => option.value === option2.value}
+      renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
+    />
   );
 }

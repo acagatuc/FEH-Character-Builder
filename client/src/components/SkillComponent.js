@@ -13,7 +13,7 @@ export default function SkillComponent(props) {
     visibleStats: [0, 0, 0, 0, 0],
     unique: false,
   };
-  const [skill, setSkill] = useState(emptySkill);
+  const [skill, setSkill] = useState(null);
 
   useEffect(() => {
     setSkillList(
@@ -51,21 +51,22 @@ export default function SkillComponent(props) {
     }
   }, [rearmed]);
 
-  // this useeffect should be used specifically to load builds from string skills and nothing else
+  // this useeffect should be used specifically to load builds from string skills and resetting tabs and nothing else
   useEffect(() => {
-    if (props.skill !== "" && props.skill !== undefined && typeof props.skill === "string") {
+    if (props.skill === "") {
+    } else if (props.skill === "reset") {
+      handleChange(null, null);
+    } else if (props.skill !== undefined && typeof props.skill === "string") {
       var tempSkill = props.skills.find((e) => e.name === props.skill);
       handleChange(null, { label: tempSkill.name, value: tempSkill, color: "white" });
     } else if (typeof props.skill === "object") {
       handleChange(null, { label: props.skill.name, value: props.skill });
-    } else if (props.skill === "") {
-      handleChange(null, null);
     }
   }, [props.skill]);
 
   const handleChange = (event, value) => {
     if (value === null || value === undefined) {
-      setSkill(emptySkill);
+      setSkill(null);
       props.onChange(emptySkill);
     } else {
       setSkill({ value: value.value, label: value.label });

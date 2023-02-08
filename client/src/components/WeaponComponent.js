@@ -52,6 +52,7 @@ export default function WeaponComponent(props) {
   }, [props.weapons]);
 
   useEffect(() => {
+    console.log(props.stringWeapon);
     if (props.stringWeapon.weapon !== "" && typeof props.stringWeapon.weapon === "string") {
       var tempWeapon = props.weapons.find((e) => e.name === props.stringWeapon.weapon);
       handleWeapon(null, { label: tempWeapon.name, value: tempWeapon, color: "white" });
@@ -67,6 +68,10 @@ export default function WeaponComponent(props) {
           tempRefine = { value: [tempWeapon.genericRefine[0], 0, 0, tempWeapon.genericRefine[3], 0], label: "+Def" };
         } else if (props.stringWeapon.refine === "+Res") {
           tempRefine = { value: [tempWeapon.genericRefine[0], 0, 0, 0, tempWeapon.genericRefine[4]], label: "+Res" };
+        } else if (props.stringWeapon.refine === "Wrathful") {
+          tempRefine = { value: [0, 0, 0, 0, 0], label: "Wrathful" };
+        } else if (props.stringWeapon.refine === "Dazzling") {
+          tempRefine = { value: [0, 0, 0, 0, 0], label: "Dazzling" };
         }
         setRefine(tempRefine);
         props.onChangeR(tempRefine, props.stringWeapon.weapon);
@@ -82,12 +87,22 @@ export default function WeaponComponent(props) {
   }, [props.stringWeapon]);
 
   const setRefineDropdown = (unique, generic) => {
-    const genericRefineList = [
-      { value: [generic[0], generic[1], 0, 0, 0], label: "+Atk" },
-      { value: [generic[0], 0, generic[2], 0, 0], label: "+Spd" },
-      { value: [generic[0], 0, 0, generic[3], 0], label: "+Def" },
-      { value: [generic[0], 0, 0, 0, generic[4]], label: "+Res" },
-    ];
+    var genericRefineList;
+    if (generic.length !== 5) {
+      genericRefineList = [];
+    } else if (props.hero.weapon_type.includes("Staff")) {
+      genericRefineList = [
+        { value: [0, 0, 0, 0, 0], label: "Wrathful" },
+        { value: [0, 0, 0, 0, 0], label: "Dazzling" },
+      ];
+    } else {
+      genericRefineList = [
+        { value: [generic[0], generic[1], 0, 0, 0], label: "+Atk" },
+        { value: [generic[0], 0, generic[2], 0, 0], label: "+Spd" },
+        { value: [generic[0], 0, 0, generic[3], 0], label: "+Def" },
+        { value: [generic[0], 0, 0, 0, generic[4]], label: "+Res" },
+      ];
+    }
     if (unique.length === 1) {
       setSelectedWeaponRefines(genericRefineList);
     } else {

@@ -396,14 +396,19 @@ export default function (state = initState, action) {
         }
       }
 
+      // a skill visible stats (in case a skill is null)
       var visible = [0, 0, 0, 0, 0];
       if (state.tabList[id].aSkill.visibleStats !== undefined) {
         visible = state.tabList[id].aSkill.visibleStats;
       }
+
+      // weapon visible stats (in case weapon is null)
       var weaponStats = [0, 0, 0, 0, 0];
       if (state.tabList[id].weapon.visibleStats !== undefined) {
         weaponStats = state.tabList[id].weapon.visibleStats;
       }
+
+      // refine visible stats (in case refine is null)
       var refineStats = [0, 0, 0, 0, 0];
       if (state.tabList[id].refine.stats !== undefined) {
         refineStats = state.tabList[id].refine.stats;

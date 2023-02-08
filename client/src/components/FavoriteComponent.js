@@ -30,7 +30,7 @@ export default function FavoriteComponent(props) {
     }
   };
   return (
-    <div>
+    <div style={{ width: "90%" }}>
       <Autocomplete
         id="favorite dropdown"
         options={favoriteList}

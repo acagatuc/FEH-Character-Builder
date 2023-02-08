@@ -50,18 +50,17 @@ export default function BlessingComponent(props) {
   };
 
   return (
-    <div>
-      <Autocomplete
-        id="blessing dropdown"
-        options={blessingOptions}
-        value={blessing}
-        onChange={handleBlessing}
-        disabled={!props.hero.exists || isDisabled}
-        getOptionLabel={(option) => option.label || ""}
-        renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
-      />
-    </div>
+    <Autocomplete
+      id="blessing dropdown"
+      sx={{ width: "100%" }}
+      options={blessingOptions}
+      value={blessing}
+      onChange={handleBlessing}
+      disabled={!props.hero.exists || isDisabled}
+      getOptionLabel={(option) => option.label || ""}
+      renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
+      isOptionEqualToValue={(option, value) => option.value === value.value}
+      renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
+    />
   );
 }

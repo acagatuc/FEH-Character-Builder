@@ -59,22 +59,21 @@ export default function FlowerComponent(props) {
   };
 
   return (
-    <div>
-      <Autocomplete
-        id="flower dropdown"
-        options={flowerList}
-        value={dragonflowerSelector}
-        onChange={handleDragonflowers}
-        disabled={!props.hero.exists}
-        getOptionLabel={(option) => option.label || ""}
-        renderOption={(props: object, option: any) => (
-          <Box sx={{ backgroundColor: option.color }} {...props}>
-            {option.label}
-          </Box>
-        )}
-        isOptionEqualToValue={(option, value) => option.label === value.label || ""}
-        renderInput={(params) => <TextField {...params} variant="standard" placeholder="Dragonflowers"></TextField>}
-      />
-    </div>
+    <Autocomplete
+      id="flower dropdown"
+      sx={{ width: "50%" }}
+      options={flowerList}
+      value={dragonflowerSelector}
+      onChange={handleDragonflowers}
+      disabled={!props.hero.exists}
+      getOptionLabel={(option) => option.label || ""}
+      renderOption={(props: object, option: any) => (
+        <Box sx={{ backgroundColor: option.color }} {...props}>
+          {option.label}
+        </Box>
+      )}
+      isOptionEqualToValue={(option, value) => option.label === value.label || ""}
+      renderInput={(params) => <TextField {...params} variant="standard" placeholder="Dragonflowers"></TextField>}
+    />
   );
 }

@@ -1,0 +1,185 @@
+/** Container for full HeroComponent return */
+.hero-component {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  overflow-y: hidden;
+  width: 100%;
+}
+
+/** Row CSS that contains the load and save buttons*/
+.load-save-row {
+  width: 100%;
+  display: inline-flex;
+  justify-content: right;
+  margin-top: 5px;
+  margin-right: 5px;
+}
+
+/** Row/Column CSS that for the component */
+.row {
+  display: inline-flex;
+  flex-direction: row;
+  margin-top: 10px;
+}
+
+.column {
+  display: inline-flex;
+  flex-direction: column;
+}
+
+.hero-stats-column {
+  width: 40%;
+  min-width: 320px;
+  margin-top: -2%;
+  padding-left: 2%;
+  padding-right: 2%;
+  align-items: stretch;
+}
+
+/** CSS for styling individual rows */
+.header-row {
+  display: inline-flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-right: 0%;
+}
+
+.headers {
+  font-size: 24px;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.additional-column-1 {
+  display: inline-flex;
+  align-items: end;
+  width: 35%;
+  min-width: 320px;
+  padding-right: 2%;
+}
+
+.additional-column-2 {
+  display: inline-flex;
+  align-items: end;
+  width: 25%;
+  padding-right: 2%;
+}
+
+.footer-column {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-evenly;
+}
+
+.footer-row {
+  display: inline-flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+}
+
+.footer-title {
+  font-size: 20px;
+  font-style: italic;
+  text-align: center;
+}
+
+.menu-row {
+  display: inline-flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 10px;
+  padding-left: 2%;
+  padding-right: 2%;
+}
+
+/** CSS for Buttons/imgs */
+
+.maximize-button {
+  width: 90px;
+  height: 27px;
+}
+
+.skills-button {
+  width: 70px;
+  height: 27px;
+}
+
+.arrow {
+  width: 30%;
+  height: 20px;
+}
+
+.menu-row-button {
+  width: 220px;
+  height: 36px;
+}
+
+.support-label {
+  font-size: 12px;
+}
+
+/** Individual component CSS */
+.blessing-hero-container {
+  display: flex;
+  justify-content: left;
+  align-items: start;
+  flex-wrap: nowrap;
+  min-height: 32px;
+  max-height: 51px;
+  overflow: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border-width: 1px;
+  border-color: lightgray;
+  border-style: solid;
+}
+
+.blessing-hero-title {
+  color: lightgray;
+  justify-content: center;
+  align-items: center;
+}
+
+.support {
+  width: 100%;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+}
+
+.buffs {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  flex-direction: row;
+}
+
+.buff {
+  width: 50px;
+  margin-left: 10px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #8cbbe9;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1976d2;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #1565c0;
+}

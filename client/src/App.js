@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
-//import AddIcon from "@mui/icons-material/Add";
 
 // We use Route in order to define the different routes of our application
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Container, Col, Row } from "react-bootstrap";
 
+// components for main unit builder
 import HeroTabs from "./HeroTabs.js";
 import HeroCanvas from "./components/HeroCanvas.js";
 import AppInfo from "./components/AppInfo.js";
@@ -33,9 +32,17 @@ const App = (props) => {
   />;
 
   // this is to set the width of the col so the form does not overflow
-  const [canvasWidth, setWidth] = useState(0);
+  const [canvasWidth, setWidth] = useState(500);
+  const [canvasHeight, setHeight] = useState(900);
   const dispatch = useDispatch();
   const [heroes, setHeroes] = useState([]);
+
+  // useEffect(() => {
+  //   function handleResize() {
+  //     console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
+  //   }
+  //   window.addEventListener("resize", handleResize);
+  // });
 
   // gets initial hero list with names and character ids
   useEffect(() => {
@@ -68,6 +75,12 @@ const App = (props) => {
     dispatch(actions.changeBackpack(""));
   }, [heroes]);
 
+  // const setUnitBuilderHeight = (height) => {
+  //   if (height > canvasHeight) {
+  //     setHeight(height);
+  //   }
+  // };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -76,16 +89,10 @@ const App = (props) => {
           <AppInfo image={"https://fehportraits.s3.amazonaws.com/infoIcon.png"} />
         </h2>
       </header>
-      <Container fluid style={{ backgroundImage: `url(${bg})`, height: "100%" }}>
-        <Row>
-          <Col md={4} style={{ width: canvasWidth, paddingTop: "5px", paddingLeft: "5px" }}>
-            <HeroCanvas sendWidth={(width) => setWidth(width + 5)} />
-          </Col>
-          <Col style={{ maxWidth: window.innerWidth - canvasWidth, padding: 0, paddingTop: "5px" }}>
-            <HeroTabs maxWidth={window.innerWidth - canvasWidth} />
-          </Col>
-        </Row>
-      </Container>
+      <div className="unit-builder">
+        <HeroCanvas stageWidth={canvasWidth} />
+        <HeroTabs maxWidth={window.innerWidth - canvasWidth - 10} height={canvasHeight} />
+      </div>
     </div>
   );
 };

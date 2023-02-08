@@ -709,8 +709,8 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
 
 export default function HeroCanvas(props) {
   const stageRef = React.useRef();
-  const [stageWidth, setStageWidth] = useState((540 / 960) * window.innerHeight);
-  const [stageHeight, setStageHeight] = useState(window.innerHeight);
+  const [stageWidth, setStageWidth] = useState(props.stageWidth);
+  const [stageHeight, setStageHeight] = useState((1920 / 1080) * props.stageWidth);
 
   // global redux state
   const hero = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].hero);
@@ -738,7 +738,7 @@ export default function HeroCanvas(props) {
   const fav = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].favorite);
 
   const handleExport = () => {
-    const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+    const uri = stageRef.current.toDataURL({ pixelRatio: 4 });
     downloadURI(uri, "FEH Builder - " + hero.name + ".png");
   };
 
@@ -751,14 +751,18 @@ export default function HeroCanvas(props) {
     document.body.removeChild(link);
   };
 
-  useEffect(() => {
-    // if (window.innerWidth >= 768) {
-    //   var aspectRatio = 960 / 540;
-    //   setStageWidth(window.innerWidth / 3);
-    //   setStageHeight(aspectRatio * stageWidth);
-    // }
-    props.sendWidth(stageWidth);
-  }, [stageWidth]);
+  // useEffect(() => {
+  //   props.sendHeight(stageHeight);
+  // }, [stageHeight]);
+
+  // useEffect(() => {
+  //   // if (window.innerWidth >= 768) {
+  //   //   var aspectRatio = 960 / 540;
+  //   //   setStageWidth(window.innerWidth / 3);
+  //   //   setStageHeight(aspectRatio * stageWidth);
+  //   // }
+  //   // props.sendWidth(stageWidth);
+  // }, [stageWidth]);
 
   return (
     <div id="wrapper" className="wrapper">

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Col, Row } from "react-bootstrap";
 import { Button, Tooltip } from "@mui/material";
-import "./../App.css";
+import "./HeroComponent.css";
 
 import BlessingComponent from "./BlessingComponent.js";
 import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
@@ -16,6 +16,7 @@ import SwitchComponent from "./SwitchComponent.js";
 import ToggleComponent from "./ToggleComponent.js";
 import BackgroundDropdown from "./BackgroundDropdown.js";
 import FavoriteComponent from "./FavoriteComponent.js";
+import BuffComponent from "./BuffComponent.js";
 
 // save and load modals
 import BarracksModal from "./BarracksModal.js";
@@ -121,11 +122,11 @@ export default function HeroComponent(props) {
     setLoadedB([]);
     setLoadedC([]);
     setWeapon({ weapon: "", refine: "" });
-    setAssist("");
-    setSpecial("");
-    setASlot("");
-    setBSlot("");
-    setCSlot("");
+    setAssist("reset");
+    setSpecial("reset");
+    setASlot("reset");
+    setBSlot("reset");
+    setCSlot("reset");
 
     let response = await fetch("http://localhost:5000/Heroes/" + newHero);
     response = await response.json();
@@ -225,7 +226,6 @@ export default function HeroComponent(props) {
   }
 
   function loadRecommendedBuild(build) {
-    maximize();
     setWeapon({ weapon: build.weapon, refine: build.refine });
     setAssist(build.assist);
     setSpecial(build.special);
@@ -272,8 +272,27 @@ export default function HeroComponent(props) {
       default:
         break;
     }
-
+    switch (build.flaw) {
+      case "hp":
+        tempLevels[0] = 0;
+        break;
+      case "atk":
+        tempLevels[1] = 0;
+        break;
+      case "spd":
+        tempLevels[2] = 0;
+        break;
+      case "def":
+        tempLevels[3] = 0;
+        break;
+      case "res":
+        tempLevels[4] = 0;
+        break;
+      default:
+        break;
+    }
     dispatch(actions.changeLevels(tempLevels, props.id, build.asset, build.flaw, build.ascended));
+    maximize();
   }
 
   useEffect(() => {
@@ -374,27 +393,33 @@ export default function HeroComponent(props) {
   };
 
   const changeAssist = (a) => {
+    setAssist("");
     dispatch(actions.changeAssist(a, props.id));
   };
 
   const changeSpecial = (s) => {
+    setSpecial("");
     dispatch(actions.changeSpecial(s, props.id));
   };
 
   const changeASkill = (a) => {
+    setASlot("");
     dispatch(actions.changeASlot(a, props.id));
     dispatch(actions.changeStats(props.id));
   };
 
   const changeBSkill = (b) => {
+    setBSlot("");
     dispatch(actions.changeBSlot(b, props.id));
   };
 
   const changeCSkill = (c) => {
+    setCSlot("");
     dispatch(actions.changeCSlot(c, props.id));
   };
 
   const changeSSkill = (s) => {
+    setSSlot("");
     dispatch(actions.changeSSlot(s, props.id));
     dispatch(actions.changeStats(props.id));
   };
@@ -440,147 +465,109 @@ export default function HeroComponent(props) {
   };
 
   return (
-    <div>
-      <Container className="noMargin" style={{ maxWidth: "100%", height: "100%" }}>
-        <Row style={{ marginTop: "5px" }}>
-          <div className="inline-row">
-            <Button variant="contained" color="primary" style={{ marginRight: "5px" }} onClick={handleShowLoad}>
-              Load
+    <div className="hero-component">
+      <div className="load-save-row">
+        <Button variant="contained" color="primary" style={{ marginRight: "5px" }} onClick={handleShowLoad}>
+          Load
+        </Button>
+        <Tooltip title="Barracks are full!" placement="top" disableTouchListener={true} disableHoverListener={barracksLength !== 12}>
+          <div>
+            <Button variant="contained" color="primary" disabled={!hero.exists || barracksLength === 12} onClick={handleShowSave}>
+              Save
             </Button>
-            <Tooltip title="Barracks are full!" placement="top" disableHoverListener={barracksLength !== 12}>
-              <div>
-                <Button variant="contained" color="primary" disabled={!hero.exists || barracksLength === 12} onClick={handleShowSave}>
-                  Save
-                </Button>
-              </div>
-            </Tooltip>
-            <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
-            <BarracksModal show={showLoad} onClose={handleCloseLoad} loadBuild={loadBuild} id={props.id} />
           </div>
-        </Row>
-        <Row>
-          <Col md={5} style={{ marginTop: "-2%" }}>
-            <Row style={{ justifyContent: "space-between" }}>
-              <div className="header-row">
-                <div className="headers">Stats:</div>
-                <Button variant="contained" color="primary" style={{ width: "20%", height: "60%" }} disabled={!hero.exists} onClick={maximize}>
-                  Maximize
-                </Button>
-              </div>
-            </Row>
-            <Row>
-              <Col>
-                <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
-              </Col>
-            </Row>
-            <Row style={{ marginTop: "10px" }}>
-              <Col>
-                <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} id={props.id} />
-              </Col>
-              <Col>
-                <FlowerComponent hero={hero} onChange={flowerChange} id={props.id} />
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Traits
-                  hero={hero}
-                  stat={asset}
-                  stats={superboon}
-                  array={levels}
-                  color={"#79ba8e"}
-                  label={"+"}
-                  onChange={assetChange}
-                  placeholder={"Asset"}
-                />
-              </Col>
-              <Col>
-                <Traits
-                  hero={hero}
-                  stat={flaw}
-                  stats={superbane}
-                  array={levels}
-                  color={"#e68585"}
-                  label={"-"}
-                  onChange={flawChange}
-                  placeholder={"Flaw"}
-                />
-              </Col>
-              <Col>
-                <Traits
-                  hero={hero}
-                  stat={ascended}
-                  stats={superboon}
-                  array={levels}
-                  color={"#79ba8e"}
-                  label={"+"}
-                  onChange={ascendedChange}
-                  placeholder={"Ascended"}
-                />
-              </Col>
-            </Row>
-            <Row style={{ justifyContent: "space-between" }}>
-              <div className="header-row">
-                <div className="headers">Skills:</div>
-                <Button variant="contained" color="primary" style={{ width: "15%", height: "60%" }} disabled={!hero.exists} onClick={skills}>
-                  Skills
-                </Button>
-              </div>
-            </Row>
-            <WeaponComponent
-              hero={hero}
-              weapons={loadedWeapons}
-              onChangeW={changeWeapon}
-              onChangeR={changeRefine}
-              stringWeapon={weapon}
-              id={props.id}
-            />
-            <SkillComponent
-              hero={hero}
-              skill={assist}
-              heroSkills={hero.assists}
-              id={props.id}
-              onChange={changeAssist}
-              skills={loadedAssists}
-              placeholder={"Choose Assist"}
-            />
-            <SkillComponent
-              hero={hero}
-              skill={special}
-              heroSkills={hero.specials}
-              id={props.id}
-              onChange={changeSpecial}
-              skills={loadedSpecials}
-              placeholder={"Choose Special"}
-            />
-            <SkillComponent
-              hero={hero}
-              skill={aSlot}
-              heroSkills={hero.a}
-              id={props.id}
-              onChange={changeASkill}
-              skills={loadedA}
-              placeholder={"Choose A Skill"}
-            />
-            <SkillComponent
-              hero={hero}
-              skill={bSlot}
-              heroSkills={hero.b}
-              id={props.id}
-              onChange={changeBSkill}
-              skills={loadedB}
-              placeholder={"Choose B Skill"}
-            />
-            <SkillComponent
-              hero={hero}
-              skill={cSlot}
-              heroSkills={hero.c}
-              id={props.id}
-              onChange={changeCSkill}
-              skills={loadedC}
-              placeholder={"Choose C Skill"}
-            />
-            {/* <SkillComponent
+        </Tooltip>
+        <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
+        <BarracksModal show={showLoad} onClose={handleCloseLoad} loadBuild={loadBuild} id={props.id} />
+      </div>
+      <div className="column hero-stats-column">
+        <div className="header-row">
+          <div className="headers">Hero:</div>
+          <Button className="maximize-button" variant="contained" color="primary" disabled={!hero.exists} onClick={maximize}>
+            Maximize
+          </Button>
+        </div>
+        <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
+        <div className="row">
+          <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} id={props.id} />
+          <FlowerComponent hero={hero} onChange={flowerChange} id={props.id} />
+        </div>
+        <div className="row" style={{ justifyContent: "center" }}>
+          <Traits
+            hero={hero}
+            stat={asset}
+            stats={superboon}
+            array={levels}
+            color={"#79ba8e"}
+            label={"+"}
+            onChange={assetChange}
+            placeholder={"Asset"}
+          />
+          <Traits hero={hero} stat={flaw} stats={superbane} array={levels} color={"#e68585"} label={"-"} onChange={flawChange} placeholder={"Flaw"} />
+          <Traits
+            hero={hero}
+            stat={ascended}
+            stats={superboon}
+            array={levels}
+            color={"#79ba8e"}
+            label={"+"}
+            onChange={ascendedChange}
+            placeholder={"Ascended"}
+          />
+        </div>
+        <div className="header-row" style={{ marginTop: "10px" }}>
+          <div className="headers">Skills:</div>
+          <Button className="skills-button" variant="contained" color="primary" disabled={!hero.exists} onClick={skills}>
+            Skills
+          </Button>
+        </div>
+        <WeaponComponent hero={hero} weapons={loadedWeapons} onChangeW={changeWeapon} onChangeR={changeRefine} stringWeapon={weapon} id={props.id} />
+        <SkillComponent
+          hero={hero}
+          skill={assist}
+          heroSkills={hero.assists}
+          id={props.id}
+          onChange={changeAssist}
+          skills={loadedAssists}
+          placeholder={"Choose Assist"}
+        />
+        <SkillComponent
+          hero={hero}
+          skill={special}
+          heroSkills={hero.specials}
+          id={props.id}
+          onChange={changeSpecial}
+          skills={loadedSpecials}
+          placeholder={"Choose Special"}
+        />
+        <SkillComponent
+          hero={hero}
+          skill={aSlot}
+          heroSkills={hero.a}
+          id={props.id}
+          onChange={changeASkill}
+          skills={loadedA}
+          placeholder={"Choose A Skill"}
+        />
+        <SkillComponent
+          hero={hero}
+          skill={bSlot}
+          heroSkills={hero.b}
+          id={props.id}
+          onChange={changeBSkill}
+          skills={loadedB}
+          placeholder={"Choose B Skill"}
+        />
+        <SkillComponent
+          hero={hero}
+          skill={cSlot}
+          heroSkills={hero.c}
+          id={props.id}
+          onChange={changeCSkill}
+          skills={loadedC}
+          placeholder={"Choose C Skill"}
+        />
+        {/* <SkillComponent
               hero={hero}
               skill={sSlot}
               id={props.id}
@@ -588,51 +575,34 @@ export default function HeroComponent(props) {
               url={`http://localhost:5000/S_Slot/`}
               placeholder={"Choose S Skill"}
             /> */}
-          </Col>
-          <Col md={4} style={{ marginTop: "15px", textAlign: "right" }}>
-            <h5>Additional:</h5>
-            <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
-            <div style={{ marginTop: "5px", height: "150px" }}>
-              <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
-            </div>
-            buffs or debuffs stats
-          </Col>
-          <Col style={{ marginTop: "5px", textAlign: "right" }}>
-            <Row style={{ marginTop: "35px" }}>
-              <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
-            </Row>
-            <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
-            <SwitchComponent
-              res={transformed === 2}
-              enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
-              onChange={handleTransform}
-              label={"Transformed?"}
-            />
-            <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
-            <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
-            <Row style={{ width: "85%", display: "inline-flex", justifyContent: "right" }}>
-              <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
-            </Row>
-            <Row style={{ width: "85%", display: "inline-flex", justifyContent: "right" }}>
-              <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
-            </Row>
-          </Col>
-        </Row>
-        <div
-          style={{
-            marginTop: "30px",
-            marginBottom: "30px",
-            width: "100%",
-            display: "inline-flex",
-            justifyContent: "space-evenly",
-            alignItems: "center",
-          }}
-        >
-          <img src={left} alt="left arrow" style={{ width: "30%", height: "20px" }} />
-          <div style={{ fontSize: "20px", fontStyle: "italic", textAlign: "center" }}>Additional Information</div>
-          <img src={right} alt="right arrow" style={{ width: "30%", height: "20px" }} />
+      </div>
+      <div className="column additional-column-1">
+        <h5>Additional:</h5>
+        <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
+        <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
+        <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
+        <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
+        <SwitchComponent
+          res={transformed === 2}
+          enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
+          onChange={handleTransform}
+          label={"Transformed?"}
+        />
+        <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
+        <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
+      </div>
+      <div className="column additional-column-2">
+        <BuffComponent />
+        <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
+        <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
+      </div>
+      <div className="column footer-column footer-title">
+        <div className="footer-row">
+          <img src={left} alt="left arrow" className="arrow" />
+          Additional Information
+          <img src={right} alt="right arrow" className="arrow" />
         </div>
-        <div style={{ width: "100%", display: "inline-flex", justifyContent: "space-between", marginBottom: "10px" }}>
+        <div className="menu-row">
           <Button variant="contained">UI Changes</Button>
           <Button variant="contained" onClick={handleShowRecommendedBuilds} disabled={!hero.exists}>
             Recommended Builds
@@ -649,7 +619,7 @@ export default function HeroComponent(props) {
           </Button>
           <HeroInfoModal show={showHeroInfo} onClose={handleCloseHeroInfo} hero={hero} />
         </div>
-      </Container>
+      </div>
     </div>
   );
 }

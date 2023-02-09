@@ -132,22 +132,21 @@ export default function Traits(props) {
   };
 
   return (
-    <div>
-      <Autocomplete
-        id="trait dropdown"
-        options={traitOptions}
-        value={trait}
-        onChange={handleChange}
-        disabled={isDisabled}
-        getOptionLabel={(option) => option.label}
-        renderOption={(props: object, option: any) => (
-          <Box sx={{ backgroundColor: option.color }} {...props}>
-            {option.label}
-          </Box>
-        )}
-        isOptionEqualToValue={(option, value) => option.label === value.label}
-        renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
-      />
-    </div>
+    <Autocomplete
+      id="trait dropdown"
+      sx={{ width: "30%" }}
+      options={traitOptions}
+      value={trait}
+      onChange={handleChange}
+      disabled={isDisabled}
+      getOptionLabel={(option) => option.label}
+      renderOption={(props: object, option: any) => (
+        <Box sx={{ backgroundColor: option.color }} {...props}>
+          {option.label}
+        </Box>
+      )}
+      isOptionEqualToValue={(option, value) => option.label === value.label}
+      renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
+    />
   );
 }

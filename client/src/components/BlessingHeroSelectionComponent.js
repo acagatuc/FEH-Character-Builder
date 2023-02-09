@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Autocomplete, TextField, Chip } from "@mui/material";
+import "./HeroComponent.css";
 
 // redux import
 import { useSelector } from "react-redux";
@@ -9,6 +10,7 @@ export default function BlessingHeroSelectionComponent(props) {
   const [selectedHeroList, setSelectedHeroList] = useState([]);
   const [stats, setStats] = useState([0, 0, 0, 0, 0]);
   const [isDisabled, setIsDisabled] = useState(true);
+  const [test, setTest] = useState("");
   const blessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
   const blessingHeroList = useSelector((state) => state.tabList.tabList[props.id].blessingHeroList);
 
@@ -85,23 +87,13 @@ export default function BlessingHeroSelectionComponent(props) {
   };
 
   return (
-    <div>
-      <Autocomplete
-        multiple
-        id="tags-outlined"
-        options={heroList}
-        getOptionLabel={(option) => option.label || ""}
-        defaultValue={[]}
-        value={selectedHeroList}
-        disabled={isDisabled}
-        onChange={(e) => {
-          handleAdd(e);
-        }}
-        isOptionEqualToValue={(option, value) => option.label === value}
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
+    <div style={{ marginTop: "5px", height: "100px", width: "100%" }}>
+      {selectedHeroList.length === 0 ? (
+        <div className="blessing-hero-container blessing-hero-title">Ally List</div>
+      ) : (
+        <div className="blessing-hero-container">
+          {selectedHeroList.map((option, index) => (
             <Chip
-              {...getTagProps({ index })}
               variant="outlined"
               key={index}
               label={option.label}
@@ -110,9 +102,22 @@ export default function BlessingHeroSelectionComponent(props) {
                 handleDelete(index, option);
               }}
             />
-          ))
-        }
-        renderInput={(params) => <TextField {...params} variant="standard" label="Hero Buffs" placeholder="Heroes" fullWidth />}
+          ))}
+        </div>
+      )}
+      <Autocomplete
+        id="tags-outlined"
+        value={[]}
+        inputValue={test}
+        options={heroList}
+        getOptionLabel={(option) => option.label || ""}
+        disabled={isDisabled}
+        getOptionDisabled={(option) => selectedHeroList.length === 6}
+        onChange={(e) => {
+          handleAdd(e);
+        }}
+        isOptionEqualToValue={(option, value) => option.label === value}
+        renderInput={(params) => <TextField {...params} variant="standard" label="Allies" placeholder="Hero" fullWidth />}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import "./HeroComponent.css";
 
 export default function ToggleComponent(props) {
   const [selected, setSelected] = useState("No");
@@ -15,9 +16,8 @@ export default function ToggleComponent(props) {
     }
   };
   return (
-    <div>
+    <div className="support">
       <label>{props.label} </label>
-      <br />
       <ToggleButtonGroup value={selected} onChange={handleChange} exclusive color="warning" disabled={!props.exists}>
         <ToggleButton value="No">No</ToggleButton>
         <ToggleButton value="C">C</ToggleButton>

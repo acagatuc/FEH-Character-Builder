@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Tabs, Tab, Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import React, { useState, useRef, useEffect } from "react";
+import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
@@ -30,6 +30,7 @@ const TabLabel = (props) => {
   };
   const deleteItem = (e) => {
     props.deleteTab(e, props.id);
+    setAnchorEl(null);
   };
 
   let url = "";
@@ -43,45 +44,44 @@ const TabLabel = (props) => {
     url = ("https://feh" + tab_image + ".s3.amazonaws.com/" + label + ".png").replace(" ", "+");
   }
   return (
-    <div className="tab-label noPadding" style={{ width: "115%" }}>
-      {url === "" ? <div style={{ minWidth: "45px" }}></div> : <img className="chibis" src={url} align="left" alt="Chibi" />}
-      <div style={{ textTransform: "none", fontSize: 16, fontWeight: "300" }}>
-        {label === "" || label === undefined ? "Build " + (props.id + 1) : label}
+    <div className="tab">
+      <div style={{ display: "inline-flex" }} onClick={() => props.changeTab(null, props.id)}>
+        {url === "" ? (
+          <div style={{ minWidth: "45px" }}></div>
+        ) : tab_image === "chibis" ? (
+          <img className="chibis" src={url} align="left" alt="Chibi" />
+        ) : (
+          <img className="portraits" src={url} align="left" alt="Portrait" />
+        )}
+        <div className="tab-label">{label === "" || label === undefined ? "Build " + (props.id + 1) : label}</div>
+      </div>
+      <div className="tab-popup">
+        <IconButton
+          component="div"
+          aria-controls={open ? "tab-menu" : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? "true" : undefined}
+          id={props.id}
+          onClick={(e) => handleClick(e)}
+        >
+          <MoreVertIcon style={{ fontSize: 32 }} />
+        </IconButton>
+        <Menu
+          id="tab-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            "aria-labelledby": "basic-button",
+          }}
+        >
+          <MenuItem onClick={copyItem}>Copy</MenuItem>
+          <MenuItem onClick={deleteItem} disabled={props.length === 1}>
+            Delete
+          </MenuItem>
+        </Menu>
       </div>
       {props.id === props.value ? <div className="tab-indicator"></div> : <div></div>}
-
-      <IconButton
-        component="div"
-        aria-controls={open ? "basic-menu" : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? "true" : undefined}
-        id={props.id}
-        onClick={(e) => handleClick(e)}
-      >
-        <MoreVertIcon style={{ fontSize: 32 }} />
-      </IconButton>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={copyItem}>Copy</MenuItem>
-        <MenuItem onClick={deleteItem} disabled={props.length === 1}>
-          Delete
-        </MenuItem>
-      </Menu>
-    </div>
-  );
-};
-
-const AddTabLabel = (props) => {
-  return (
-    <div style={{ textTransform: "none" }}>
-      <Add style={{ color: "black" }} />
     </div>
   );
 };
@@ -102,15 +102,20 @@ function HeroTabs(props) {
   };
 
   const addTab = () => {
-    let id = t[t.length - 1].id + 1;
-    dispatch(actions.addTab(id));
-    dispatch(actions.changeTab(id));
+    if (t.length < 10) {
+      let id = t[t.length - 1].id + 1;
+      dispatch(actions.addTab(id));
+      dispatch(actions.changeTab(id));
+    }
   };
 
   const copyTab = (value) => {
-    let id = t[t.length - 1].id + 1;
-    dispatch(actions.copyTab(value, id));
-    dispatch(actions.changeTab(id));
+    // lists ofskills are not being generated at all
+    if (t.length < 10) {
+      let id = t[t.length - 1].id + 1;
+      dispatch(actions.copyTab(value, id));
+      dispatch(actions.changeTab(id));
+    }
   };
 
   const deleteTab = (e, tabId) => {
@@ -121,50 +126,26 @@ function HeroTabs(props) {
       return;
     }
 
-    // set current tab and tab list
+    // delete tab and set new tab if the current tab was the deleted one
     dispatch(actions.deleteTab(tabId));
   };
-
   return (
-    <div style={{ borderRadius: 10, backgroundColor: "white" }}>
-      <Tabs
-        value={tabValue}
-        onChange={handleTabChange}
-        variant="scrollable"
-        scrollButtons="auto"
-        TabIndicatorProps={{
-          style: { display: "none" },
-        }}
-        TabScrollButtonProps={{ style: { background: "#282c34", color: "white" } }}
-        sx={{
-          display: "inline-flex",
-          justifyContent: "left",
-          width: "90%",
-          minHeight: "50px",
-          maxHeight: "80px",
-          borderTopLeftRadius: 10,
-        }}
-      >
+    <div
+      style={{
+        height: "fit-content",
+        borderRadius: 10,
+        backgroundColor: "white",
+      }}
+    >
+      <div className="tab-row">
         {t.map((tab) => (
-          <Tab
-            key={tab.key.toString()}
-            value={tab.id}
-            label={<TabLabel id={tab.id} value={tabValue} copyTab={copyTab} deleteTab={deleteTab} length={length} />}
-            wrapped
-            sx={{
-              backgroundColor: "white",
-              width: 1 / 5,
-              minWidth: 1 / 5,
-              minHeight: 0,
-              pt: 0,
-              pb: 0,
-            }}
-            disableRipple
-          />
+          <TabLabel key={tab.id} id={tab.id} value={tabValue} changeTab={handleTabChange} copyTab={copyTab} deleteTab={deleteTab} length={length} />
         ))}
-        <Tab value={-1} label={<AddTabLabel />} sx={{ pr: 0, pl: 0, width: 1 / 10 }} />
-      </Tabs>
-      <Divider />
+        <IconButton onClick={addTab} disabled={t.length >= 10}>
+          <Add />
+        </IconButton>
+      </div>
+      <div className="divider"></div>
       {t.map((tab, index) => (
         <HeroTabContent key={tab.key} id={tab.id} value={tabValue} index={index} />
       ))}

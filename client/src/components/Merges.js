@@ -38,17 +38,16 @@ export default function Merges(props) {
   };
 
   return (
-    <div>
-      <Autocomplete
-        id="flower dropdown"
-        options={mergeOptions}
-        value={mergeSelector}
-        onChange={handleChange}
-        disabled={!props.hero.exists}
-        getOptionLabel={(option) => option.label || ""}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        renderInput={(params) => <TextField {...params} variant="standard" placeholder="Merges"></TextField>}
-      />
-    </div>
+    <Autocomplete
+      id="merge dropdown"
+      sx={{ width: "48%" }}
+      options={mergeOptions}
+      value={mergeSelector}
+      onChange={handleChange}
+      disabled={!props.hero.exists}
+      getOptionLabel={(option) => option.label || ""}
+      isOptionEqualToValue={(option, value) => option.value === value.value}
+      renderInput={(params) => <TextField {...params} variant="standard" placeholder="Merges"></TextField>}
+    />
   );
 }

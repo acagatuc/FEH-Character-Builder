@@ -13,6 +13,17 @@
   font-size: calc(10px + 2vmin);
   color: white;
   width: 100%;
+  height: 50px;
+}
+
+.unit-builder {
+  display: flex;
+  justify-content: left;
+  padding-top: 5px;
+  padding-left: 5px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  background-image: url("./background.png");
 }
 
 .modal-size {
@@ -27,35 +38,77 @@
   display: inline-block;
 }
 
-div.noMargin {
-  margin-left: 0;
-  margin-right: 0;
+/* CSS for Tabs */
+
+.tab-row {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  background-color: white;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  min-height: 55px;
+  max-height: 80px;
+  min-width: 0;
+  max-width: 99%;
+  overflow-x: auto;
 }
 
-div.noPadding {
-  padding-right: 0;
+.tab {
+  display: inline-flex;
+  justify-content: left;
+  align-items: center;
+  max-width: 200px;
+  min-width: 200px;
+  height: 55px;
+  position: relative;
 }
 
 .tab-label {
   display: inline-flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
+  text-align: center;
+  min-width: 100px;
 }
 
 .tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 200px;
   background-color: #3f50b5;
-  height: 5px;
+  height: 3px;
 }
 
-.tab-menu-button:hover {
-  background-color: gray;
+.tab-popup {
+  visibility: hidden;
+  margin-left: auto;
+}
+
+.tab:hover > .tab-popup {
+  visibility: visible;
+}
+
+.portraits {
+  height: 55px;
+  max-width: 55px;
+  object-fit: cover;
+  border-radius: 100%;
 }
 
 .chibis {
   height: 45px;
   max-width: 55px;
   object-fit: cover;
-  padding-right: 5px;
+  padding-right: 10px;
+  padding-left: 5px;
+}
+
+.divider {
+  background-color: lightgray;
+  width: 100%;
+  height: 0.5px;
 }
 
 .header-row {
@@ -64,19 +117,17 @@ div.noPadding {
   align-items: center;
   padding-right: 0%;
 }
+
 .headers {
   font-size: 30px;
   font-weight: 500;
   display: inline-block;
 }
-.inline-row {
-  display: inline-flex;
-  justify-content: right;
-}
 
 .hero-info-modal-size {
   max-width: 50% !important;
 }
+
 .description-box {
   position: relative;
   border-style: solid;
@@ -91,17 +142,12 @@ div.noPadding {
   height: 100px;
 }
 
-@media screen and (max-width: 600px) {
-  .col-md-4 {
-    padding: 0px !important;
+/** if user is using firefox*/
+/* @-moz-document url-prefix() {
+  body {
+    scrollbar-width: auto;
   }
-}
-
-@media screen and (min-width: 601px) {
-  .col {
-    padding-right: 3px !important;
-  }
-}
+} */
 
 @font-face {
   font-family: "nintendoP_Skip-D_003";

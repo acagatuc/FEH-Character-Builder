@@ -104,7 +104,7 @@ const HeroInfoModal = (props) => {
   }
 
   return (
-    <Modal show={props.show} onHide={props.onClose} dialogClassName="hero-info-modal-size">
+    <Modal show={props.show} onHide={props.onClose} dialogClassName="hero-info-modal-size" centered={false}>
       <Modal.Header
         style={{
           display: "flex",

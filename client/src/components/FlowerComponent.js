@@ -61,7 +61,7 @@ export default function FlowerComponent(props) {
   return (
     <Autocomplete
       id="flower dropdown"
-      sx={{ width: "50%" }}
+      sx={{ width: "48%" }}
       options={flowerList}
       value={dragonflowerSelector}
       onChange={handleDragonflowers}

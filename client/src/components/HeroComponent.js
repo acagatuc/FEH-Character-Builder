@@ -488,11 +488,11 @@ export default function HeroComponent(props) {
           </Button>
         </div>
         <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
-        <div className="row">
+        <div className="flex-row" style={{ justifyContent: "space-between" }}>
           <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} id={props.id} />
           <FlowerComponent hero={hero} onChange={flowerChange} id={props.id} />
         </div>
-        <div className="row" style={{ justifyContent: "center" }}>
+        <div className="flex-row" style={{ justifyContent: "space-between" }}>
           <Traits
             hero={hero}
             stat={asset}
@@ -567,34 +567,25 @@ export default function HeroComponent(props) {
           skills={loadedC}
           placeholder={"Choose C Skill"}
         />
-        {/* <SkillComponent
-              hero={hero}
-              skill={sSlot}
-              id={props.id}
-              onChange={changeSSkill}
-              url={`http://localhost:5000/S_Slot/`}
-              placeholder={"Choose S Skill"}
-            /> */}
+        <SkillComponent hero={hero} skill={sSlot} heroSkills={[]} id={props.id} onChange={changeSSkill} skills={[]} placeholder={"Choose S Skill"} />
       </div>
-      <div className="column additional-column-1">
-        <h5>Additional:</h5>
-        <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
-        <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
-        <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
-        <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
-        <SwitchComponent
-          res={transformed === 2}
-          enabled={hero.weapon_type.includes("Beast") || hero.weapon_type.includes("Dragon")}
-          onChange={handleTransform}
-          label={"Transformed?"}
-        />
-        <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
-        <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
-      </div>
-      <div className="column additional-column-2">
-        <BuffComponent />
-        <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
-        <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
+      <div className="screen-divider"></div>
+      <div className="additional-col">
+        <div className="column additional-column-1">
+          <h5>Additional:</h5>
+          <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
+          <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
+          <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
+          <ToggleComponent currentState={AllySupport} exists={hero.exists} label={"Ally Support:"} onChange={changeAllySupport} />
+          <SwitchComponent res={transformed === 2} enabled={hero.weapon_type.includes("Beast")} onChange={handleTransform} label={"Transformed?"} />
+          <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
+          <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
+        </div>
+        <div className="column additional-column-2">
+          <BuffComponent hero={hero} />
+          <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
+          <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
+        </div>
       </div>
       <div className="column footer-column footer-title">
         <div className="footer-row">

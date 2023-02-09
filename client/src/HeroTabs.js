@@ -93,11 +93,6 @@ function HeroTabs(props) {
   const tabValue = useSelector((state) => state.tabList.tabValue);
   const length = useSelector((state) => state.tabList.tabList.length);
 
-  const ref = useRef();
-  // useEffect(() => {
-  //   props.sendHeight(ref.current.clientHeight);
-  // });
-
   const handleTabChange = (event, value) => {
     if (value !== -1) {
       dispatch(actions.changeTab(value));
@@ -135,7 +130,13 @@ function HeroTabs(props) {
     dispatch(actions.deleteTab(tabId));
   };
   return (
-    <div ref={ref} style={{ maxWidth: props.maxWidth, height: "fit-content", borderRadius: 10, backgroundColor: "white" }}>
+    <div
+      style={{
+        height: "fit-content",
+        borderRadius: 10,
+        backgroundColor: "white",
+      }}
+    >
       <div className="tab-row">
         {t.map((tab) => (
           <TabLabel key={tab.id} id={tab.id} value={tabValue} changeTab={handleTabChange} copyTab={copyTab} deleteTab={deleteTab} length={length} />

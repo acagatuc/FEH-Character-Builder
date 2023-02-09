@@ -40,7 +40,7 @@ export default function Merges(props) {
   return (
     <Autocomplete
       id="merge dropdown"
-      sx={{ width: "50%" }}
+      sx={{ width: "48%" }}
       options={mergeOptions}
       value={mergeSelector}
       onChange={handleChange}

@@ -24,7 +24,7 @@ export default function BackgroundDropdown(props) {
     }
   };
   return (
-    <div style={{ width: "90%" }}>
+    <div style={{ width: "90%", marginTop: "20px" }}>
       <Autocomplete
         id="background dropdown"
         options={backgroundList}

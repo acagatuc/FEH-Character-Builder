@@ -134,7 +134,7 @@ export default function Traits(props) {
   return (
     <Autocomplete
       id="trait dropdown"
-      sx={{ width: 1 / 3 }}
+      sx={{ width: "30%" }}
       options={traitOptions}
       value={trait}
       onChange={handleChange}

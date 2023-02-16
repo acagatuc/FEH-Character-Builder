@@ -48,32 +48,13 @@ const SavedBuildInBarracks = (props) => {
   };
 
   return (
-    <Card variant="outlined" sx={{ margin: "6px", maxWidth: "200px" }}>
+    <Card variant="outlined" sx={{ margin: "6px", minWidth: "200px", maxWidth: "200px" }}>
       <CardHeader
         action={
           <>
-            <IconButton
-              // component="div"
-              // aria-controls={open ? "basic-menu" : undefined}
-              // aria-haspopup="true"
-              // aria-expanded={open ? "true" : undefined}
-              // id={props.id}
-              onClick={() => openDeleteConfirmation(props.item.key)}
-            >
+            <IconButton onClick={() => openDeleteConfirmation(props.item.key)}>
               <Close />
             </IconButton>
-            {/* <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
-            >
-              <MenuItem onClick={() => overwriteBuild(props.item.key, props.id)}>Overwrite Build</MenuItem>
-              <MenuItem onClick={() => openDeleteConfirmation(props.item.key)}>Delete Build</MenuItem>
-            </Menu> */}
           </>
         }
         avatar={
@@ -92,8 +73,21 @@ const SavedBuildInBarracks = (props) => {
       />
       <CardContent className="buildCard">
         <Collapse in={isCollapsed}>
-          {props.item.weapon.name}, {props.item.assist.name}, {props.item.special.name},{props.item.aSkill.name}, {props.item.bSkill.name},{" "}
-          {props.item.cSkill.name}
+          <div className="buildSkills">
+            {props.item.weapon} {props.item.refine !== "" ? "(" + props.item.refine + ")" : ""}
+            <br />
+            {props.item.assist.name}
+            <br />
+            {props.item.special.name}
+            <br />
+            {props.item.aSkill.name}
+            <br />
+            {props.item.bSkill.name}
+            <br />
+            {props.item.cSkill.name}
+            <br />
+            {props.item.sSkill.name}
+          </div>
         </Collapse>
         <div className="buildCardBottomRow">
           <div className="expandIcon">

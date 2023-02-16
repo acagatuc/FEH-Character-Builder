@@ -10,7 +10,7 @@ export default function BlessingHeroSelectionComponent(props) {
   const [selectedHeroList, setSelectedHeroList] = useState([]);
   const [stats, setStats] = useState([0, 0, 0, 0, 0]);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [test, setTest] = useState("");
+  const test = "";
   const blessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
   const blessingHeroList = useSelector((state) => state.tabList.tabList[props.id].blessingHeroList);
 
@@ -87,7 +87,7 @@ export default function BlessingHeroSelectionComponent(props) {
   };
 
   return (
-    <div style={{ marginTop: "5px", height: "100px", width: "100%" }}>
+    <div style={{ marginTop: "5px", marginBottom: "10px", height: "100px", width: "100%" }}>
       {selectedHeroList.length === 0 ? (
         <div className="blessing-hero-container blessing-hero-title">Ally List</div>
       ) : (

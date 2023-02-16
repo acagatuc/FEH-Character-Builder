@@ -704,7 +704,6 @@ const SkillComponent = ({ text, x, y, offsetX, offsetY }) => {
       </Group>
     );
   }
-  return null;
 };
 
 export default function HeroCanvas(props) {
@@ -751,18 +750,18 @@ export default function HeroCanvas(props) {
     document.body.removeChild(link);
   };
 
-  // useEffect(() => {
-  //   props.sendHeight(stageHeight);
-  // }, [stageHeight]);
+  useEffect(() => {
+    function resizeCanvas() {
+      if (window.innerWidth <= 500) {
+        console.log("hit with " + window.innerWidth);
 
-  // useEffect(() => {
-  //   // if (window.innerWidth >= 768) {
-  //   //   var aspectRatio = 960 / 540;
-  //   //   setStageWidth(window.innerWidth / 3);
-  //   //   setStageHeight(aspectRatio * stageWidth);
-  //   // }
-  //   // props.sendWidth(stageWidth);
-  // }, [stageWidth]);
+        setStageWidth(window.innerWidth);
+        setStageHeight((1920 / 1080) * window.innerWidth);
+      }
+    }
+
+    window.addEventListener("resize", resizeCanvas());
+  });
 
   return (
     <div id="wrapper" className="wrapper">
@@ -838,6 +837,7 @@ export default function HeroCanvas(props) {
           <SkillComponent text={`${aSkill.name}`} x={275} y={707} offsetX={38} offsetY={8} />
           <SkillComponent text={`${bSkill.name}`} x={275} y={745} offsetX={37} offsetY={7} />
           <SkillComponent text={`${cSkill.name}`} x={275} y={781} offsetX={38} offsetY={8} />
+          <SkillComponent text={`${sSkill.name}`} x={275} y={819} offsetX={38} offsetY={8} />
         </Layer>
       </Stage>
     </div>

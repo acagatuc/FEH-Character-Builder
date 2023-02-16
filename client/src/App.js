@@ -37,12 +37,12 @@ const App = (props) => {
   const dispatch = useDispatch();
   const [heroes, setHeroes] = useState([]);
 
-  useEffect(() => {
-    function handleResize() {
-      console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
-    }
-    window.addEventListener("resize", handleResize);
-  });
+  // useEffect(() => {
+  //   function handleResize() {
+  //     console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
+  //   }
+  //   window.addEventListener("resize", handleResize);
+  // });
 
   // gets initial hero list with names and character ids
   useEffect(() => {

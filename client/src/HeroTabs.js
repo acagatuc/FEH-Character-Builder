@@ -1,5 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Divider, IconButton, Menu, MenuItem } from "@mui/material";
+import React, { useState } from "react";
+import { IconButton, Menu, MenuItem } from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Add from "@mui/icons-material/Add";
 import HeroTabContent from "./HeroTabContent.js";
@@ -135,6 +135,7 @@ function HeroTabs(props) {
         height: "fit-content",
         borderRadius: 10,
         backgroundColor: "white",
+        maxWidth: "100%",
       }}
     >
       <div className="tab-row">

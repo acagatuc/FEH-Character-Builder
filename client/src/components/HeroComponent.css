@@ -89,16 +89,39 @@
 
 .additional-column-1 {
   display: inline-flex;
-  align-items: end;
+  align-items: flex-end;
   width: 55%;
 }
 
 .additional-column-2 {
   display: inline-flex;
-  align-items: end;
+  align-items: flex-end;
   width: 40%;
   margin-top: 7%;
   margin-right: 2%;
+}
+
+@media (max-width: 500px) {
+  .additional-col {
+    flex-wrap: wrap;
+  }
+  .additional-column-1,
+  .additional-column-2 {
+    width: 98%;
+  }
+  .additional-columns-title {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  .screen-divider-2 {
+    display: inline;
+    margin-top: 20px;
+    background-color: lightgray;
+    height: 0.5px;
+    width: 100%;
+  }
 }
 
 .footer-column {
@@ -161,7 +184,7 @@
 .blessing-hero-container {
   display: flex;
   justify-content: left;
-  align-items: start;
+  align-items: flex-start;
   flex-wrap: nowrap;
   min-height: 32px;
   max-height: 51px;
@@ -224,6 +247,7 @@
 /* Scrollbar css */
 ::-webkit-scrollbar {
   width: 10px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {

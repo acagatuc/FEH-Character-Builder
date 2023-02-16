@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal, Container, Col, Row } from "react-bootstrap";
-import { Card, CardHeader, Typography, CardContent, Button } from "@mui/material";
+import { Card, CardHeader, Typography, CardContent, Button, IconButton, Collapse } from "@mui/material";
 
 //css
 import "../App.css";
+import "./Barracks.css";
 import { left, right } from "../assets";
+import ExpandIcon from "@mui/icons-material/ExpandMore";
+import CollapseIcon from "@mui/icons-material/ExpandLess";
 
 //redux imports
 import { useSelector } from "react-redux";
 
 const RecommendedBuild = (props) => {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
+  const showCollapsedInfo = (bool) => {
+    setIsCollapsed(!bool);
+  };
+
   return (
-    <Card variant="outlined" sx={{ margin: "6px", width: "33%" }}>
+    <Card variant="outlined" sx={{ margin: "6px", maxWidth: "200px", minWidth: "200px" }}>
       <CardHeader
         title={
           <div style={{ fontSize: 20, textAlign: "center", fontStyle: "italic", fontWeight: "bold" }}>
@@ -34,7 +44,26 @@ const RecommendedBuild = (props) => {
         <Typography sx={{ fontSize: 14 }} color="text.secondary">
           {props.build.description}
         </Typography>
-
+        <Collapse in={isCollapsed}>
+          <div className="buildSkills">
+            {props.build.weapon} {props.build.refine !== "" ? "(" + props.build.refine + ")" : ""}
+            <br />
+            {props.build.assist}
+            <br />
+            {props.build.special}
+            <br />
+            {props.build.a}
+            <br />
+            {props.build.b}
+            <br />
+            {props.build.c}
+            <br />
+            {props.build.s}
+          </div>
+        </Collapse>
+        <div className="expandIcon">
+          <IconButton onClick={() => showCollapsedInfo(isCollapsed)}>{isCollapsed ? <CollapseIcon /> : <ExpandIcon />}</IconButton>
+        </div>
         <div>
           <Button onClick={() => props.loadBuild(props.build)}>Load</Button>
         </div>
@@ -67,7 +96,7 @@ const RecommendedBuildsModal = (props) => {
               encouraged!)
             </div>
           ) : (
-            <div style={{ display: "inline-flex", justifyContent: "left", wrap: "wrap", width: "100%" }}>
+            <div style={{ display: "inline-flex", justifyContent: "left", flexWrap: "wrap", width: "100%" }}>
               {props.recommended?.map(function (item) {
                 return <RecommendedBuild key={item.name} build={item} loadBuild={loadBuild} />;
               })}

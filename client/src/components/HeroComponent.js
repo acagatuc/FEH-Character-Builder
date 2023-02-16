@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Container, Col, Row } from "react-bootstrap";
 import { Button, Tooltip } from "@mui/material";
 import "./HeroComponent.css";
 
@@ -94,6 +93,7 @@ export default function HeroComponent(props) {
   const [loadedA, setLoadedA] = useState([]);
   const [loadedB, setLoadedB] = useState([]);
   const [loadedC, setLoadedC] = useState([]);
+  const [loadedS, setLoadedS] = useState([]);
 
   // for load modal
   const [showLoad, setShowLoad] = useState(false);
@@ -121,6 +121,7 @@ export default function HeroComponent(props) {
     setLoadedA([]);
     setLoadedB([]);
     setLoadedC([]);
+    setLoadedS([]);
     setWeapon({ weapon: "", refine: "" });
     setAssist("reset");
     setSpecial("reset");
@@ -157,6 +158,7 @@ export default function HeroComponent(props) {
     setLoadedA(skills["aList"]);
     setLoadedB(skills["bList"]);
     setLoadedC(skills["cList"]);
+    setLoadedS(skills["sList"]);
 
     dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
   }
@@ -178,6 +180,7 @@ export default function HeroComponent(props) {
       setLoadedA(skills["aList"]);
       setLoadedB(skills["bList"]);
       setLoadedC(skills["cList"]);
+      setLoadedS(skills["sList"]);
 
       dispatch(actions.changeLevels([1, 1, 1, 1, 1], props.id));
     }
@@ -211,9 +214,6 @@ export default function HeroComponent(props) {
     var buildFromBarracks = {};
     Object.assign(buildFromBarracks, build);
 
-    // load the hero and build into the current tab
-    dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
-
     // gets the hero from the db to check if there have been any changes (like skills)
     await heroChange(buildFromBarracks.value);
 
@@ -223,6 +223,10 @@ export default function HeroComponent(props) {
     setASlot(build.aSkill);
     setBSlot(build.bSkill);
     setCSlot(build.cSkill);
+    setSSlot(build.sSkill);
+
+    // load the hero and build into the current tab
+    dispatch(actions.loadBuildFromBarracks(buildFromBarracks, props.id));
   }
 
   function loadRecommendedBuild(build) {
@@ -232,6 +236,7 @@ export default function HeroComponent(props) {
     setASlot(build.a);
     setBSlot(build.b);
     setCSlot(build.c);
+    setSSlot(build.s);
 
     var tempLevels = [1, 1, 1, 1, 1];
     switch (build.asset) {
@@ -567,12 +572,20 @@ export default function HeroComponent(props) {
           skills={loadedC}
           placeholder={"Choose C Skill"}
         />
-        <SkillComponent hero={hero} skill={sSlot} heroSkills={[]} id={props.id} onChange={changeSSkill} skills={[]} placeholder={"Choose S Skill"} />
+        <SkillComponent
+          hero={hero}
+          skill={sSlot}
+          heroSkills={[]}
+          id={props.id}
+          onChange={changeSSkill}
+          skills={loadedS}
+          placeholder={"Choose S Skill"}
+        />
       </div>
       <div className="screen-divider"></div>
       <div className="additional-col">
         <div className="column additional-column-1">
-          <h5>Additional:</h5>
+          <h5 className="additional-columns-title">Additional:</h5>
           <BlessingComponent hero={hero} placeholder={"Blessing"} onChange={changeBlessing} id={props.id} />
           <BlessingHeroSelectionComponent hero={hero} onChange={changeBlessingStats} id={props.id} />
           <ToggleComponent currentState={SummonerSupport} exists={hero.exists} label={"Summoner Support:"} onChange={changeSummonerSupport} />
@@ -581,6 +594,7 @@ export default function HeroComponent(props) {
           <SwitchComponent res={resplendent} enabled={hero.artist[1]} onChange={changeResplendent} label={"Resplendant Art"} />
           <SwitchComponent res={resplendentStats} enabled={hero.name !== ""} onChange={handleResplendentStats} label={"Resplendant Stats"} />
         </div>
+        <div className="screen-divider-2"></div>
         <div className="column additional-column-2">
           <BuffComponent hero={hero} />
           <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />

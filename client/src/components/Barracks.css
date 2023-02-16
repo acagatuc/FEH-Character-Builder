@@ -1,6 +1,6 @@
 .barracksCards {
   display: inline-flex;
-  justify-content: space-evenly;
+  justify-content: left;
   align-items: flex-start;
   overflow-y: auto;
   flex-wrap: wrap;
@@ -8,6 +8,12 @@
 
 .buildCard {
   padding-bottom: 10px !important;
+}
+
+.buildSkills {
+  height: fit-content;
+  color: gray;
+  margin-top: 20px;
 }
 
 .titleRow {

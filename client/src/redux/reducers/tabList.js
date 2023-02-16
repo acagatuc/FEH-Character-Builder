@@ -402,6 +402,12 @@ export default function (state = initState, action) {
         visible = state.tabList[id].aSkill.visibleStats;
       }
 
+      // a variable to represent visible stats of equipped seals
+      var visibleS = [0, 0, 0, 0, 0];
+      if (state.tabList[id].sSkill.visibleStats !== undefined && state.tabList[id].sSkill.visibleStats.length !== 1) {
+        visibleS = state.tabList[id].sSkill.visibleStats;
+      }
+
       // weapon visible stats (in case weapon is null)
       var weaponStats = [0, 0, 0, 0, 0];
       if (state.tabList[id].weapon.visibleStats !== undefined) {
@@ -423,6 +429,7 @@ export default function (state = initState, action) {
         weaponStats[0] +
         refineStats[0] +
         visible[0] +
+        visibleS[0] +
         state.tabList[id].summonerSupportStats[0] +
         state.tabList[id].resStats[0];
 
@@ -436,6 +443,7 @@ export default function (state = initState, action) {
         weaponStats[1] +
         refineStats[1] +
         visible[1] +
+        visibleS[1] +
         state.tabList[id].summonerSupportStats[1] +
         state.tabList[id].transformed +
         state.tabList[id].resStats[1];
@@ -449,6 +457,7 @@ export default function (state = initState, action) {
         weaponStats[2] +
         refineStats[2] +
         visible[2] +
+        visibleS[2] +
         state.tabList[id].summonerSupportStats[2] +
         state.tabList[id].resStats[2];
 
@@ -461,6 +470,7 @@ export default function (state = initState, action) {
         weaponStats[3] +
         refineStats[3] +
         visible[3] +
+        visibleS[3] +
         state.tabList[id].summonerSupportStats[3] +
         state.tabList[id].resStats[3];
 
@@ -473,6 +483,7 @@ export default function (state = initState, action) {
         weaponStats[4] +
         refineStats[4] +
         visible[4] +
+        visibleS[4] +
         state.tabList[id].summonerSupportStats[4] +
         state.tabList[id].resStats[4];
       return { ...state };

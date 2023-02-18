@@ -8,6 +8,8 @@ export default function BackgroundDropdown(props) {
   const backgroundList = [
     { value: "study", label: "Study" },
     { value: "beach", label: "Beach" },
+    { value: "newyear", label: "New Years" },
+    { value: "halloween", label: "Halloween" },
   ];
   const reduxBg = useSelector((state) => state.tabList.tabList[props.id].background);
   const [bg, setBg] = useState("");

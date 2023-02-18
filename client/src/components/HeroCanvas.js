@@ -482,9 +482,17 @@ const MergeComponent = ({ merges }) => {
   return null;
 };
 
-const StatComponent = ({ text, x, y }) => {
+const StatComponent = ({ text, x, y, buff, buffColor }) => {
   if (text !== undefined && text !== "") {
-    return <NumberComponent number={text} x={x} y={y} width={15} height={20} colorHeight={0} />;
+    if (buff) {
+      if (buffColor) {
+        return <NumberComponent number={text} x={x} y={y} width={15} height={20} colorHeight={120} />;
+      } else {
+        return <NumberComponent number={text} x={x} y={y} width={15} height={20} colorHeight={80} />;
+      }
+    } else {
+      return <NumberComponent number={text} x={x} y={y} width={15} height={20} colorHeight={0} />;
+    }
   }
   return null;
 };
@@ -732,6 +740,7 @@ export default function HeroCanvas(props) {
   const resplendent = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].resplendent);
   const ss = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].summonerSupport);
   const as = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].allySupport);
+  const buff = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].buffStats);
   const background = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].background);
   const blessing = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].blessing);
   const fav = useSelector((state) => state.tabList.tabList[state.tabList.tabValue].favorite);
@@ -799,11 +808,11 @@ export default function HeroCanvas(props) {
           <TextComponent text={"Spd"} color={levels} merges={merges} x={85} y={678} />
           <TextComponent text={"Def"} color={levels} merges={merges} x={86} y={715} />
           <TextComponent text={"Res"} color={levels} merges={merges} x={86} y={752} />
-          <StatComponent text={`${hp}`} x={172} y={603} />
-          <StatComponent text={`${atk}`} x={172} y={640} />
-          <StatComponent text={`${spd}`} x={172} y={677} />
-          <StatComponent text={`${def}`} x={172} y={714} />
-          <StatComponent text={`${res}`} x={172} y={751} />
+          <StatComponent text={`${hp}`} x={172} y={603} buff={false} />
+          <StatComponent text={`${atk}`} x={172} y={640} buff={buff[0] !== 0} buffColor={buff[0] < 0} />
+          <StatComponent text={`${spd}`} x={172} y={677} buff={buff[1] !== 0} buffColor={buff[1] < 0} />
+          <StatComponent text={`${def}`} x={172} y={714} buff={buff[2] !== 0} buffColor={buff[2] < 0} />
+          <StatComponent text={`${res}`} x={172} y={751} buff={buff[3] !== 0} buffColor={buff[3] < 0} />
           <TextComponent text={"9999\n\n7000"} color="#82f546" x={142} y={789} />
           <Text
             text={hero.VA === undefined ? "" : `${hero.VA}`}

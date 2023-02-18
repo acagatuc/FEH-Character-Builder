@@ -25,6 +25,7 @@ import {
   CHANGE_BLESSING_STATS,
   CHANGE_SUMMONER_SUPPORT,
   CHANGE_ALLY_SUPPORT,
+  CHANGE_BUFFED_STATS,
   CHANGE_BACKGROUND,
   CHANGE_FAVORITE,
 } from "../actionTypes";
@@ -75,6 +76,7 @@ const initState = {
       merges: 0,
       mergeOrder: [],
       mergedStats: [0, 0, 0, 0, 0],
+      buffStats: [0, 0, 0, 0],
       dragonflowers: 0,
       dragonflowerStats: [0, 0, 0, 0, 0],
       resplendent: false,
@@ -179,6 +181,7 @@ export default function (state = initState, action) {
           merges: 0,
           mergeOrder: [],
           mergedStats: [0, 0, 0, 0, 0],
+          buffStats: [0, 0, 0, 0],
           dragonflowers: 0,
           dragonflowerStats: [0, 0, 0, 0, 0],
           resplendent: false,
@@ -304,6 +307,7 @@ export default function (state = initState, action) {
         merges: 0,
         mergeOrder: [],
         mergedStats: [0, 0, 0, 0, 0],
+        buffStats: [0, 0, 0, 0],
         dragonflowers: 0,
         dragonflowerStats: [0, 0, 0, 0, 0],
         resplendent: false,
@@ -446,7 +450,8 @@ export default function (state = initState, action) {
         visibleS[1] +
         state.tabList[id].summonerSupportStats[1] +
         state.tabList[id].transformed +
-        state.tabList[id].resStats[1];
+        state.tabList[id].resStats[1] +
+        state.tabList[id].buffStats[0];
 
       // calculates hero spd
       state.tabList[id].spd =
@@ -459,7 +464,8 @@ export default function (state = initState, action) {
         visible[2] +
         visibleS[2] +
         state.tabList[id].summonerSupportStats[2] +
-        state.tabList[id].resStats[2];
+        state.tabList[id].resStats[2] +
+        state.tabList[id].buffStats[1];
 
       // calculates hero def
       state.tabList[id].def =
@@ -472,7 +478,8 @@ export default function (state = initState, action) {
         visible[3] +
         visibleS[3] +
         state.tabList[id].summonerSupportStats[3] +
-        state.tabList[id].resStats[3];
+        state.tabList[id].resStats[3] +
+        state.tabList[id].buffStats[2];
 
       // calculates hero res
       state.tabList[id].res =
@@ -485,7 +492,8 @@ export default function (state = initState, action) {
         visible[4] +
         visibleS[4] +
         state.tabList[id].summonerSupportStats[4] +
-        state.tabList[id].resStats[4];
+        state.tabList[id].resStats[4] +
+        state.tabList[id].buffStats[3];
       return { ...state };
     }
     case CHANGE_WEAPON: {
@@ -666,6 +674,11 @@ export default function (state = initState, action) {
     case CHANGE_ALLY_SUPPORT: {
       const { ally_support, id } = action.payload;
       state.tabList[id].allySupport = ally_support;
+      return { ...state };
+    }
+    case CHANGE_BUFFED_STATS: {
+      const { index, number, id } = action.payload;
+      state.tabList[id].buffStats[index] = number;
       return { ...state };
     }
     case CHANGE_BACKGROUND: {

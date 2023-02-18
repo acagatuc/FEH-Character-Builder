@@ -452,6 +452,11 @@ export default function HeroComponent(props) {
     dispatch(actions.changeStats(props.id));
   };
 
+  const changeBuffedStats = (statIndex, number) => {
+    dispatch(actions.changeBuffedStats(statIndex, number, props.id));
+    dispatch(actions.changeStats(props.id));
+  };
+
   const changeBackground = (bg) => {
     dispatch(actions.changeBackground(bg, props.id));
   };
@@ -596,7 +601,7 @@ export default function HeroComponent(props) {
         </div>
         <div className="screen-divider-2"></div>
         <div className="column additional-column-2">
-          <BuffComponent hero={hero} />
+          <BuffComponent hero={hero} onChange={changeBuffedStats} />
           <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={changeBackground} id={props.id} />
           <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={changeFavorite} id={props.id} />
         </div>

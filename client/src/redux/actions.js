@@ -207,6 +207,15 @@ export const changeAS = (as, id) => ({
   },
 });
 
+export const changeBuffedStats = (index, number, id) => ({
+  type: actionTypes.CHANGE_BUFFED_STATS,
+  payload: {
+    index: index,
+    number: number,
+    id: id,
+  },
+});
+
 export const changeBackground = (bg, id) => ({
   type: actionTypes.CHANGE_BACKGROUND,
   payload: {

@@ -119,6 +119,14 @@ skillRoutes.route("/AllSkills/:move/:weapon/:character_id").get(async function (
       },
       { _id: 0, name: 1, unique: 1, maxSkill: 1 }
     ),
+    queryPromise(
+      "S_Slot",
+      {
+        weaponRestrictions: { $regex: req.params.weapon.toLowerCase() },
+        movementRestrictions: { $regex: req.params.move.toLowerCase() },
+      },
+      { _id: 0, name: 1, visibleStats: 1, maxSkill: 1 }
+    ),
   ])
     .then(function (result) {
       // result is an array of responses here
@@ -133,6 +141,7 @@ skillRoutes.route("/AllSkills/:move/:weapon/:character_id").get(async function (
         aList: result[4],
         bList: result[5],
         cList: result[6],
+        sList: result[7],
       });
     })
     .catch(function (err) {

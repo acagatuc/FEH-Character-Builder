@@ -53,7 +53,6 @@ export default function SkillComponent(props) {
 
   // this useeffect should be used specifically to load builds from string skills and resetting tabs and nothing else
   useEffect(() => {
-    console.log(props.skill);
     if (props.skill === "") {
     } else if (props.skill === "reset" || props.skill === null) {
       handleChange(null, null);

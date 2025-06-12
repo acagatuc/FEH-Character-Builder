@@ -7,10 +7,39 @@ import { useSelector } from "react-redux";
 export default function Dropdown(props) {
   // whole hero list that contains all names, backpacks, and character ids
   const heroList = useSelector((state) => state.display.heroList);
+  const grouping = useSelector((state) => state.display.grouping);
+  const groupArray = [
+    "Heroes",
+    "Shadow Dragon / (New) Mystery",
+    "Echoes",
+    "Genealogy of the Holy War",
+    "Thracia 776",
+    "The Blazing Blade",
+    "The Binding Blade",
+    "The Sacred Stones",
+    "Path of Radiance",
+    "Radiant Dawn",
+    "Awakening",
+    "Fates",
+    "Tokyo Mirage Sessions ♯FE Encore",
+    "Three Houses",
+    "Engage",
+  ];
 
   // list of heroes only used for display (uses parts of the hero list to creat this)
   const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
   const [dropdown, setDropdown] = useState({ value: null, label: "" });
+
+  // comparator for origin
+  function originComparator(a, b) {
+    if (groupArray.indexOf(a.origin) > groupArray.indexOf(b.origin)) {
+      return 1;
+    }
+    if (groupArray.indexOf(a.origin) < groupArray.indexOf(b.origin)) {
+      return -1;
+    }
+    return 0;
+  }
 
   useEffect(() => {
     // change name based on current name display settings
@@ -28,17 +57,35 @@ export default function Dropdown(props) {
   }
 
   return (
-    <Autocomplete
-      id="hero list"
-      disableClearable
-      openOnFocus
-      selectOnFocus
-      options={heroList}
-      value={dropdown}
-      onChange={handleChange}
-      getOptionLabel={(option) => option.label}
-      isOptionEqualToValue={(option, option2) => option.value === option2.value}
-      renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
-    />
+    <div>
+      {grouping ? (
+        <Autocomplete
+          id="hero list"
+          disableClearable
+          openOnFocus
+          selectOnFocus
+          options={[...heroList].sort(originComparator)}
+          value={dropdown}
+          groupBy={(option) => option.origin}
+          onChange={handleChange}
+          getOptionLabel={(option) => option.label}
+          isOptionEqualToValue={(option, option2) => option.value === option2.value}
+          renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
+        />
+      ) : (
+        <Autocomplete
+          id="hero list"
+          disableClearable
+          openOnFocus
+          selectOnFocus
+          options={heroList}
+          value={dropdown}
+          onChange={handleChange}
+          getOptionLabel={(option) => option.label}
+          isOptionEqualToValue={(option, option2) => option.value === option2.value}
+          renderInput={(params) => <TextField {...params} variant="outlined" label="Hero List"></TextField>}
+        />
+      )}
+    </div>
   );
 }

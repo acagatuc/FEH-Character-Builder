@@ -268,6 +268,13 @@ export const changeDuoDisplay = (i) => ({
   },
 });
 
+export const changeGrouping = (i) => ({
+  type: actionTypes.CHANGE_GROUPING_DISPLAY,
+  payload: {
+    grouped: i,
+  },
+});
+
 export const changeTabImageDisplay = (i) => ({
   type: actionTypes.CHANGE_TAB_IMAGE_DISPLAY,
   payload: {

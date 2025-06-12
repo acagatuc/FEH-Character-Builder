@@ -424,6 +424,13 @@ export default function (state = initState, action) {
         refineStats = state.tabList[id].refine.stats;
       }
 
+      // refine visible stats (in case refine is null)
+      var buffStats = [0, 0, 0, 0];
+      if (state.tabList[id].buffStats !== undefined) {
+        buffStats = state.tabList[id].buffStats;
+      }
+      console.log(buffStats);
+
       // calculates hero hp
       state.tabList[id].hp =
         state.tabList[id].hero.hp[3 + levels[0]] +

@@ -52,7 +52,6 @@ export default function WeaponComponent(props) {
   }, [props.weapons]);
 
   useEffect(() => {
-    console.log(props.stringWeapon);
     if (props.stringWeapon.weapon !== "" && typeof props.stringWeapon.weapon === "string") {
       var tempWeapon = props.weapons.find((e) => e.name === props.stringWeapon.weapon);
       handleWeapon(null, { label: tempWeapon.name, value: tempWeapon, color: "white" });

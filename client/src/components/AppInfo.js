@@ -18,6 +18,7 @@ const AppInfo = (props) => {
   const backpack = useSelector((state) => state.display.backpack);
   const grima = useSelector((state) => state.display.grima);
   const fehnix = useSelector((state) => state.display.fehnix);
+  const grouped = useSelector((state) => state.display.grouping);
   const duo = useSelector((state) => state.display.duo_display);
   const tab_image = useSelector((state) => state.display.tab_image);
   const dispatch = useDispatch();
@@ -39,11 +40,13 @@ const AppInfo = (props) => {
   const changeFehnix = (e, value) => {
     dispatch(actions.changeFehnix(value));
   };
-
   const changeDuoDisplay = (e, value) => {
     if (value !== null) {
       dispatch(actions.changeDuoDisplay(value));
     }
+  };
+  const changeGrouping = (e, value) => {
+    dispatch(actions.changeGrouping(value));
   };
   const changeTabImageDisplay = (e, value) => {
     if (value !== null) {
@@ -101,6 +104,15 @@ const AppInfo = (props) => {
                     <FormControlLabel
                       control={<Switch checked={fehnix} onChange={changeFehnix} />}
                       label={"Display Fehnix?"}
+                      labelPlacement="start"
+                    />
+                  </div>
+                </Row>
+                <Row style={{ width: "92%" }}>
+                  <div style={{ display: "inline-flex", justifyContent: "right" }}>
+                    <FormControlLabel
+                      control={<Switch checked={grouped} onChange={changeGrouping} />}
+                      label={"Group Dropdown by Game?"}
                       labelPlacement="start"
                     />
                   </div>

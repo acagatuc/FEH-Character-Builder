@@ -5,6 +5,7 @@ import {
   CHANGE_BACKPACK,
   CHANGE_FEHNIX,
   CHANGE_DUO_DISPLAY,
+  CHANGE_GROUPING_DISPLAY,
   CHANGE_TAB_IMAGE_DISPLAY,
 } from "../actionTypes";
 
@@ -18,6 +19,7 @@ const initState = {
   fullHeroList: [],
   heroList: [],
   loaded: false,
+  grouping: false,
 };
 
 export default function (state = initState, action) {
@@ -49,6 +51,7 @@ export default function (state = initState, action) {
             return {
               value: listItem.character_id,
               label: name,
+              origin: listItem.origin[0],
             };
           });
       }
@@ -66,6 +69,7 @@ export default function (state = initState, action) {
             return {
               value: listItem.character_id,
               label: name,
+              origin: listItem.origin[0],
             };
           });
       }
@@ -85,6 +89,7 @@ export default function (state = initState, action) {
             return {
               value: listItem.character_id,
               label: name,
+              origin: listItem.origin[0],
             };
           });
       }
@@ -122,6 +127,7 @@ export default function (state = initState, action) {
         return {
           value: listItem.value,
           label: name,
+          origin: listItem.origin,
         };
       });
       return { ...state };
@@ -143,6 +149,7 @@ export default function (state = initState, action) {
         return {
           value: listItem.value,
           label: name,
+          origin: listItem.origin,
         };
       });
       return { ...state };
@@ -155,6 +162,11 @@ export default function (state = initState, action) {
     case CHANGE_DUO_DISPLAY: {
       const { display } = action.payload;
       state.duo_display = display;
+      return { ...state };
+    }
+    case CHANGE_GROUPING_DISPLAY: {
+      const { grouped } = action.payload;
+      state.grouping = grouped;
       return { ...state };
     }
     case CHANGE_TAB_IMAGE_DISPLAY: {

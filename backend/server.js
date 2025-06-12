@@ -9,7 +9,7 @@ app.use(require("./routes/skills"));
 app.use(require("./routes/imgs"));
 app.use(require("./routes/heroes"));
 // get driver connection
-const dbo = require("./db/conn");
+const dbo = require("./config/conn");
 
 app.listen(port, () => {
   // perform a database connection when server starts

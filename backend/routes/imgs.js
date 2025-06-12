@@ -6,7 +6,7 @@ const express = require("express");
 const imageRoutes = express.Router();
 
 // This will help us connect to the database
-const dbo = require("../db/conn");
+const dbo = require("../config/conn");
 
 imageRoutes.route("/images/:name").get(function (req, res) {
   let img_db = dbo.getS3();

@@ -31,16 +31,9 @@ export default function Dropdown(props) {
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(value) {
-    console.log("http://localhost:5000/api/heroes/hero/" + value.hero_id)
-    var newHero = await fetch("http://localhost:5000/api/heroes/hero/" + value.hero_id).then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-    console.log(newHero)
+    console.log(value)
     setSelectedHero(value)
-    console.log(selectedHero)
+    props.onChange(value)
   }
 
   return (

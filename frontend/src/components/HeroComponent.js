@@ -129,8 +129,9 @@ export default function HeroComponent(props) {
     setBSlot("reset");
     setCSlot("reset");
 
-    let response = await fetch("http://localhost:5000/Heroes/" + newHero);
+    let response = await fetch("http://localhost:5000/api/heroes/hero/" + newHero.hero_id);
     response = await response.json();
+    console.log(response)
 
     // if there are no recommended builds, just set it equal to an empty array
     if (response["recommended"] !== null) {

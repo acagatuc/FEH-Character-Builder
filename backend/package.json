@@ -11,6 +11,8 @@
   "license": "ISC",
   "dependencies": {
     "aws-sdk": "^2.1079.0",
+    "@aws-sdk/client-s3": "^3.x.x",
+    "@aws-sdk/s3-request-presigner": "^3.x.x",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

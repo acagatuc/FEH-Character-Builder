@@ -1,0 +1,352 @@
+[
+    {
+        "name": "Garon: King of Nohr",
+        "category": "",
+        "weaponType": "Red Breath",
+        "moveType": "Infantry",
+        "baseStats1": {
+            "hp": [
+                16,
+                17,
+                18
+            ],
+            "atk": [
+                8,
+                9,
+                10
+            ],
+            "spd": [
+                4,
+                5,
+                6
+            ],
+            "def": [
+                8,
+                9,
+                10
+            ],
+            "res": [
+                7,
+                8,
+                9
+            ]
+        },
+        "baseStats40": {
+            "hp": [
+                40,
+                43,
+                46
+            ],
+            "atk": [
+                30,
+                33,
+                36
+            ],
+            "spd": [
+                19,
+                22,
+                25
+            ],
+            "def": [
+                30,
+                33,
+                36
+            ],
+            "res": [
+                29,
+                32,
+                35
+            ]
+        },
+        "weapons": [
+            "Fire Breath",
+            "Fire Breath+",
+            "Flametongue",
+            "Breath of Blight"
+        ],
+        "assists": [],
+        "specials": [
+            "Dragon Gaze",
+            "Dragon Fang"
+        ],
+        "passives": [
+            "Distant Def 1",
+            "Distant Def 2",
+            "Distant Def 3",
+            "Panic Ploy 1",
+            "Panic Ploy 2",
+            "Panic Ploy 3"
+        ],
+        "hasResplendent": false,
+        "superboons": [],
+        "superbanes": []
+    },
+    {
+        "name": "Robin: Mystery Tactician",
+        "category": "",
+        "weaponType": "Green Tome",
+        "moveType": "Infantry",
+        "baseStats1": {
+            "hp": [
+                17,
+                18,
+                19
+            ],
+            "atk": [
+                6,
+                7,
+                8
+            ],
+            "spd": [
+                6,
+                7,
+                8
+            ],
+            "def": [
+                6,
+                7,
+                8
+            ],
+            "res": [
+                4,
+                5,
+                6
+            ]
+        },
+        "baseStats40": {
+            "hp": [
+                36,
+                40,
+                43
+            ],
+            "atk": [
+                25,
+                29,
+                32
+            ],
+            "spd": [
+                25,
+                29,
+                32
+            ],
+            "def": [
+                25,
+                29,
+                32
+            ],
+            "res": [
+                19,
+                22,
+                25
+            ]
+        },
+        "weapons": [
+            "Wind",
+            "Elwind",
+            "Gronnwolf",
+            "Gronnwolf+",
+            "Tactical Gale"
+        ],
+        "assists": [],
+        "specials": [
+            "Glowing Ember",
+            "Ignis"
+        ],
+        "passives": [
+            "Defiant Res 1",
+            "Defiant Res 2",
+            "Defiant Res 3",
+            "B Tomebreaker 1",
+            "B Tomebreaker 2",
+            "B Tomebreaker 3"
+        ],
+        "hasResplendent": true,
+        "superboons": [],
+        "superbanes": [
+            "hp",
+            "atk",
+            "spd",
+            "def"
+        ]
+    },
+    {
+        "name": "Pent: Mage General",
+        "category": "",
+        "weaponType": "Green Tome",
+        "moveType": "Infantry",
+        "baseStats1": {
+            "hp": [
+                17,
+                18,
+                19
+            ],
+            "atk": [
+                7,
+                8,
+                9
+            ],
+            "spd": [
+                8,
+                9,
+                10
+            ],
+            "def": [
+                5,
+                6,
+                7
+            ],
+            "res": [
+                7,
+                8,
+                9
+            ]
+        },
+        "baseStats40": {
+            "hp": [
+                36,
+                40,
+                43
+            ],
+            "atk": [
+                35,
+                38,
+                42
+            ],
+            "spd": [
+                36,
+                39,
+                43
+            ],
+            "def": [
+                15,
+                19,
+                22
+            ],
+            "res": [
+                26,
+                30,
+                33
+            ]
+        },
+        "weapons": [
+            "Wind",
+            "Elwind",
+            "Rexcalibur",
+            "Tome of Reglay"
+        ],
+        "assists": [],
+        "specials": [
+            "Night Sky",
+            "Glimmer"
+        ],
+        "passives": [
+            "G Duel Infantry 1",
+            "G Duel Infantry 2",
+            "G Duel Infantry 3",
+            "G Duel Infantry 4",
+            "Lull Atk/Res 1",
+            "Lull Atk/Res 2",
+            "Lull Atk/Res 3",
+            "Time's Pulse 1",
+            "Time's Pulse 2",
+            "Time's Pulse 3"
+        ],
+        "hasResplendent": false,
+        "superboons": [
+            "atk",
+            "spd"
+        ],
+        "superbanes": [
+            "hp",
+            "def",
+            "res"
+        ]
+    },
+    {
+        "name": "Est: Sweet Baby Sis",
+        "category": "Valentian",
+        "weaponType": "Lance",
+        "moveType": "Flier",
+        "baseStats1": {
+            "hp": [
+                15,
+                16,
+                17
+            ],
+            "atk": [
+                10,
+                11,
+                12
+            ],
+            "spd": [
+                7,
+                8,
+                9
+            ],
+            "def": [
+                7,
+                8,
+                9
+            ],
+            "res": [
+                8,
+                9,
+                10
+            ]
+        },
+        "baseStats40": {
+            "hp": [
+                32,
+                35,
+                39
+            ],
+            "atk": [
+                38,
+                41,
+                45
+            ],
+            "spd": [
+                35,
+                38,
+                42
+            ],
+            "def": [
+                22,
+                25,
+                28
+            ],
+            "res": [
+                34,
+                37,
+                40
+            ]
+        },
+        "weapons": [
+            "Iron Lance",
+            "Steel Lance",
+            "Silver Lance",
+            "Tri-Edge Lance"
+        ],
+        "assists": [],
+        "specials": [
+            "Chilling Wind",
+            "Iceberg"
+        ],
+        "passives": [
+            "Atk/Res Push 1",
+            "Atk/Res Push 2",
+            "Atk/Res Push 3",
+            "Atk/Res Push 4",
+            "Flow Feather 1",
+            "Flow Feather 2",
+            "Flow Feather 3"
+        ],
+        "hasResplendent": false,
+        "superboons": [
+            "hp",
+            "atk",
+            "spd"
+        ],
+        "superbanes": []
+    }
+]

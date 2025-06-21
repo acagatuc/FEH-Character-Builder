@@ -1,0 +1,1250 @@
+[
+    {
+        "hero_name": "Fjorm: Princess of Ice",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Gunnthr\u00e1: Voice of Dreams",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Ike: Vanguard Legend",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Ephraim: Legendary Lord",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Robin: Fell Vessel",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Lyn: Lady of the Wind",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Ryoma: Supreme Samurai",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Hector: Marquess of Ostia",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Lucina: Glorious Archer",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Marth: Hero-King",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Tiki: Legendary Dragon",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Eirika: Graceful Resolve",
+        "blessing": "Water",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Hr\u00edd: Icy Blade",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Azura: Vallite Songstress",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Roy: Blazing Lion",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Alm: Saint-King",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Eliwood: Blazing Knight",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Julia: Crusader of Light",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Leif: Unifier of Thracia",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Celica: Queen of Valentia",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Chrom: Crowned Exalt",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Edelgard: Flame Emperor",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Seliph: Scion of Light",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Corrin: Child of Dusk",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Dimitri: Savior King",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Lilina: Firelight Leader",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Claude: King of Unification",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Sigurd: Fated Holy Knight",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Byleth: The F\u00f3dlan Star",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Micaiah: Radiant Queen",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Fae: Childlike Dragon",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Eitri: Youthful Sage",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Byleth: The F\u00f3dlan Light",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup"
+    },
+    {
+        "hero_name": "Caeda: Beloved Queen",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Nanna: Beloved Princess",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Myrrh: Guardian Dragon",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Xander: Gallant King",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Deirdre: Fated Saint",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Ninian: Ice-Dragon Oracle",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Veronica: Princess Rising",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Shez: Sharpest Blades",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Robin: Exalt's Other Half",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Yuri: Underground Lord",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Hinoka: Thundering Wings",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Guinivere: Queen of Bern",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Alear: Awoken Divinity",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Elincia: Undaunted Queen",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Camilla: Alluring Darkness",
+        "blessing": "Water",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Alear: Engaging Fire",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Corrin: Child of Dawn",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Shez: Dual Sword Master",
+        "blessing": "Wind",
+        "boost": [
+            3,
+            0,
+            0,
+            4,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Ayra: Supreme Astra",
+        "blessing": "Water",
+        "boost": [
+            3,
+            0,
+            3,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Sakura: In Full Bloom",
+        "blessing": "Earth",
+        "boost": [
+            3,
+            0,
+            0,
+            0,
+            4
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Black Knight: Mortal Legend",
+        "blessing": "Fire",
+        "boost": [
+            3,
+            2,
+            0,
+            0,
+            0
+        ],
+        "bonus": "pairup stats"
+    },
+    {
+        "hero_name": "Eir: Merciful Death",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Duma: God of Strength",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Yune: Chaos Goddess",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Naga: Dragon Divinity",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Sothis: Girl on the Throne",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Thrasir: Omnicidal Witch",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Altina: Dawn's Trueblade",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Peony: Sweet Dream",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "L\u00edf: Lethal Swordsman",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Bramimond: The Enigma",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Mila: Goddess of Love",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Mirabilis: Daydream",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Hel: Death Sovereign",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Plumeria: Lewd Dream",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Freyja: Lady of Nightmare",
+        "blessing": "Light",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Triandra: Nightmare",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": ""
+    },
+    {
+        "hero_name": "Reginn: Bearing Hope",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Seiros: Saint of Legend",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Dagr: Sun's Radiance",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Ashera: Order Goddess",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "N\u00f3tt: Moon's Elegance",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Ullr: The Bowmaster",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "\u00d3tr: Kingsbrother",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Th\u00f3rr: War God",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Ash: Retainer to Askr",
+        "blessing": "Light",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Elimine: Scouring Saint",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Medeus: Earth-Dragon King",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Askr: God of Openness",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Arval: Cycle Keeper",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Embla: God of Closure",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Sei\u00f0r: Goddess of Hope",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Gotoh: White Sage",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Fomortiis: Demon King",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Ner\u00feuz: God of the Land",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Hei\u00f0r: Innocent Goddess",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Freyr: Dream-King",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Veyle: Gentle Dragon",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Kvasir: Seer of the Past",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Gullveig: Golden Seer",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Ratatoskr: Mending Hand",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Lumera: In Distant Skies",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Loki: Trickster God",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Eik\u00feyrnir: Quieting Strength",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Hei\u00f0r\u00fan: Healing Nectar",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Hr\u00e6svelgr: Quieting Blade",
+        "blessing": "Light",
+        "boost": [
+            5,
+            3,
+            0,
+            0,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "L\u00e6ra\u00f0r: Quieting Heart",
+        "blessing": "Dark",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "N\u00ed\u00f0h\u00f6ggr: Quieting Dose",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            0,
+            0,
+            5
+        ],
+        "bonus": "special slot"
+    },
+    {
+        "hero_name": "Rune: Source of Wisdom",
+        "blessing": "Light",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "reinforcement"
+    },
+    {
+        "hero_name": "Athos: Omniscient One",
+        "blessing": "Anima",
+        "boost": [
+            5,
+            0,
+            0,
+            5,
+            0
+        ],
+        "bonus": "reinforcement"
+    },
+    {
+        "hero_name": "Elm: Retainer to Embla",
+        "blessing": "Astra",
+        "boost": [
+            5,
+            0,
+            4,
+            0,
+            0
+        ],
+        "bonus": "reinforcement"
+    }
+]

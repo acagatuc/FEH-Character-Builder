@@ -80,9 +80,9 @@ const AppInfo = (props) => {
                 <h5>Hero Name Display</h5>
                 <Row style={{ width: "100%" }}>
                   <ToggleButtonGroup value={nameDisplay} onChange={handleChange} exclusive color="warning">
-                    <ToggleButton value="full">Full Name</ToggleButton>
-                    <ToggleButton value="title">Name and Title</ToggleButton>
-                    <ToggleButton value="abbrev">Abbreviated</ToggleButton>
+                    <ToggleButton value="full_name">Full Name</ToggleButton>
+                    <ToggleButton value="common_name">Common Name</ToggleButton>
+                    {/* <ToggleButton value="abbrev">Abbreviated</ToggleButton> */}
                   </ToggleButtonGroup>
                 </Row>
                 <Row style={{ width: "92%" }}>

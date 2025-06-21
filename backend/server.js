@@ -1,23 +1,39 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-require("dotenv").config({ path: "./config.env" });
-const port = process.env.PORT || 5000;
-app.use(cors());
-app.use(express.json());
-app.use(require("./routes/skills"));
-app.use(require("./routes/imgs"));
-app.use(require("./routes/heroes"));
-// get driver connection
-const dbo = require("./config/conn");
+const express = require('express');
+const cors = require('cors');
+const connectDB = require('./config/conn');
+const heroRoutes = require('./routes/heroRoutes'); // example route
 
-app.listen(port, () => {
-  // perform a database connection when server starts
-  dbo.connectToServer(function (err) {
-    if (err) console.error(err);
-  });
-  dbo.listBuckets(function (err) {
-    if (err) console.error(err);
-  });
-  console.log(`Server is running on port: ${port}`);
+// Load environment variables
+// require('dotenv').config();
+console.log('Loaded MONGO_URI:', process.env.MONGO_URI);
+
+// Connect to MongoDB
+connectDB();
+
+// Initialize app
+const app = express();
+app.use(cors());
+
+// Middleware to parse JSON
+// Increase limit to 5MB
+app.use(express.json({ limit: '5mb' }));
+
+// Routes
+app.use('/api/heroes', heroRoutes);
+
+// Root route (optional)
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
+
+// Global error handler (optional)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something broke!' });
+});
+
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });

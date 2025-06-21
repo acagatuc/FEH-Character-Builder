@@ -10,24 +10,56 @@ import {
 } from "../actionTypes";
 
 const initState = {
-  name_display: "full",
+  name_display: 'full_name',
   grima: false,
   backpack: false,
   fehnix: false,
   duo_display: "",
   tab_image: "chibis",
-  fullHeroList: [],
   heroList: [],
+  sortedHeroList: [],
   loaded: false,
   grouping: false,
 };
+
+const groupOrder = [
+  "Heroes",
+  "Shadow Dragon/(New) Mystery",
+  "Echoes",
+  "Genealogy of the Holy War",
+  "Thracia 776",
+  "Blazing Blade",
+  "Binding Blade",
+  "Sacred Stones",
+  "Path of Radiance",
+  "Radiant Dawn",
+  "Awakening",
+  "Fates",
+  "Tokyo Mirage Sessions",
+  "Three Houses",
+  "Engage",
+];
+
+export function sortHeroesByCustomGameOrder(list) {
+  return [...list].sort((a, b) => {
+    const groupA = groupOrder.indexOf(a.game);
+    const groupB = groupOrder.indexOf(b.game);
+
+    // Sort based on group index first
+    if (groupA !== groupB) return groupA - groupB;
+
+    // If in same group, sort by full name
+    return a.full_name.localeCompare(b.full_name);
+  });
+}
 
 export default function (state = initState, action) {
   switch (action.type) {
     // herolist actions
     case FETCH_HERO_LIST: {
       const { heroes } = action.payload;
-      state.fullHeroList = heroes;
+      state.heroList = heroes;
+      state.sortedHeroList = sortHeroesByCustomGameOrder(heroes)
       state.loaded = true;
       return { ...state };
     }
@@ -35,65 +67,7 @@ export default function (state = initState, action) {
     // tabs actions
     case CHANGE_NAME_DISPLAY: {
       const { nameDisplay } = action.payload;
-      if (nameDisplay !== "") {
-        state.name_display = nameDisplay;
-      }
-      if (state.name_display === "full") {
-        state.heroList = []
-          .concat(state.fullHeroList)
-          .sort((a, b) => (a.full_name > b.full_name ? 1 : -1))
-          .map(function (listItem) {
-            // if the user wants to display grima instead of fallen robin
-            var name = listItem.full_name;
-            if (state.grima_display && name.includes("Fallen Robin")) {
-              name = name.replace("Fallen Robin", "Grima");
-            }
-            return {
-              value: listItem.character_id,
-              label: name,
-              origin: listItem.origin[0],
-            };
-          });
-      }
-      // if the user wants names and titles
-      else if (state.name_display === "title") {
-        state.heroList = []
-          .concat(state.fullHeroList)
-          .sort((a, b) => (a.name_title > b.name_title ? 1 : -1))
-          .map(function (listItem) {
-            // if the user wants to display grima instead of fallen robin
-            var name = listItem.name_title;
-            if (state.grima_display && name.includes("Fallen Robin")) {
-              name = name.replace("Fallen Robin", "Grima");
-            }
-            return {
-              value: listItem.character_id,
-              label: name,
-              origin: listItem.origin[0],
-            };
-          });
-      }
-      // if the user wants abbreviated names
-      else if (state.name_display === "abbrev") {
-        state.heroList = []
-          .concat(state.fullHeroList)
-          .sort((a, b) => (a.abbreviated > b.abbreviated ? 1 : -1))
-          .map(function (listItem) {
-            // if the user wants to display grima instead of fallen robin
-            var name = listItem.abbreviated;
-            if (state.grima_display && name.includes("F!F!Robin")) {
-              name = name.replace("F!F!Robin", "F!Grima");
-            } else if (state.grima_display && name.includes("F!M!Robin")) {
-              name = name.replace("F!M!Robin", "M!Grima");
-            }
-            return {
-              value: listItem.character_id,
-              label: name,
-              origin: listItem.origin[0],
-            };
-          });
-      }
-      return { ...state };
+      return { ...state, name_display: nameDisplay };
     }
     case CHANGE_GRIMA: {
       const { grima } = action.payload;
@@ -167,6 +141,7 @@ export default function (state = initState, action) {
     case CHANGE_GROUPING_DISPLAY: {
       const { grouped } = action.payload;
       state.grouping = grouped;
+
       return { ...state };
     }
     case CHANGE_TAB_IMAGE_DISPLAY: {

@@ -378,10 +378,12 @@ const ResplendentComponent = ({ shouldRender }) => {
 };
 
 const ImageComponent = ({ image, cropX, cropY, cropWidth, cropHeight, width, height }) => {
-  if (image === "https://fehportraits.s3.amazonaws.com/.png") {
-    image = "";
+  const imageUrl = "";
+  console.log(image)
+  if (image != "") {
+    const imageUrl = fetch("http://localhost:5000/api/heroes/heroImage/" + image + ".png");
   }
-  const [imgElement] = useImage(image, "Anonymous");
+  const [imgElement] = useImage(imageUrl, "Anonymous");
   return (
     <Image image={imgElement} x={0} y={0} cropX={cropX} cropY={cropY} cropWidth={cropWidth} cropHeight={cropHeight} width={width} height={height} />
   );
@@ -780,8 +782,8 @@ export default function HeroCanvas(props) {
           <ImageComponent
             image={
               resplendent
-                ? "https://fehportraits.s3.amazonaws.com/Resplendent " + hero.name + ".png"
-                : "https://fehportraits.s3.amazonaws.com/" + hero.name + ".png"
+                ? "Resplendent " + hero.name
+                : hero.name
             }
             cropX={368}
             cropY={0}

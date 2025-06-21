@@ -14,14 +14,14 @@ for item in my_list:
         name = item.split(" - ")
         shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Summer ' + name[0] + ".png")
     if "- Spa" in item:
-        name = item.split(" - ")
+        name = item.split(" - ")  
         shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Hostile Springs ' + name[0] + ".png")
     if "- Dancer" in item:
         name = item.split(" - ")
         if name[0]=="Ryoma" or name[0]=="Xander" or name[0]=="Micaiah" or name[0]=="Elincia":
             shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Hoshidan Summer ' + name[0] + ".png")
         if name[0]=="Azura" or name[0]=="Olivia" or name[0]=="Inigo" or name[0]=="Shigure":
-            shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Performing ' + name[0] + ".png")
+            shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Performing Arts' + name[0] + ".png")
     if "- Legendary" in item:
         name = item.split(" - ")
         shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Legendary ' + name[0] + ".png")
@@ -33,7 +33,7 @@ for item in my_list:
         shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Valentines ' + name[0] + ".png")
     if "- Christmas" in item:
         name = item.split(" - ")
-        shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Christmas ' + name[0] + ".png")
+        shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Winter ' + name[0] + ".png")
     if "- Fallen" in item:
         name = item.split(" - ")
         shutil.move('C:/Users/hiwhy/Documents/Personal Projects/portraits/' + item, 'C:/Users/hiwhy/Documents/Personal Projects/portraits/Fallen ' + name[0] + ".png")

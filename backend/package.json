@@ -12,8 +12,9 @@
   "dependencies": {
     "aws-sdk": "^2.1079.0",
     "cors": "^2.8.5",
-    "dotenv": "^14.2.0",
-    "express": "^4.17.2",
-    "mongodb": "^4.3.1"
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongodb": "^5",
+    "mongoose": "^8.15.2"
   }
 }

@@ -1,0 +1,13 @@
+Abel: The Panther
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Abel: The Panther
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Azura: Young Songstress
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Barst: The Hatchet
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Bartre: Earsome Warrior
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Leo: Shrouded Heart
+HTTPConnectionPool(host='localhost', port=43601): Read timed out. (read timeout=120)
+occured with Lyon: Esteemed Royals

@@ -47,22 +47,19 @@ const App = (props) => {
   // gets initial hero list with names and character ids
   useEffect(() => {
     async function fetchHeroList() {
-      let response = await fetch("http://localhost:5000/Heroes/");
+      let response = await fetch("http://localhost:5000/api/heroes/");
       response = await response.json();
-
       // concats hero list from response onto empty array and sets the hero list
-      setHeroes(
-        [].concat(response).map(function (listItem) {
-          return {
-            character_id: listItem.character_id,
-            full_name: listItem.full_name,
-            name_title: listItem.name_title,
-            abbreviated: listItem.abbreviated,
-            backpack: listItem.backpack,
-            origin: listItem.origin,
-          };
-        })
-      );
+      // setHeroes(
+      //   [].concat(response).map(function (listItem) {
+      //     return {
+      //       full_name: listItem.full_name,
+      //       common_name: listItem.common_name,
+      //       origin: listItem.game,
+      //     };
+      //   })
+      // );
+      setHeroes(response);
     }
 
     fetchHeroList();
@@ -70,9 +67,9 @@ const App = (props) => {
 
   useEffect(() => {
     dispatch(actions.fetchHeroList(heroes));
-    dispatch(actions.changeNameDisplay(""));
-    dispatch(actions.changeGrima(""));
-    dispatch(actions.changeBackpack(""));
+    // dispatch(actions.changeNameDisplay(""));
+    // dispatch(actions.changeGrima(""));
+    // dispatch(actions.changeBackpack(""));
   }, [heroes]);
 
   // const setUnitBuilderHeight = (height) => {

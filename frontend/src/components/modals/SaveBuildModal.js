@@ -3,12 +3,12 @@ import { Modal, Button, Container, Col, Row } from "react-bootstrap";
 import TextField from "@mui/material/TextField";
 
 //css
-import "../App.css";
+import "../../App.css";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../redux/actions";
-import { store } from "../redux/store";
+import * as actions from "../../redux/actions";
+import { store } from "../../redux/store";
 
 const SaveBuildModal = (props) => {
   const [name, setName] = useState("");

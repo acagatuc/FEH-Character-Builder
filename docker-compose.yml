@@ -13,7 +13,7 @@ services:
     environment:
       - CHOKIDAR_USEPOLLING=true # useful for live reload in some setups
     networks:
-      - feh-network 
+      - feh-network
 
   backend:
     build:
@@ -30,7 +30,7 @@ services:
       - /app/node_modules
     command: npm start
     networks:
-      - feh-network 
+      - feh-network
 
   mongo:
     image: mongo:latest
@@ -40,7 +40,7 @@ services:
     volumes:
       - mongo-data:/data/db
     networks:
-      - feh-network 
+      - feh-network
 
 volumes:
   mongo-data:

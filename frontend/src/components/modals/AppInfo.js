@@ -6,11 +6,11 @@ import { Switch, FormControlLabel, IconButton } from "@mui/material";
 
 //importing mui icon and css
 import GitHubIcon from "@mui/icons-material/GitHub";
-import "../App.css";
+import "../../App.css";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../redux/actions";
+import * as actions from "../../redux/actions";
 
 const AppInfo = (props) => {
   const [show, setShow] = useState(false);

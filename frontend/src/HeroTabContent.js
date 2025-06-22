@@ -1,5 +1,5 @@
 import React from "react";
-import HeroComponent from "./components/HeroComponent.js";
+import HeroComponent from "./components/hero/HeroComponent.js";
 
 export default function HeroTabContent(props) {
   return (

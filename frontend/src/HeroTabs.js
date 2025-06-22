@@ -46,13 +46,13 @@ const TabLabel = (props) => {
   return (
     <div className="tab">
       <div style={{ display: "inline-flex" }} onClick={() => props.changeTab(null, props.id)}>
-        {url === "" ? (
+        {/* {url === "" ? (
           <div style={{ minWidth: "45px" }}></div>
         ) : tab_image === "chibis" ? (
           <img className="chibis" src={url} align="left" alt="Chibi" />
         ) : (
           <img className="portraits" src={url} align="left" alt="Portrait" />
-        )}
+        )} */}
         <div className="tab-label">{label === "" || label === undefined ? "Build " + (props.id + 1) : label}</div>
       </div>
       <div className="tab-popup">

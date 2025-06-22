@@ -3,7 +3,7 @@ import { Modal, Container, Col, Row } from "react-bootstrap";
 import { Button } from "@mui/material";
 
 //css
-import "../App.css";
+import "../../App.css";
 
 //redux imports
 import { useSelector } from "react-redux";
@@ -28,7 +28,7 @@ import {
   fehnix,
   left,
   right,
-} from "./../assets";
+} from "./../../assets";
 
 const HeroInfoModal = (props) => {
   const owl = useSelector((state) => state.display.fehnix);

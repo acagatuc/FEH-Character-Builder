@@ -3,9 +3,9 @@ import { Modal, Container, Col, Row } from "react-bootstrap";
 import { Card, CardHeader, Typography, CardContent, Button, IconButton, Collapse } from "@mui/material";
 
 //css
-import "../App.css";
+import "../../App.css";
 import "./Barracks.css";
-import { left, right } from "../assets";
+import { left, right } from "../../assets";
 import ExpandIcon from "@mui/icons-material/ExpandMore";
 import CollapseIcon from "@mui/icons-material/ExpandLess";
 

@@ -7,7 +7,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from "@mui/material/Typography";
 
 //css and icons
-import "../App.css";
+import "../../App.css";
 import "./Barracks.css";
 import Close from "@mui/icons-material/Close";
 import ExpandIcon from "@mui/icons-material/ExpandMore";
@@ -16,8 +16,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../redux/actions";
-import { store } from "../redux/store";
+import * as actions from "../../redux/actions";
+import { store } from "../../redux/store";
 
 const SavedBuildInBarracks = (props) => {
   const dispatch = useDispatch();

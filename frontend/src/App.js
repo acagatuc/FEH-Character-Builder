@@ -6,8 +6,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 // components for main unit builder
 import HeroTabs from "./HeroTabs.js";
-import HeroCanvas from "./components/HeroCanvas.js";
-import AppInfo from "./components/AppInfo.js";
+import HeroCanvas from "./components/canvas/HeroCanvas.js";
+import AppInfo from "./components/modals/AppInfo.js";
 
 //redux imports
 import { store } from "./redux/store";

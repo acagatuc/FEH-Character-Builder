@@ -35,67 +35,69 @@ export default function HeroComponent(props) {
   const tab = useSelector((state) => state.tabList.tabList[props.id]);
 
   // hero info
-  const hero = useSelector((state) => state.tabList.tabList[props.id].hero);
-  const hp = useSelector((state) => state.tabList.tabList[props.id].hero.hp);
-  const atk = useSelector((state) => state.tabList.tabList[props.id].hero.atk);
-  const spd = useSelector((state) => state.tabList.tabList[props.id].hero.spd);
-  const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
-  const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
+  const hero = useSelector((state) => state.tabList.tabList[props.id]);
+  console.log(hero)
+  // const hp = useSelector((state) => state.tabList.tabList[props.id].hero.hp);
+  // const atk = useSelector((state) => state.tabList.tabList[props.id].hero.atk);
+  // const spd = useSelector((state) => state.tabList.tabList[props.id].hero.spd);
+  // const def = useSelector((state) => state.tabList.tabList[props.id].hero.def);
+  // const res = useSelector((state) => state.tabList.tabList[props.id].hero.res);
 
-  // redux skill info
-  const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
-  const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
-  const reduxAssist = useSelector((state) => state.tabList.tabList[props.id].assist);
-  const reduxSpecial = useSelector((state) => state.tabList.tabList[props.id].special);
-  const reduxA = useSelector((state) => state.tabList.tabList[props.id].aSkill);
-  const reduxB = useSelector((state) => state.tabList.tabList[props.id].bSkill);
-  const reduxC = useSelector((state) => state.tabList.tabList[props.id].cSkill);
+  // // redux skill info
+  // const reduxWeapon = useSelector((state) => state.tabList.tabList[props.id].weapon);
+  // const reduxRefine = useSelector((state) => state.tabList.tabList[props.id].refine);
+  // const reduxAssist = useSelector((state) => state.tabList.tabList[props.id].assist);
+  // const reduxSpecial = useSelector((state) => state.tabList.tabList[props.id].special);
+  // const reduxA = useSelector((state) => state.tabList.tabList[props.id].aSkill);
+  // const reduxB = useSelector((state) => state.tabList.tabList[props.id].bSkill);
+  // const reduxC = useSelector((state) => state.tabList.tabList[props.id].cSkill);
 
-  // skill info for string loaded builds (recommended mostly)
-  const [weapon, setWeapon] = useState("");
-  const [refine, setRefine] = useState("");
-  const [assist, setAssist] = useState("");
-  const [special, setSpecial] = useState("");
-  const [aSlot, setASlot] = useState("");
-  const [bSlot, setBSlot] = useState("");
-  const [cSlot, setCSlot] = useState("");
-  const [sSlot, setSSlot] = useState("");
+  // // skill info for string loaded builds (recommended mostly)
+  // const [weapon, setWeapon] = useState("");
+  // const [refine, setRefine] = useState("");
+  // const [assist, setAssist] = useState("");
+  // const [special, setSpecial] = useState("");
+  // const [aSlot, setASlot] = useState("");
+  // const [bSlot, setBSlot] = useState("");
+  // const [cSlot, setCSlot] = useState("");
+  // const [sSlot, setSSlot] = useState("");
 
-  // support info
-  const SummonerSupport = useSelector((state) => state.tabList.tabList[props.id].summonerSupport);
-  const AllySupport = useSelector((state) => state.tabList.tabList[props.id].allySupport);
+  // // support info
+  // const SummonerSupport = useSelector((state) => state.tabList.tabList[props.id].summonerSupport);
+  // const AllySupport = useSelector((state) => state.tabList.tabList[props.id].allySupport);
 
-  // assets flaws and ascended stats info
-  const levels = useSelector((state) => state.tabList.tabList[props.id].levels);
-  const superboon = useSelector((state) => state.tabList.tabList[props.id].hero.superboon);
-  const superbane = useSelector((state) => state.tabList.tabList[props.id].hero.superbane);
-  const asset = useSelector((state) => state.tabList.tabList[props.id].asset);
-  const flaw = useSelector((state) => state.tabList.tabList[props.id].flaw);
-  const ascended = useSelector((state) => state.tabList.tabList[props.id].ascended);
+  // // assets flaws and ascended stats info
+  // const levels = useSelector((state) => state.tabList.tabList[props.id].levels);
+  // const superboon = useSelector((state) => state.tabList.tabList[props.id].hero.superboon);
+  // const superbane = useSelector((state) => state.tabList.tabList[props.id].hero.superbane);
+  // const asset = useSelector((state) => state.tabList.tabList[props.id].asset);
+  // const flaw = useSelector((state) => state.tabList.tabList[props.id].flaw);
+  // const ascended = useSelector((state) => state.tabList.tabList[props.id].ascended);
 
-  // truthy values for resplendent and resplendent stat toggle buttons
-  const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
-  const resplendentStats = useSelector((state) => state.tabList.tabList[props.id].resplendentStats);
+  // // truthy values for resplendent and resplendent stat toggle buttons
+  // const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
+  // const resplendentStats = useSelector((state) => state.tabList.tabList[props.id].resplendentStats);
 
-  // for beast units only
-  const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
+  // // for beast units only
+  // const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
 
-  // length check on barracks for disabled state of save button
-  const barracksLength = useSelector((state) => state.barracks.key);
+  // // length check on barracks for disabled state of save button
+  // const barracksLength = useSelector((state) => state.barracks.key);
+const barracksLength = useState(1)
 
-  // loading variable to ensure that no state skill changes are committed while loading a new hero
-  const [recommendedBuilds, setRecommendedBuilds] = useState([]);
+  // // loading variable to ensure that no state skill changes are committed while loading a new hero
+  // const [recommendedBuilds, setRecommendedBuilds] = useState([]);
 
-  // skill lists from fetch request
-  const [loadedWeapons, setLoadedWeapons] = useState([]);
-  const [loadedAssists, setLoadedAssists] = useState([]);
-  const [loadedSpecials, setLoadedSpecials] = useState([]);
-  const [loadedA, setLoadedA] = useState([]);
-  const [loadedB, setLoadedB] = useState([]);
-  const [loadedC, setLoadedC] = useState([]);
-  const [loadedS, setLoadedS] = useState([]);
+  // // skill lists from fetch request
+  // const [loadedWeapons, setLoadedWeapons] = useState([]);
+  // const [loadedAssists, setLoadedAssists] = useState([]);
+  // const [loadedSpecials, setLoadedSpecials] = useState([]);
+  // const [loadedA, setLoadedA] = useState([]);
+  // const [loadedB, setLoadedB] = useState([]);
+  // const [loadedC, setLoadedC] = useState([]);
+  // const [loadedS, setLoadedS] = useState([]);
 
-  // for load modal
+  // // for load modal
   const [showLoad, setShowLoad] = useState(false);
   const [showSave, setShowSave] = useState(false);
   const [showHeroInfo, setShowHeroInfo] = useState(false);
@@ -110,7 +112,7 @@ export default function HeroComponent(props) {
   const handleCloseRecommendedBuilds = () => setShowRecommendedBuilds(false);
 
   //test thingy for loading on copy
-  const [test, setTest] = useState(false);
+  // const [test, setTest] = useState(false);
 
   async function heroChange(newHero) {
     // resets tab state in redux and all skill lists

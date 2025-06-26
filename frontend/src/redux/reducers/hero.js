@@ -25,113 +25,23 @@ import {
   CHANGE_FAVORITE,
 } from "../actionTypes";
 
-// import { clone, cloneDeep } from "lodash";
-
 const initState = {
-  key: 0,
-  id: 0,
-  value: null,
-  label: "",
-  hero: {
-    name: "",
-    singleName: "",
-    title: "",
-    VA: "",
-    artist: "",
-    hp: [],
-    atk: [],
-    spd: [],
-    def: [],
-    res: [],
-    superboon: [],
-    superbane: [],
-    weapons: [],
-    assists: [],
-    specials: [],
-    passives: [],
-    weapon_type: "",
-    move_type: "",
-    hero_type: "",
-    dragonflowers: 0,
-    exists: false,
-  },
-  hp: "",
-  atk: "",
-  spd: "",
-  def: "",
-  res: "",
-  levels: [1, 1, 1, 1, 1],
-  asset: "",
-  flaw: "",
-  ascended: "",
-  merges: 0,
-  mergeOrder: [],
-  mergedStats: [0, 0, 0, 0, 0],
-  buffStats: [0, 0, 0, 0],
-  dragonflowers: 0,
-  dragonflowerStats: [0, 0, 0, 0, 0],
-  resplendent: false,
-  resplendentStats: false,
-  resStats: [0, 0, 0, 0, 0],
-  transformed: 0,
-  blessing: "",
-  blessingStats: [0, 0, 0, 0, 0],
-  blessingHeroList: [],
-  summonerSupport: "",
-  summonerSupportStats: [0, 0, 0, 0, 0],
-  allySupport: "",
-  background: "",
-  favorite: "",
-  weapon: {
-    name: "",
-    might: 0,
-    visibleStats: [0, 0, 0, 0, 0],
-    refine: false,
-    rearmed: false,
-  },
-  refine: {
-    name: "",
-    img: "",
-    stats: [0, 0, 0, 0, 0],
-  },
-  assist: {
-    name: "",
-    unique: false,
-  },
-  special: {
-    name: "",
-    unique: false,
-  },
-  aSkill: {
-    name: "",
-    visibleStats: [0, 0, 0, 0, 0],
-    unique: false,
-  },
-  bSkill: {
-    name: "",
-    unique: false,
-  },
-  cSkill: {
-    name: "",
-    unique: false,
-  },
-  sSkill: {
-    name: "",
-    visibleStats: [0, 0, 0, 0, 0],
-  },
+  heroes: {},
+  canvas: {},
+  skills: {},
 };
 
 export default function (state = initState, action) {
   switch (action.type) {
     // hero actions
-
     case CHANGE_HERO: {
       const { hero, id } = action.payload;
-      state.tabList[id].hero = hero;
-      state.tabList[id].label = hero.name;
-      state.tabList[id].value = hero.character_id;
-      state.tabList[id].resplendent = false;
-
+      if (hero != null) {
+        state.heroes[id] = hero[0];
+      } else {
+        state.heroes[id] = {};
+      }
+console.log(state)
       return { ...state };
     }
 

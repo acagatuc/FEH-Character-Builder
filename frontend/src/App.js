@@ -5,7 +5,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 // components for main unit builder
-import HeroTabs from "./HeroTabs.js";
+import HeroTabs from "./components/navigation/HeroTabs.js";
+import TabComponent from "./components/navigation/TabComponent.js"
 import HeroCanvas from "./components/canvas/HeroCanvas.js";
 import AppInfo from "./components/modals/AppInfo.js";
 
@@ -88,7 +89,8 @@ const App = (props) => {
       </header>
       <div className="unit-builder">
         <HeroCanvas stageWidth={canvasWidth} />
-        <HeroTabs />
+        {/* <HeroTabs /> */}
+        <TabComponent />
       </div>
     </div>
   );

@@ -1,18 +1,20 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import ReactDOM from "react-dom/client";  // <-- changed here
 import { Provider } from "react-redux";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import "./fonts/nintendoPSkip-D003.ttf";
-import { store } from "./redux/store";
+import { store } from "./rtk/store";
 
-ReactDOM.render(
+const container = document.getElementById("root");
+const root = ReactDOM.createRoot(container);  // <-- create root here
+
+root.render(
   <Provider store={store}>
     <React.StrictMode>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </React.StrictMode>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );

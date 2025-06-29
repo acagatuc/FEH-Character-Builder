@@ -17,6 +17,9 @@
   padding-left: 5px;
   padding-top: 5px;
 }
+.hero-content-wrapper {
+  width: 100%;
+}
 
 .unit-builder {
   display: flex;

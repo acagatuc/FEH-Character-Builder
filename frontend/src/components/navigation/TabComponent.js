@@ -1,57 +1,56 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
 import {
   Tabs,
-  Tab,
-  IconButton,
+  Box,
+  Avatar,
   Menu,
   MenuItem,
-  Avatar,
-  Box,
+  IconButton,
   Tooltip,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import AddIcon from "@mui/icons-material/Add";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import HeroTabContent from "./HeroTabContent.js"
+
+// redux import
+import { useSelector, useDispatch } from 'react-redux';
+import { addTab, changeTab, deleteTab, resetTab } from '../../rtk/tabsSlice.js';
+import { copyTabWithHero } from "../../rtk/thunk.js";
+
 
 const TabComponent = () => {
-  const [tabs, setTabs] = useState([
-    { id: 0, label: "Tab 1" },
-    { id: 1, label: "Tab 2" },
-  ]);
-  const [selectedTab, setSelectedTab] = useState(0);
+  const dispatch = useDispatch();
+  const currentTab = useSelector(state => state.tabs.currentTab || 0)
+  const tabList = useSelector(state => state.tabs.tabList || {});
+  const length = useSelector(state => state.tabs.length || 1);
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [activeTabIdForMenu, setActiveTabIdForMenu] = useState(null);
 
-  // Example Redux selector
-  const tabImages = useSelector((state) => state.tabImages);
-  // Expected: { 0: "url1", 1: "url2" }
-
   const handleAddTab = () => {
-    const newTab = {
-      id: Date.now(),
-      label: `Tab ${tabs.length + 1}`,
-    };
-    setTabs([...tabs, newTab]);
-    setSelectedTab(newTab.id);
+    dispatch(addTab())
   };
 
-  const handleCopy = (tab) => {
-    const newTab = {
-      id: Date.now(),
-      label: tab.label + " Copy",
-    };
-    setTabs([...tabs, newTab]);
-    setSelectedTab(newTab.id);
+  const handleCopy = (id) => {
+    dispatch(copyTabWithHero({id, length}));
     handleMenuClose();
   };
 
-  const handleDelete = (tabId) => {
-    const newTabs = tabs.filter((tab) => tab.id !== tabId);
-    setTabs(newTabs);
-    if (selectedTab === tabId && newTabs.length > 0) {
-      setSelectedTab(newTabs[0].id);
+  const handleDelete = (e, tabId) => {
+    console.log(e)
+    e.stopPropagation();
+
+    // if the array is only 1 length, just clear the tab
+    if (tabList.length === 1) {
+      document.activeElement.blur(); // removes focus
+      handleMenuClose();
+      dispatch(resetTab(tabId));
+      return;
     }
+
+    // delete tab and set new tab if the current tab was the deleted one
+    document.activeElement.blur(); // removes focus
     handleMenuClose();
+    dispatch(deleteTab(tabId));
   };
 
   const handleMenuOpen = (event, tabId) => {
@@ -66,105 +65,104 @@ const TabComponent = () => {
   };
 
   return (
-    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-      <Tabs
-        value={
-          selectedTab === "add"
-            ? false
-            : tabs.findIndex((t) => t.id === selectedTab)
-        }
-        onChange={(e, newIndex) => {
-          if (newIndex === tabs.length) return;
-          setSelectedTab(tabs[newIndex].id);
-        }}
-      >
-        {tabs.map((tab) => (
-          <Tab
+    <div className="hero-content-wrapper">
+      <Box sx={{ borderBottom: 1, borderColor: "divider", display: "flex" }}>
+        {tabList.map((tab) => (
+          <Box
             key={tab.id}
             sx={{
+              display: "flex",
+              alignItems: "center",
+              px: 2,
+              py: 1,
+              mr: 1,
               backgroundColor: "white",
-              color: "gray",
-              "&.Mui-selected": {
-                backgroundColor: "white",
-                color: "black", // optional: make selected tab text darker
-                fontWeight: "bold",
-              },
+              color: currentTab === tab.id ? "black" : "gray",
               borderTopLeftRadius: 4,
               borderTopRightRadius: 4,
-              mr: 1,
+              cursor: "pointer",
+              fontWeight: currentTab === tab.id ? "bold" : "normal",
+              boxShadow: currentTab === tab.id ? 2 : 0,
             }}
-            label={
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                {tabImages?.[tab.id] && (
-                  <Avatar
-                    src={tabImages[tab.id]}
-                    alt="tab icon"
-                    sx={{ width: 24, height: 24 }}
-                  />
-                )}
-                {tab.label}
-                <IconButton
-                  size="small"
-                  onClick={(e) => handleMenuOpen(e, tab.id)}
-                >
-                  <MoreVertIcon fontSize="small" />
-                </IconButton>
-              </Box>
-            }
-          />
+            onClick={() => dispatch(changeTab(tab.id))}
+          >
+            {tab.label}
+            <IconButton
+              size="small"
+              sx={{ ml: 1 }}
+              onClick={(e) => handleMenuOpen(e, tab.id)}
+            >
+              <MoreVertIcon fontSize="small" />
+            </IconButton>
+          </Box>
         ))}
 
-        {/* Add Button as a Tab */}
-        <Tab
-          sx={{
-            backgroundColor: "white",
-            color: "gray",
-            "&.Mui-selected": {
+        <Tooltip title="Add Tab">
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              px: 2,
+              py: 1,
               backgroundColor: "white",
-              color: "black", // optional: make selected tab text darker
-              fontWeight: "bold",
-            },
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-            mr: 1,
-          }}
-          label={
-            <Tooltip title="Add Tab">
-              <IconButton size="small" onClick={handleAddTab}>
-                <AddIcon />
-              </IconButton>
-            </Tooltip>
-          }
-          onClick={handleAddTab}
-        />
-      </Tabs>
+              color: "gray",
+              borderTopLeftRadius: 4,
+              borderTopRightRadius: 4,
+              cursor: "pointer",
+            }}
+            onClick={handleAddTab}
+          >
+            <AddIcon />
+          </Box>
+        </Tooltip>
 
-      {/* Action Menu */}
-      <Menu
-        anchorEl={menuAnchor}
-        open={Boolean(menuAnchor)}
-        onClose={handleMenuClose}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        transformOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-      >
-        <MenuItem
-          onClick={() =>
-            handleCopy(tabs.find((tab) => tab.id === activeTabIdForMenu))
-          }
+        <Menu
+          anchorEl={menuAnchor}
+          open={Boolean(menuAnchor)}
+          onClose={handleMenuClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "right",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
         >
-          Copy Tab
-        </MenuItem>
-        <MenuItem onClick={() => handleDelete(activeTabIdForMenu)}>
-          Delete Tab
-        </MenuItem>
-      </Menu>
-    </Box>
+          <MenuItem
+            onClick={() =>
+              handleCopy(tabList.find((tab) => tab.id === activeTabIdForMenu).id)
+            }
+          >
+            Copy Tab
+          </MenuItem>
+          <MenuItem onClick={(e) => handleDelete(e, activeTabIdForMenu)}>
+            Delete Tab
+          </MenuItem>
+        </Menu>
+      </Box>
+      {/* Tab Content Area */}
+      <div
+        style={{
+          height: "100%",
+          borderRadius: 10,
+          backgroundColor: "white",
+          maxWidth: "100%",
+        }}
+      ><Box sx={{ p: 2 }}>
+          {tabList.map((tab) => (
+            <Box
+              key={tab.id}
+              hidden={tab.id !== currentTab}
+              sx={{ display: tab.id === currentTab ? "block" : "none" }}
+            >
+              <HeroTabContent id={tab.id} />
+            </Box>
+          ))}
+        </Box>
+
+      </div>
+    </div>
   );
 };
 

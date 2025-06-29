@@ -12,7 +12,7 @@ with open("character_pointers.json", "r") as f:
 client = MongoClient("mongodb://localhost:27017/")
 
 # Access collections
-db = client["fire-emblem"]
+db = client["Heroes"]
 collection = db['heros']
 
 for pointer in pointers_list:

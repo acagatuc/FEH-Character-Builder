@@ -26,6 +26,8 @@ import ui from "./../../assets/updated ui 2.png";
 // redux import
 import { useSelector } from "react-redux";
 
+import ImageComponent from "./ImageComponent";
+
 // an array that declares the x values of all numbers
 const numberArray = [520, 555, 590, 624, 656, 692, 725, 759, 793, 828];
 
@@ -600,7 +602,7 @@ const ResplendentComponent = ({ shouldRender }) => {
   return null;
 };
 
-const ImageComponent = ({
+const ImageComponent2 = ({
   image,
   cropX,
   cropY,
@@ -612,7 +614,6 @@ const ImageComponent = ({
   const [imageUrl, setImageUrl] = useState(null);
   useEffect(() => {
     if (image.name?.length > 0 && image.name) {
-  console.log(image.name)
       const safeName = image.name.replace(":", "_");
       const url = `http://localhost:5000/api/heroes/heroImage/${safeName}.png`;
       setImageUrl(url);
@@ -1089,8 +1090,9 @@ export default function HeroCanvas(props) {
 
   // global redux state
   const hero = useSelector(
-    (state) => state.hero.heroes[state.tabList.currentTab]
+    (state) => state.hero.heroes[state.tabs.currentTab]
   );
+  console.log(hero)
   return (
     <div id="wrapper" className="wrapper">
       <Stage
@@ -1101,7 +1103,7 @@ export default function HeroCanvas(props) {
         scaleY={stageHeight / 960}
       >
         <Layer id="img layer">
-          {/* <ImageComponent
+          <ImageComponent
             image={hero}
             cropX={368}
             cropY={0}
@@ -1109,7 +1111,7 @@ export default function HeroCanvas(props) {
             cropHeight={1538}
             width={540}
             height={960}
-          /> */}
+          />
         </Layer>
       </Stage>
     </div>

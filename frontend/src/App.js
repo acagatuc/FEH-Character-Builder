@@ -11,18 +11,19 @@ import HeroCanvas from "./components/canvas/HeroCanvas.js";
 import AppInfo from "./components/modals/AppInfo.js";
 
 //redux imports
-import { store } from "./redux/store";
-import { saveState, saveBuilds } from "./redux/localStorage";
+import { store } from "./rtk/store";
+// import { saveState, saveBuilds } from "./redux/localStorage";
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "./redux/actions";
+// import * as actions from "./rtk/actions";
 import bg from "./background.png";
+import { loadHeroList } from './rtk/displaySlice';
 
-store.subscribe(() => {
-  saveState({
-    display: store.getState().display,
-    barracks: store.getState().barracks,
-  });
-});
+// store.subscribe(() => {
+//   saveState({
+//     display: store.getState().display,
+//     barracks: store.getState().barracks,
+//   });
+// });
 
 const App = (props) => {
   <link
@@ -50,28 +51,18 @@ const App = (props) => {
     async function fetchHeroList() {
       let response = await fetch("http://localhost:5000/api/heroes/");
       response = await response.json();
-      // concats hero list from response onto empty array and sets the hero list
-      // setHeroes(
-      //   [].concat(response).map(function (listItem) {
-      //     return {
-      //       full_name: listItem.full_name,
-      //       common_name: listItem.common_name,
-      //       origin: listItem.game,
-      //     };
-      //   })
-      // );
-      setHeroes(response);
+      dispatch(loadHeroList(response))
     }
 
     fetchHeroList();
   }, []);
 
-  useEffect(() => {
-    dispatch(actions.fetchHeroList(heroes));
-    // dispatch(actions.changeNameDisplay(""));
-    // dispatch(actions.changeGrima(""));
-    // dispatch(actions.changeBackpack(""));
-  }, [heroes]);
+  // useEffect(() => {
+  //   dispatch(fetchHeroList(heroes));
+  //   // dispatch(actions.changeNameDisplay(""));
+  //   // dispatch(actions.changeGrima(""));
+  //   // dispatch(actions.changeBackpack(""));
+  // }, [heroes]);
 
   // const setUnitBuilderHeight = (height) => {
   //   if (height > canvasHeight) {

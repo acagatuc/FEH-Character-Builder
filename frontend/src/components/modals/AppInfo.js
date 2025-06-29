@@ -10,7 +10,15 @@ import "../../App.css";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../redux/actions";
+import {
+  changeNameDisplay,
+  changeGrimaDisplay,
+  changeBackpackDisplay,
+  changeFehnixDisplay,
+  changeDuoDisplay,
+  changeGroupingDisplay,
+  changeTabImageDisplay
+} from '../../rtk/displaySlice.js'
 
 const AppInfo = (props) => {
   const [show, setShow] = useState(false);
@@ -28,29 +36,29 @@ const AppInfo = (props) => {
 
   const handleChange = (e, value) => {
     if (value !== null) {
-      dispatch(actions.changeNameDisplay(value));
+      dispatch(changeNameDisplay(value));
     }
   };
   const changeBackpack = (e, value) => {
-    dispatch(actions.changeBackpack(value));
+    dispatch(changeBackpackDisplay(value));
   };
   const changeGrima = (e, value) => {
-    dispatch(actions.changeGrima(value));
+    dispatch(changeGrimaDisplay(value));
   };
   const changeFehnix = (e, value) => {
-    dispatch(actions.changeFehnix(value));
+    dispatch(changeFehnixDisplay(value));
   };
-  const changeDuoDisplay = (e, value) => {
+  const changeDuo = (e, value) => {
     if (value !== null) {
-      dispatch(actions.changeDuoDisplay(value));
+      dispatch(changeDuoDisplay(value));
     }
   };
   const changeGrouping = (e, value) => {
-    dispatch(actions.changeGrouping(value));
+    dispatch(changeGroupingDisplay(value));
   };
-  const changeTabImageDisplay = (e, value) => {
+  const changeTabImage = (e, value) => {
     if (value !== null) {
-      dispatch(actions.changeTabImageDisplay(value));
+      dispatch(changeTabImageDisplay(value));
     }
   };
 
@@ -126,7 +134,7 @@ const AppInfo = (props) => {
                   <label>Icon Display</label>
                 </Row>
                 <Row>
-                  <ToggleButtonGroup value={tab_image} onChange={changeTabImageDisplay} exclusive color="warning">
+                  <ToggleButtonGroup value={tab_image} onChange={changeTabImage} exclusive color="warning">
                     <ToggleButton value="chibis">Chibi</ToggleButton>
                     <ToggleButton value="smallportraits">Portrait</ToggleButton>
                   </ToggleButtonGroup>
@@ -135,7 +143,7 @@ const AppInfo = (props) => {
                   <label>Duo Chibi Display</label>
                 </Row>
                 <Row>
-                  <ToggleButtonGroup value={duo} onChange={changeDuoDisplay} exclusive color="warning">
+                  <ToggleButtonGroup value={duo} onChange={changeDuo} exclusive color="warning">
                     <ToggleButton value="">Both</ToggleButton>
                     <ToggleButton value="+Main">Lead Only</ToggleButton>
                     <ToggleButton value="+Sub">Sub Only</ToggleButton>

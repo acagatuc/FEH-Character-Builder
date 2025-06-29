@@ -25,18 +25,17 @@ import RecommendedBuildsModal from "../modals/RecommendedBuildsModal.js";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import * as actions from "../../redux/actions.js";
+import { resetTab } from '../../rtk/tabsSlice.js';
+import { changeHero } from '../../rtk/heroSlice.js';
 
 // text arrows
 import { left, right } from "../../assets/index.js";
 
 export default function HeroComponent(props) {
   const dispatch = useDispatch();
-  const tab = useSelector((state) => state.tabList.tabList[props.id]);
 
   // hero info
-  const hero = useSelector((state) => state.tabList.tabList[props.id]);
-  console.log(hero)
+  const hero = useSelector((state) => state.hero.heroes[props.id]);
   // const hp = useSelector((state) => state.tabList.tabList[props.id].hero.hp);
   // const atk = useSelector((state) => state.tabList.tabList[props.id].hero.atk);
   // const spd = useSelector((state) => state.tabList.tabList[props.id].hero.spd);
@@ -83,7 +82,7 @@ export default function HeroComponent(props) {
 
   // // length check on barracks for disabled state of save button
   // const barracksLength = useSelector((state) => state.barracks.key);
-const barracksLength = useState(1)
+  const barracksLength = useState(1)
 
   // // loading variable to ensure that no state skill changes are committed while loading a new hero
   // const [recommendedBuilds, setRecommendedBuilds] = useState([]);
@@ -116,7 +115,7 @@ const barracksLength = useState(1)
 
   async function heroChange(newHero) {
     // resets tab state in redux and all skill lists
-    dispatch(actions.resetTab(props.id));
+    dispatch(resetTab(props.id));
     // setLoadedWeapons([]);
     // setLoadedAssists([]);
     // setLoadedSpecials([]);
@@ -133,7 +132,6 @@ const barracksLength = useState(1)
 
     let response = await fetch("http://localhost:5000/api/heroes/hero/" + newHero.hero_id);
     response = await response.json();
-    console.log(response)
 
     // if there are no recommended builds, just set it equal to an empty array
     // if (response["recommended"] !== null) {
@@ -145,7 +143,7 @@ const barracksLength = useState(1)
     // response["hero"].character_id = newHero;
 
     // setTest(true);
-    dispatch(actions.changeHero(response, props.id));
+    dispatch(changeHero({hero: response[0], id: props.id}));
 
     // var weapon = response["hero"]["weapon_type"];
     // if (weapon.includes("Dragon") || weapon.includes("Beast") || weapon.includes("Bow") || weapon.includes("Dagger")) {
@@ -479,7 +477,7 @@ const barracksLength = useState(1)
 
   return (
     <div className="hero-component">
-      <div className="load-save-row">
+      {/* <div className="load-save-row">
         <Button variant="contained" color="primary" style={{ marginRight: "5px" }} onClick={handleShowLoad}>
           Load
         </Button>
@@ -489,10 +487,10 @@ const barracksLength = useState(1)
               Save
             </Button>
           </div>
-        </Tooltip>
-        {/* <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
+        </Tooltip> */}
+      {/* <SaveBuildModal show={showSave} onClose={handleCloseSave} tab={tab} />
         <BarracksModal show={showLoad} onClose={handleCloseLoad} loadBuild={loadBuild} id={props.id} /> */}
-      </div>
+      {/* </div> */}
       <div className="column hero-stats-column">
         <div className="header-row">
           <div className="headers">Hero:</div>
@@ -501,7 +499,7 @@ const barracksLength = useState(1)
           </Button> */}
         </div>
         <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
-        </div>
+      </div>
     </div>
   );
 }

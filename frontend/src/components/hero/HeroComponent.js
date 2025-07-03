@@ -5,7 +5,7 @@ import "./HeroComponent.css";
 import BlessingComponent from "./BlessingComponent.js";
 import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
 
-import Dropdown from "./Dropdown.js";
+import HeroDropdown from "./HeroDropdown.js";
 import WeaponComponent from "./WeaponComponent.js";
 import SkillComponent from "./SkillComponent.js";
 import Traits from "./Traits.js";
@@ -25,8 +25,12 @@ import RecommendedBuildsModal from "../modals/RecommendedBuildsModal.js";
 
 //redux imports
 import { useSelector, useDispatch } from "react-redux";
-import { resetTab } from '../../rtk/tabsSlice.js';
-import { changeHero } from '../../rtk/heroSlice.js';
+import { resetTab } from "../../rtk/tabsSlice.js";
+import {
+  changeHero,
+  changeResplendent,
+  changeResplendentStats,
+} from "../../rtk/heroSlice.js";
 
 // text arrows
 import { left, right } from "../../assets/index.js";
@@ -73,16 +77,20 @@ export default function HeroComponent(props) {
   // const flaw = useSelector((state) => state.tabList.tabList[props.id].flaw);
   // const ascended = useSelector((state) => state.tabList.tabList[props.id].ascended);
 
-  // // truthy values for resplendent and resplendent stat toggle buttons
-  // const resplendent = useSelector((state) => state.tabList.tabList[props.id].resplendent);
-  // const resplendentStats = useSelector((state) => state.tabList.tabList[props.id].resplendentStats);
+  // truthy values for resplendent and resplendent stat toggle buttons
+  const resplendent = useSelector(
+    (state) => state.hero.heroes[props.id]?.resplendent || false
+  );
+  const resplendentStats = useSelector(
+    (state) => state.hero.heroes[props.id]?.resplendentStats || false
+  );
 
   // // for beast units only
   // const transformed = useSelector((state) => state.tabList.tabList[props.id].transformed);
 
   // // length check on barracks for disabled state of save button
   // const barracksLength = useSelector((state) => state.barracks.key);
-  const barracksLength = useState(1)
+  const barracksLength = useState(1);
 
   // // loading variable to ensure that no state skill changes are committed while loading a new hero
   // const [recommendedBuilds, setRecommendedBuilds] = useState([]);
@@ -130,7 +138,9 @@ export default function HeroComponent(props) {
     // setBSlot("reset");
     // setCSlot("reset");
 
-    let response = await fetch("http://localhost:5000/api/heroes/hero/" + newHero.hero_id);
+    let response = await fetch(
+      "http://localhost:5000/api/heroes/hero/" + newHero.hero_id
+    );
     response = await response.json();
 
     // if there are no recommended builds, just set it equal to an empty array
@@ -143,7 +153,9 @@ export default function HeroComponent(props) {
     // response["hero"].character_id = newHero;
 
     // setTest(true);
-    dispatch(changeHero({hero: response[0], id: props.id}));
+    dispatch(
+      changeHero({ hero: response[0], id: props.id, resplendent: false })
+    );
 
     // var weapon = response["hero"]["weapon_type"];
     // if (weapon.includes("Dragon") || weapon.includes("Beast") || weapon.includes("Bow") || weapon.includes("Dagger")) {
@@ -430,14 +442,14 @@ export default function HeroComponent(props) {
   //   dispatch(actions.changeStats(props.id));
   // };
 
-  // const changeBlessing = (b) => {
-  //   dispatch(actions.changeBlessing(b, props.id));
-  // };
+  const changeBlessing = (b) => {
+    dispatch(changeBlessing(b, props.id));
+  };
 
-  // const changeBlessingStats = (buffs, heroes) => {
-  //   dispatch(actions.changeBlessingStats(buffs, heroes, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const changeBlessingStats = (buffs, heroes) => {
+    dispatch(changeBlessingStats(buffs, heroes, props.id));
+    // dispatch(changeStats(props.id));
+  };
 
   // const changeSummonerSupport = (event) => {
   //   dispatch(actions.changeSS(event, props.id));
@@ -466,14 +478,14 @@ export default function HeroComponent(props) {
   //   dispatch(actions.changeFavorite(fav, props.id));
   // };
 
-  // const changeResplendent = (r) => {
-  //   dispatch(actions.changeResplendent(r, props.id));
-  // };
+  const toggleResplendent = (r) => {
+    dispatch(changeResplendent({ r: r, id: props.id }));
+  };
 
-  // const handleResplendentStats = (r) => {
-  //   dispatch(actions.changeResplendentStats(r, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleResplendentStats = (r) => {
+    dispatch(changeResplendentStats({ r: r, id: props.id }));
+    //   dispatch(actions.changeStats(props.id));
+  };
 
   return (
     <div className="hero-component">
@@ -498,12 +510,39 @@ export default function HeroComponent(props) {
             Maximize
           </Button> */}
         </div>
-        <Dropdown onChange={heroChange} title={"Select Hero"} id={props.id} />
+        <HeroDropdown
+          onChange={heroChange}
+          title={"Select Hero"}
+          id={props.id}
+        />
+
+        <BlessingComponent
+          hero={hero}
+          placeholder={"Blessing"}
+          onChange={changeBlessing}
+          id={props.id}
+        />
+        <BlessingHeroSelectionComponent
+          hero={hero}
+          onChange={changeBlessingStats}
+          id={props.id}
+        />
+        <SwitchComponent
+          res={resplendent}
+          enabled={hero?.hasResplendent || false}
+          onChange={toggleResplendent}
+          label={"Resplendent Art"}
+        />
+        <SwitchComponent
+          res={resplendentStats}
+          enabled={hero?.hasResplendent || false}
+          onChange={handleResplendentStats}
+          label={"Resplendent Stats"}
+        />
       </div>
     </div>
   );
 }
-
 
 // <div className="flex-row" style={{ justifyContent: "space-between" }}>
 //           <Merges hero={hero} levels={levels} onChange={mergeChange} placeholder={"Merges"} id={props.id} />

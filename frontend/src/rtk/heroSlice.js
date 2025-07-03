@@ -13,9 +13,13 @@ const heroSlice = createSlice({
       const { hero, id } = action.payload;
       if (hero != null) {
         state.heroes[id] = hero;
+        state.heroes[id].resplendent = false;
+        state.heroes[id].resplendentStats = false;
+        state.heroes[id].blessing = null;
       } else {
         state.heroes[id] = {};
       }
+      console.log(JSON.parse(JSON.stringify(state)));
     },
 
     copyHero: (state, action) => {
@@ -189,19 +193,22 @@ const heroSlice = createSlice({
     },
 
     changeResplendent(state, action) {
-      const { res, id } = action.payload;
-      state.tabList[id].resplendent = res;
+      const { r, id } = action.payload;
+      state.heroes[id].resplendent = r;
     },
 
     changeResplendentStats(state, action) {
-      const { res, id } = action.payload;
-      let tempArray = [0, 0, 0, 0, 0];
-      if (res) {
-        tempArray = [2, 2, 2, 2, 2];
-      }
-      const tab = state.tabList[id];
-      tab.resplendentStats = res;
-      tab.resStats = tempArray;
+      const { r, id } = action.payload;
+      state.heroes[id].resplendentStats = r;
+
+
+      // let tempArray = [0, 0, 0, 0, 0];
+      // if (res) {
+      //   tempArray = [2, 2, 2, 2, 2];
+      // }
+      // const tab = state.tabList[id];
+      // tab.resplendentStats = res;
+      // tab.resStats = tempArray;
     },
 
     changeTransformed(state, action) {

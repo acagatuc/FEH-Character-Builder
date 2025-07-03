@@ -8,5 +8,6 @@ export const defaultHero = {
     def: 0,
     res: 0
   },
-  skills: []
+  skills: [],
+  resplendent: false
 };

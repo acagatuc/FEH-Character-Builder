@@ -6,7 +6,7 @@ import { createFilterOptions } from '@mui/material/Autocomplete';
 // redux import
 import { useSelector } from "react-redux";
 
-export default function Dropdown(props) {
+export default function HeroDropdown(props) {
   // whole hero list that contains all names, backpacks, and character ids
   const name_display = useSelector((state) => state.display.name_display);
   const heroList = useSelector((state) => state.display.heroList);

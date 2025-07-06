@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { Autocomplete, Box, TextField } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Autocomplete, Box, TextField, Chip } from "@mui/material";
 
 //redux imports
 import { useSelector } from "react-redux";
 
 const BlessingComponent = (props) => {
-  const reduxBlessing = useSelector((state) => state.hero.heroes[props.id].blessing);
+//   const reduxBlessing = useSelector((state) => state.hero.heroes[props.id].blessing);
   const [blessing, setBlessing] = useState(null);
-  const [isDisabled, setIsDisabled] = useState(true);
+//   const [isDisabled, setIsDisabled] = useState(true);
   const blessingOptions = [
     { value: "water", label: "Water" },
     { value: "wind", label: "Wind" },
@@ -19,34 +19,31 @@ const BlessingComponent = (props) => {
     { value: "anima", label: "Anima" },
   ];
 
-  useEffect(() => {
-    if (
-      props.hero.hero_type === "normal" ||
-      props.hero.hero_type === "duo" ||
-      props.hero.hero_type === "harmonic" ||
-      props.hero.hero_type === "rearmed" ||
-      props.hero.hero_type === "ascended"
-    ) {
-      setIsDisabled(false);
-    } else {
-      setIsDisabled(true);
-    }
-  }, [props.hero.name, props.hero.hero_type]);
+//   useEffect(() => {
+//     if (
+//       props.hero.hero_type === "normal" ||
+//       props.hero.hero_type === "duo" ||
+//       props.hero.hero_type === "harmonic" ||
+//       props.hero.hero_type === "rearmed" ||
+//       props.hero.hero_type === "ascended"
+//     ) {
+//       setIsDisabled(false);
+//     } else {
+//       setIsDisabled(true);
+//     }
+//   }, [props.hero.name, props.hero.hero_type]);
 
-  useEffect(() => {
-    if (reduxBlessing === "") {
-      setBlessing({ value: null, label: "" });
-    } else {
-      setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
-    }
-  }, [reduxBlessing]);
+//   useEffect(() => {
+//     if (reduxBlessing === "") {
+//       setBlessing({ value: null, label: "" });
+//     } else {
+//       setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
+//     }
+//   }, [reduxBlessing]);
 
-  const handleBlessing = (e, value) => {
-    if (value === null) {
-      props.onChange("");
-    } else {
-      props.onChange(value.value);
-    }
+  const handleBlessing = (value) => {
+    setBlessing(value)
+    props.onChange(value.label)
   };
 
   return (
@@ -55,10 +52,10 @@ const BlessingComponent = (props) => {
       sx={{ width: "100%" }}
       options={blessingOptions}
       value={blessing}
-      onChange={handleBlessing}
-      disabled={!props.hero.exists || isDisabled}
+      onChange={(_, selectedBlessing) => handleBlessing(selectedBlessing)}
+    //   disabled={!props.hero.exists || isDisabled}
       getOptionLabel={(option) => option.label || ""}
-      renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
+      renderOption={(props, option) => <Box {...props}>{option.label}</Box>}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
     />
@@ -71,14 +68,14 @@ const BlessingHeroSelectionComponent = (props) => {
   const [selectedHeroList, setSelectedHeroList] = useState([]);
   const [stats, setStats] = useState([0, 0, 0, 0, 0]);
   const [isDisabled, setIsDisabled] = useState(true);
-  const test = "";
-  const blessing = useSelector((state) => state.tabList.tabList[props.id].blessing);
-  const blessingHeroList = useSelector((state) => state.tabList.tabList[props.id].blessingHeroList);
+  const blessing = useSelector((state) => state.hero.heroes[props.id].blessing || null);
+  const blessingHeroList = useSelector((state) => state.hero.heroes[props.id].blessingHeroList || []);
 
   useEffect(() => {
     setIsDisabled(true);
     async function fetchMyAPI() {
-      let response = await fetch(`http://localhost:5000/LegendaryMythic/` + blessing);
+      var url = `http://localhost:5000/api/heroes/lm/` + blessing;
+      let response = await fetch(url);
       response = await response.json();
       setHeroList(
         []
@@ -87,19 +84,16 @@ const BlessingHeroSelectionComponent = (props) => {
           .map(function (hero) {
             return {
               value: hero,
-              label: hero.name,
+              label: hero.hero_name,
             };
           })
       );
-
       setStats([0, 0, 0, 0, 0]);
     }
     if (blessing !== null && blessing !== "" && blessing !== "normal" && blessing !== "duo" && blessing !== "harmonic") {
       fetchMyAPI();
       setIsDisabled(false);
     }
-    // not sure why its yelling because i dont understand this error.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blessing]);
 
   useEffect(() => {
@@ -107,24 +101,23 @@ const BlessingHeroSelectionComponent = (props) => {
   }, [blessingHeroList]);
 
   const handleAdd = (chip) => {
-    if (chip.currentTarget.title === "Clear") {
-      calculateHeroBuffs(stats, [], false);
-    } else if (selectedHeroList.length < 6) {
-      var hero = heroList.find((element) => {
-        return element.label === chip.target.innerHTML;
-      });
-      var array = [...selectedHeroList, { label: chip.target.innerHTML, index: selectedHeroList.length }];
-      calculateHeroBuffs(hero.value.stats, array, true);
-    }
+    setSelectedHeroList([...selectedHeroList, chip])
+    // if (chip.currentTarget.title === "Clear") {
+    // //   calculateHeroBuffs(stats, [], false);
+    // } else if (selectedHeroList.length < 6) {
+    //   var hero = heroList.find((element) => {
+    //     return element.label === chip.target.innerHTML;
+    //   });
+    //   var array = [...selectedHeroList, { label: chip.target.innerHTML, index: selectedHeroList.length }];
+    //   calculateHeroBuffs(hero.value.stats, array, true);
+    // }
   };
 
   const handleDelete = (index, option) => {
-    var hero = heroList.find((element) => {
-      return element.label === option.label;
-    });
     const array = [...selectedHeroList];
     array.splice(index, 1);
-    calculateHeroBuffs(hero.value.stats, array, false);
+    setSelectedHeroList(array)
+    // calculateHeroBuffs(hero.value.stats, array, false);
   };
 
   const calculateHeroBuffs = (heroStats, heroArray, addOrSubtract) => {
@@ -169,13 +162,13 @@ const BlessingHeroSelectionComponent = (props) => {
       <Autocomplete
         id="tags-outlined"
         value={[]}
-        inputValue={test}
+        inputValue={""}
         options={heroList}
         getOptionLabel={(option) => option.label || ""}
         disabled={isDisabled}
         getOptionDisabled={(option) => selectedHeroList.length === 6}
-        onChange={(e) => {
-          handleAdd(e);
+        onChange={(_, addHero) => {
+          handleAdd(addHero);
         }}
         isOptionEqualToValue={(option, value) => option.label === value}
         renderInput={(params) => <TextField {...params} variant="standard" label="Allies" placeholder="Hero" fullWidth />}
@@ -184,4 +177,4 @@ const BlessingHeroSelectionComponent = (props) => {
   );
 }
 
-export default {BlessingHeroSelectionComponent, BlessingComponent};
+export { BlessingComponent, BlessingHeroSelectionComponent };

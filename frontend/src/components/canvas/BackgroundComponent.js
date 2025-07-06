@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
-import { Stage, Layer, Group, Image, Text } from "react-konva";
+import { Image } from "react-konva";
 import useImage from "use-image";
 import "./HeroCanvas.css";
 import "./../../App.css";
+import bg from "./../../assets/og_background.webp"
 
-const BackgroundComponent = ({ image, summonerSupport, width, height }) => {
-  if (image.label === "" || image === "" || image === undefined) {
-    image = "normal";
-  } else {
-    image = image.value;
-  }
-  if (
-    summonerSupport !== "No" &&
-    summonerSupport !== null &&
-    summonerSupport !== ""
-  ) {
-    image += "_summoner";
-  }
-  var url = "https://fehportraits.s3.amazonaws.com/bg_" + image + ".png";
-  const [imgElement] = useImage(url, "Anonymous");
-
+const BackgroundComponent = ({ width, height }) => {
+  // if (image.label === "" || image === "" || image === undefined) {
+  //   image = "normal";
+  // } else {
+  //   image = image.value;
+  // }
+  // if (
+  //   summonerSupport !== "No" &&
+  //   summonerSupport !== null &&
+  //   summonerSupport !== ""
+  // ) {
+  //   image += "_summoner";
+  // }
+  // var url = "https://fehportraits.s3.amazonaws.com/bg_" + image + ".png";
+  
+  const [image] = useImage(bg);
   return (
     <Image
-      image={imgElement}
+      image={image}
       x={0}
       y={0}
       cropX={130}

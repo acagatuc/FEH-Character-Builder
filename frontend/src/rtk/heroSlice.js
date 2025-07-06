@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { defaultHero } from './constants';
 
 const initialState = {
-  heroes: {},
+  heroes: {0: defaultHero},
   canvas: {},
   skills: {}
 };
@@ -16,6 +17,7 @@ const heroSlice = createSlice({
         state.heroes[id].resplendent = false;
         state.heroes[id].resplendentStats = false;
         state.heroes[id].blessing = null;
+        state.heroes[id].blessingHeroList = []
       } else {
         state.heroes[id] = {};
       }
@@ -223,7 +225,7 @@ const heroSlice = createSlice({
 
     changeBlessing(state, action) {
       const { blessing, id } = action.payload;
-      state.tabList[id].blessing = blessing;
+      state.heroes[id].blessing = blessing;
     },
 
     changeBlessingStats(state, action) {

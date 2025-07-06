@@ -91,6 +91,16 @@ const getHeroList = async (req, res) => {
   }
 }
 
+const getLMList = async (req, res) => {
+  try {
+    const blessingHeroes = await Blessing.find({blessing: req.params.blessing});
+    res.status(200).json(blessingHeroes);
+  } catch (err) {
+    console.error('Error fetching heroes:', err);
+    res.status(500).json({ message: 'Server error fetching heroes' });
+  }
+}
+
 const getHero = async (req, res) => {
   try {
     const hero = await Hero.find({_id: req.params.heroId});
@@ -130,6 +140,7 @@ module.exports = {
   addBulkList,
   addBulkBlessings,
   getHeroList,
+  getLMList,
   getHero,
   getHeroImage
 };

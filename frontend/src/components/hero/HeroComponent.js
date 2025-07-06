@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@mui/material";
 import "./HeroComponent.css";
 
-import BlessingComponent from "./BlessingComponent.js";
-import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
+import { BlessingComponent, BlessingHeroSelectionComponent } from "./BlessingComponent.js";
+// import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
 
 import HeroDropdown from "./HeroDropdown.js";
 import WeaponComponent from "./WeaponComponent.js";
@@ -30,6 +30,8 @@ import {
   changeHero,
   changeResplendent,
   changeResplendentStats,
+  changeBlessing,
+  changeBlessingStats
 } from "../../rtk/heroSlice.js";
 
 // text arrows
@@ -442,11 +444,11 @@ export default function HeroComponent(props) {
   //   dispatch(actions.changeStats(props.id));
   // };
 
-  const changeBlessing = (b) => {
-    dispatch(changeBlessing(b, props.id));
+  const handleBlessing = (b) => {
+    dispatch(changeBlessing({ blessing: b, id: props.id }));
   };
 
-  const changeBlessingStats = (buffs, heroes) => {
+  const handleBlessingStats = (buffs, heroes) => {
     dispatch(changeBlessingStats(buffs, heroes, props.id));
     // dispatch(changeStats(props.id));
   };
@@ -515,16 +517,13 @@ export default function HeroComponent(props) {
           title={"Select Hero"}
           id={props.id}
         />
-
         <BlessingComponent
-          hero={hero}
           placeholder={"Blessing"}
-          onChange={changeBlessing}
+          onChange={handleBlessing}
           id={props.id}
         />
         <BlessingHeroSelectionComponent
-          hero={hero}
-          onChange={changeBlessingStats}
+          onChange={handleBlessingStats}
           id={props.id}
         />
         <SwitchComponent

@@ -3,103 +3,106 @@ import { Stage, Layer, Group, Image, Text } from "react-konva";
 import useImage from "use-image";
 import "./HeroCanvas.css";
 import "./../../App.css";
-import floret from "./../../assets/ascendant_floret.png";
-import Summoner_C from "./../../assets/Summoner_C.png";
-import Summoner_B from "./../../assets/Summoner_B.png";
-import Summoner_A from "./../../assets/Summoner_A.png";
-import Summoner_S from "./../../assets/Summoner_S.png";
-import Ally_C from "./../../assets/Ally_C.png";
-import Ally_B from "./../../assets/Ally_B.png";
-import Ally_A from "./../../assets/Ally_A.png";
-import Ally_S from "./../../assets/Ally_S.png";
-import harmonic from "./../../assets/harmonic.png";
-import duo from "./../../assets/duo.png";
-import ascended from "./../../assets/ascended.png";
-import rearmed from "./../../assets/rearmed.png";
-import df from "./../../assets/Item_2.png";
-import stars from "./../../assets/Summon_Rarity.png";
-import sheet from "./../../assets/sprite_sheet.png";
-import wmsheet from "./../../assets/wmsheet.png";
-import bg_button from "./../../assets/bg_button.png";
-import ui from "./../../assets/updated ui 2.png";
+// import floret from "./../../assets/ascendant_floret.png";
+// import Summoner_C from "./../../assets/Summoner_C.png";
+// import Summoner_B from "./../../assets/Summoner_B.png";
+// import Summoner_A from "./../../assets/Summoner_A.png";
+// import Summoner_S from "./../../assets/Summoner_S.png";
+// import Ally_C from "./../../assets/Ally_C.png";
+// import Ally_B from "./../../assets/Ally_B.png";
+// import Ally_A from "./../../assets/Ally_A.png";
+// import Ally_S from "./../../assets/Ally_S.png";
+// import harmonic from "./../../assets/harmonic.png";
+// import duo from "./../../assets/duo.png";
+// import ascended from "./../../assets/ascended.png";
+// import rearmed from "./../../assets/rearmed.png";
+// import df from "./../../assets/Item_2.png";
+// import stars from "./../../assets/Summon_Rarity.png";
+// import sheet from "./../../assets/sprite_sheet.png";
+// import wmsheet from "./../../assets/wmsheet.png";
+// import bg_button from "./../../assets/bg_button.png";
+// import ui from "./../../assets/updated ui 2.png";
 
 // redux import
 import { useSelector } from "react-redux";
 
 import ImageComponent from "./ImageComponent";
+import UIComponent from "./UIComponent";
 import BackgroundComponent from "./BackgroundComponent";
+import { LargeTextComponent, TextComponent } from "./TextComponent";
+import StatComponent from "./StatComponent";
 
 // an array that declares the x values of all numbers
 const numberArray = [520, 555, 590, 624, 656, 692, 725, 759, 793, 828];
 
-const RarityComponent = ({ rarity }) => {
-  const [imgElement] = useImage(stars, "Anonymous");
+// const RarityComponent = ({ rarity }) => {
+//   const [imgElement] = useImage(stars, "Anonymous");
 
-  return (
-    <Group>
-      {/* <Image image={imgElement} x={0} y={0} cropX={0} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 1 star
-      <Image image={imgElement} x={30} y={0} cropX={90} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 2 star
-      <Image image={imgElement} x={60} y={0} cropX={180} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 3 star
-      <Image image={imgElement} x={90} y={0} cropX={270} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 4 star*/}
-      <Image
-        image={imgElement}
-        x={44}
-        y={375}
-        cropX={360}
-        cropY={390}
-        cropWidth={90}
-        cropHeight={90}
-        width={45}
-        height={45}
-      />
-      <Image
-        image={imgElement}
-        x={72}
-        y={375}
-        cropX={360}
-        cropY={390}
-        cropWidth={90}
-        cropHeight={90}
-        width={45}
-        height={45}
-      />
-      <Image
-        image={imgElement}
-        x={100}
-        y={375}
-        cropX={360}
-        cropY={390}
-        cropWidth={90}
-        cropHeight={90}
-        width={45}
-        height={45}
-      />
-      <Image
-        image={imgElement}
-        x={128}
-        y={375}
-        cropX={360}
-        cropY={390}
-        cropWidth={90}
-        cropHeight={90}
-        width={45}
-        height={45}
-      />
-      <Image
-        image={imgElement}
-        x={156}
-        y={375}
-        cropX={360}
-        cropY={390}
-        cropWidth={90}
-        cropHeight={90}
-        width={45}
-        height={45}
-      />
-      {/* <Image image={imgElement} x={156} y={375} cropX={450} cropY={390} cropWidth={90} cropHeight={90} width={45} height={45} /> forma star*/}
-    </Group>
-  );
-};
+//   return (
+//     <Group>
+//       {/* <Image image={imgElement} x={0} y={0} cropX={0} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 1 star
+//       <Image image={imgElement} x={30} y={0} cropX={90} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 2 star
+//       <Image image={imgElement} x={60} y={0} cropX={180} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 3 star
+//       <Image image={imgElement} x={90} y={0} cropX={270} cropY={390} cropWidth={90} cropHeight={90} width={50} height={50} /> 4 star*/}
+//       <Image
+//         image={imgElement}
+//         x={44}
+//         y={375}
+//         cropX={360}
+//         cropY={390}
+//         cropWidth={90}
+//         cropHeight={90}
+//         width={45}
+//         height={45}
+//       />
+//       <Image
+//         image={imgElement}
+//         x={72}
+//         y={375}
+//         cropX={360}
+//         cropY={390}
+//         cropWidth={90}
+//         cropHeight={90}
+//         width={45}
+//         height={45}
+//       />
+//       <Image
+//         image={imgElement}
+//         x={100}
+//         y={375}
+//         cropX={360}
+//         cropY={390}
+//         cropWidth={90}
+//         cropHeight={90}
+//         width={45}
+//         height={45}
+//       />
+//       <Image
+//         image={imgElement}
+//         x={128}
+//         y={375}
+//         cropX={360}
+//         cropY={390}
+//         cropWidth={90}
+//         cropHeight={90}
+//         width={45}
+//         height={45}
+//       />
+//       <Image
+//         image={imgElement}
+//         x={156}
+//         y={375}
+//         cropX={360}
+//         cropY={390}
+//         cropWidth={90}
+//         cropHeight={90}
+//         width={45}
+//         height={45}
+//       />
+//       {/* <Image image={imgElement} x={156} y={375} cropX={450} cropY={390} cropWidth={90} cropHeight={90} width={45} height={45} /> forma star*/}
+//     </Group>
+//   );
+// };
 
 // const ResplendentComponent = ({ shouldRender }) => {
 //   const [imgElement] = useImage(sheet, "Anonymous");
@@ -162,9 +165,9 @@ export default function HeroCanvas(props) {
   );
 
   // global redux state
-  const hero = useSelector(
-    (state) => state.hero.heroes[state.tabs.currentTab]
-  );
+  const hero = useSelector((state) => state.hero.heroes[state.tabs.currentTab]);
+  console.log(hero)
+
   return (
     <div id="wrapper" className="wrapper">
       <Stage
@@ -174,13 +177,11 @@ export default function HeroCanvas(props) {
         scaleX={stageWidth / 540}
         scaleY={stageHeight / 960}
       >
-        <Layer id="img layer">
-          {/* <BackgroundComponent
-              image={background}
-              summonerSupport={ss}
+        <Layer id="hero layer">
+          <BackgroundComponent
               width={540}
               height={960}
-            /> */}
+            />
           <ImageComponent
             image={hero}
             cropX={368}
@@ -190,6 +191,83 @@ export default function HeroCanvas(props) {
             width={540}
             height={960}
           />
+          <UIComponent width={540} height={960} />
+        </Layer>
+        <Layer id="stat layer">
+          <LargeTextComponent
+              text={hero.name.split(":")[1] || ""}
+              color="white"
+              stroke="black"
+              x={58}
+              y={470}
+              width={214}
+            />
+            <LargeTextComponent
+              text={hero.name.split(":")[0] || ""}
+              color="white"
+              x={15}
+              y={412}
+              width={260}
+            />
+          <TextComponent
+              text={"HP"}
+              color={"white"} // change this to a helper function later
+              x={88}
+              y={604}
+            />
+            <TextComponent
+              text={"Atk"}
+              color={"white"}
+              x={87}
+              y={641}
+            />
+            <TextComponent
+              text={"Spd"}
+              color={"white"}
+              x={85}
+              y={678}
+            />
+            <TextComponent
+              text={"Def"}
+              color={"white"}
+              x={86}
+              y={715}
+            />
+            <TextComponent
+              text={"Res"}
+              color={"white"}
+              x={86}
+              y={752}
+            />
+            <StatComponent text={`${hp}`} x={172} y={603} buff={false} />
+             <StatComponent
+              text={`${atk}`}
+              x={172}
+              y={640}
+              buff={buff[0] !== 0}
+              buffColor={buff[0] < 0}
+            />
+            <StatComponent
+              text={`${spd}`}
+              x={172}
+              y={677}
+              buff={buff[1] !== 0}
+              buffColor={buff[1] < 0}
+            />
+            <StatComponent
+              text={`${def}`}
+              x={172}
+              y={714}
+              buff={buff[2] !== 0}
+              buffColor={buff[2] < 0}
+            />
+            <StatComponent
+              text={`${res}`}
+              x={172}
+              y={751}
+              buff={buff[3] !== 0}
+              buffColor={buff[3] < 0}
+            />
         </Layer>
       </Stage>
     </div>

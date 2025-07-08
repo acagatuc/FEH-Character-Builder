@@ -67,7 +67,7 @@ export default function FlowerComponent(props) {
       onChange={handleDragonflowers}
       disabled={!props.hero.exists}
       getOptionLabel={(option) => option.label || ""}
-      renderOption={(props: object, option: any) => (
+      renderOption={(props, option) => (
         <Box sx={{ backgroundColor: option.color }} {...props}>
           {option.label}
         </Box>

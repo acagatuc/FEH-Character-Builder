@@ -166,7 +166,6 @@ export default function HeroCanvas(props) {
 
   // global redux state
   const hero = useSelector((state) => state.hero.heroes[state.tabs.currentTab]);
-  console.log(hero)
 
   return (
     <div id="wrapper" className="wrapper">
@@ -239,34 +238,34 @@ export default function HeroCanvas(props) {
               x={86}
               y={752}
             />
-            <StatComponent text={`${hp}`} x={172} y={603} buff={false} />
+            <StatComponent number={`${hero.calculatedStats[0]}`} x={158} y={603} buff={false} />
              <StatComponent
-              text={`${atk}`}
-              x={172}
+              number={`${hero.calculatedStats[1]}`}
+              x={158}
               y={640}
-              buff={buff[0] !== 0}
-              buffColor={buff[0] < 0}
+              buff={hero.buffs[0] !== 0}
+              buffColor={hero.buffs[0] < 0}
             />
             <StatComponent
-              text={`${spd}`}
-              x={172}
+              number={`${hero.calculatedStats[2]}`}
+              x={158}
               y={677}
-              buff={buff[1] !== 0}
-              buffColor={buff[1] < 0}
+              buff={hero.buffs[1] !== 0}
+              buffColor={hero.buffs[1] < 0}
             />
             <StatComponent
-              text={`${def}`}
-              x={172}
+              number={`${hero.calculatedStats[3]}`}
+              x={158}
               y={714}
-              buff={buff[2] !== 0}
-              buffColor={buff[2] < 0}
+              buff={hero.buffs[2] !== 0}
+              buffColor={hero.buffs[2] < 0}
             />
             <StatComponent
-              text={`${res}`}
-              x={172}
+              number={`${hero.calculatedStats[4]}`}
+              x={158}
               y={751}
-              buff={buff[3] !== 0}
-              buffColor={buff[3] < 0}
+              buff={hero.buffs[3] !== 0}
+              buffColor={hero.buffs[3] < 0}
             />
         </Layer>
       </Stage>

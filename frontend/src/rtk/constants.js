@@ -9,6 +9,8 @@ export const defaultHero = {
     res: 0
   },
   skills: [],
+  calculatedStats: [],
+  buffs: [],
   resplendent: false,
   blessing: null,
   blessingHeroList: []

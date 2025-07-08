@@ -31,7 +31,6 @@ export default function HeroDropdown(props) {
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(value) {
-    console.log(value)
     setSelectedHero(value)
     props.onChange(value)
   }

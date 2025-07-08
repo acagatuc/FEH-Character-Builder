@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { defaultHero } from './constants';
+import { StatCalculation } from '../utils/StatCalculation'
 
 const initialState = {
   heroes: {0: defaultHero},
@@ -14,14 +15,18 @@ const heroSlice = createSlice({
       const { hero, id } = action.payload;
       if (hero != null) {
         state.heroes[id] = hero;
+        state.heroes[id].calculatedStats = StatCalculation(hero);
+        state.heroes[id].buffs = [0,0,0,0];
+        state.heroes[id].boon = null;
+        state.heroes[id].bane = null;
+        state.heroes[id].ascended = null;
         state.heroes[id].resplendent = false;
         state.heroes[id].resplendentStats = false;
         state.heroes[id].blessing = null;
-        state.heroes[id].blessingHeroList = []
+        state.heroes[id].blessingHeroList = [];
       } else {
         state.heroes[id] = {};
       }
-      console.log(JSON.parse(JSON.stringify(state)));
     },
 
     copyHero: (state, action) => {

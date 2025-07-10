@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Button, Tooltip } from "@mui/material";
 import "./HeroComponent.css";
 
-import { BlessingComponent, BlessingHeroSelectionComponent } from "./BlessingComponent.js";
+import {
+  BlessingComponent,
+  BlessingHeroSelectionComponent,
+} from "./BlessingComponent.js";
 // import BlessingHeroSelectionComponent from "./BlessingHeroSelectionComponent.js";
 
 import HeroDropdown from "./HeroDropdown.js";
@@ -31,7 +34,7 @@ import {
   changeResplendent,
   changeResplendentStats,
   changeBlessing,
-  changeBlessingStats
+  changeBlessingStats,
 } from "../../rtk/heroSlice.js";
 
 // text arrows
@@ -351,7 +354,7 @@ export default function HeroComponent(props) {
   //   }
   // };
 
-  // const mergeChange = (number) => {
+  const handleMerge = (number) => {
   //   var tempArray = [];
   //   var mergeTemp = [];
 
@@ -369,9 +372,9 @@ export default function HeroComponent(props) {
   //     tempArray[index] = 0;
   //     i += 1;
   //   }
-  //   dispatch(actions.changeMerges(number, mergeTemp, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+    dispatch(changeMerges(number, mergeTemp, props.id));
+    dispatch(changeStats(props.id));
+  };
 
   // const flowerChange = (value) => {
   //   dispatch(actions.changeDragonflowers(value, props.id));
@@ -539,6 +542,12 @@ export default function HeroComponent(props) {
           label={"+"}
           onChange={handleAscended}
           placeholder={"Ascended"}
+          />
+        <Merges
+          hero={hero}
+          onChange={handleMerge}
+          placeholder={"Merges"}
+          id={props.id}
         />
         <BlessingComponent
           placeholder={"Blessing"}

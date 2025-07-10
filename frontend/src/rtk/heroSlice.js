@@ -20,6 +20,7 @@ const heroSlice = createSlice({
         state.heroes[id].boon = null;
         state.heroes[id].bane = null;
         state.heroes[id].ascended = null;
+        state.heroes[id].merges = 0;
         state.heroes[id].resplendent = false;
         state.heroes[id].resplendentStats = false;
         state.heroes[id].blessing = null;
@@ -113,63 +114,8 @@ const heroSlice = createSlice({
     },
 
     changeMerges(state, action) {
-      const { merges, order, id } = action.payload;
-      const tab = state.tabList[id];
-      tab.merges = merges;
-      tab.mergeOrder = order;
-
-      let tempArray = [0, 0, 0, 0, 0];
-
-      if (merges === 10) {
-        tempArray[order[4]] += 1;
-        tempArray[order[3]] += 1;
-      }
-      if (merges >= 9) {
-        tempArray[order[1]] += 1;
-        tempArray[order[2]] += 1;
-      }
-      if (merges >= 8) {
-        tempArray[order[4]] += 1;
-        tempArray[order[0]] += 1;
-      }
-      if (merges >= 7) {
-        tempArray[order[2]] += 1;
-        tempArray[order[3]] += 1;
-      }
-      if (merges >= 6) {
-        tempArray[order[1]] += 1;
-        tempArray[order[0]] += 1;
-      }
-      if (merges >= 5) {
-        tempArray[order[4]] += 1;
-        tempArray[order[3]] += 1;
-      }
-      if (merges >= 4) {
-        tempArray[order[1]] += 1;
-        tempArray[order[2]] += 1;
-      }
-      if (merges >= 3) {
-        tempArray[order[4]] += 1;
-        tempArray[order[0]] += 1;
-      }
-      if (merges >= 2) {
-        tempArray[order[2]] += 1;
-        tempArray[order[3]] += 1;
-      }
-      if (merges >= 1) {
-        const prevAsset = tab.levels.indexOf(2);
-        const prevFlaw = tab.levels.indexOf(0);
-        if (prevFlaw === -1 && prevAsset === -1) {
-          tempArray[order[0]] += 2;
-          tempArray[order[1]] += 2;
-          tempArray[order[2]] += 1;
-        } else {
-          tempArray[order[0]] += 1;
-          tempArray[order[1]] += 1;
-        }
-      }
-
-      tab.mergedStats = tempArray;
+      const { merges, id } = action.payload;
+      state.heroes[id].merges = merges
     },
 
     changeLevels(state, action) {

@@ -1,36 +1,44 @@
 import { useEffect, useState } from "react";
 import { Autocomplete, Box, TextField } from "@mui/material";
 
-
 export default function TraitComponent(props) {
   const [trait, setTrait] = useState(null);
-  const stats = ["HP", "Atk", "Spd", "Def", "Res"]
-  const [traitsOptions, setTraitsOptions] = useState([])
+  const stats = ["HP", "Atk", "Spd", "Def", "Res"];
+  const [traitsOptions, setTraitsOptions] = useState([]);
 
   useEffect(() => {
     if (!props.disabled) {
-      console.log(props.traits)
-      setTraitsOptions(stats.map((element) => {
-        // gets the background color of the element
-        let color = "white"
-        if (props.traits.includes(element.toLowerCase())) {
-          color = props.color
-        }
+      setTraitsOptions(
+        stats.map((element) => {
+          // gets the background color of the element
+          let color = "white";
+          if (props.traits.includes(element.toLowerCase())) {
+            color = props.color;
+          }
 
-        // gets whether the element is already selected (making it unselectable)
-        
+          // gets whether the element is already selected (making it unselectable) (make this occur on change to boons/banes instead of hero?)
 
-        return { "value": element, "label": props.label + element, "color": color, "disabled": false}
-      }))
-      console.log(traitsOptions)
+          return {
+            value: element,
+            label: props.label + element,
+            color: color,
+            disabled: false,
+          };
+        })
+      );
     }
-  }, [props.hero])
+  }, [props.hero]);
 
+  useEffect(() => {}, [props.hero.boon, props.hero.bane, props.hero.ascended]);
 
   const handleChange = (value) => {
-    setTrait(value)
-    props.onChange(value)
-  }
+    setTrait(value);
+    if (value === null) {
+      props.onChange(props.placeholder, null);
+    } else {
+      props.onChange(props.placeholder, value.value.toLowerCase());
+    }
+  };
 
   return (
     <Autocomplete
@@ -47,10 +55,16 @@ export default function TraitComponent(props) {
       )}
       isOptionEqualToValue={(option, value) => option.label === value.label}
       getOptionDisabled={(option) => option.disabled}
-      renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
-    />)
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="standard"
+          placeholder={props.placeholder}
+        ></TextField>
+      )}
+    />
+  );
 }
-
 
 // const [traitOptions, setTraitOptions] = useState([
 //   {

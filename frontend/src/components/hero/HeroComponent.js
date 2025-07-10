@@ -31,6 +31,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { resetTab } from "../../rtk/tabsSlice.js";
 import {
   changeHero,
+  changeTraits,
+  changeDragonflowers,
   changeResplendent,
   changeResplendentStats,
   changeBlessing,
@@ -355,48 +357,31 @@ export default function HeroComponent(props) {
   // };
 
   const handleMerge = (number) => {
-  //   var tempArray = [];
-  //   var mergeTemp = [];
-
-  //   tempArray.push(0);
-  //   tempArray.push(parseInt(hero.atk[levels[1]]));
-  //   tempArray.push(parseInt(hero.spd[levels[2]]));
-  //   tempArray.push(parseInt(hero.def[levels[3]]));
-  //   tempArray.push(parseInt(hero.res[levels[4]]));
-
-  //   mergeTemp.push(0);
-  //   var i = 0;
-  //   while (i < 4) {
-  //     var index = tempArray.indexOf(Math.max(...tempArray));
-  //     mergeTemp.push(index);
-  //     tempArray[index] = 0;
-  //     i += 1;
-  //   }
-    dispatch(changeMerges(number, mergeTemp, props.id));
-    dispatch(changeStats(props.id));
+    //   var tempArray = [];
+    //   var mergeTemp = [];
+    //   tempArray.push(0);
+    //   tempArray.push(parseInt(hero.atk[levels[1]]));
+    //   tempArray.push(parseInt(hero.spd[levels[2]]));
+    //   tempArray.push(parseInt(hero.def[levels[3]]));
+    //   tempArray.push(parseInt(hero.res[levels[4]]));
+    //   mergeTemp.push(0);
+    //   var i = 0;
+    //   while (i < 4) {
+    //     var index = tempArray.indexOf(Math.max(...tempArray));
+    //     mergeTemp.push(index);
+    //     tempArray[index] = 0;
+    //     i += 1;
+    //   }
+    //   dispatch(changeMerges(number, mergeTemp, props.id));
+    //   dispatch(changeStats(props.id));
   };
 
-  // const flowerChange = (value) => {
-  //   dispatch(actions.changeDragonflowers(value, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
-
-  const handleAsset = (value) => {
-    console.log(value)
-    // dispatch(actions.changeLevels(array, props.id, a, flaw, ascended));
-    // dispatch(actions.changeStats(props.id));
+  const handleFlowers = (value) => {
+    dispatch(changeDragonflowers({ dragonflowers: value, id: props.id }));
   };
 
-  const handleFlaw = (value) => {
-    console.log(value)
-    // dispatch(actions.changeLevels(array, props.id, asset, f, ascended));
-    // dispatch(actions.changeStats(props.id));
-  };
-
-  const handleAscended = (value) => {
-    console.log(value)
-    // dispatch(actions.changeLevels(array, props.id, asset, flaw, a));
-    // dispatch(actions.changeStats(props.id));
+  const handleTrait = (trait, value) => {
+    dispatch(changeTraits({ trait: trait, value: value, id: props.id }));
   };
 
   // const changeWeapon = (w) => {
@@ -529,26 +514,39 @@ export default function HeroComponent(props) {
           disabled={hero.name === ""}
           color={"#79ba8e"}
           label={"+"}
-          onChange={handleAsset}
+          onChange={handleTrait}
           placeholder={"Asset"}
         />
-        <Traits hero={hero} traits={hero.superbanes}
-          disabled={hero.name === ""} color={"#e68585"} label={"-"} onChange={handleFlaw} placeholder={"Flaw"} />
+        <Traits
+          hero={hero}
+          traits={hero.superbanes}
+          disabled={hero.name === ""}
+          color={"#e68585"}
+          label={"-"}
+          onChange={handleTrait}
+          placeholder={"Flaw"}
+        />
         <Traits
           hero={hero}
           traits={hero.superboons}
           disabled={hero.name === ""}
           color={"#79ba8e"}
           label={"+"}
-          onChange={handleAscended}
+          onChange={handleTrait}
           placeholder={"Ascended"}
-          />
-        <Merges
+        />
+        <FlowerComponent
+          hero={hero}
+          disabled={hero.name === ""}
+          onChange={handleFlowers}
+          id={props.id}
+        />
+        {/* <Merges
           hero={hero}
           onChange={handleMerge}
           placeholder={"Merges"}
           id={props.id}
-        />
+        /> */}
         <BlessingComponent
           placeholder={"Blessing"}
           onChange={handleBlessing}

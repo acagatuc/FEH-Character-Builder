@@ -1,14 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { defaultHero } from './constants';
-import { StatCalculation } from '../utils/StatCalculation'
+import { createSlice } from "@reduxjs/toolkit";
+import { defaultHero } from "./constants";
+import { StatCalculation } from "../utils/StatCalculation";
 
 const initialState = {
-  heroes: {0: defaultHero},
+  heroes: { 0: defaultHero },
   canvas: {},
-  skills: {}
+  skills: {},
 };
 const heroSlice = createSlice({
-  name: 'heroes',
+  name: "heroes",
   initialState,
   reducers: {
     changeHero: (state, action) => {
@@ -16,10 +16,11 @@ const heroSlice = createSlice({
       if (hero != null) {
         state.heroes[id] = hero;
         state.heroes[id].calculatedStats = StatCalculation(hero);
-        state.heroes[id].buffs = [0,0,0,0];
+        state.heroes[id].buffs = [0, 0, 0, 0];
         state.heroes[id].boon = null;
         state.heroes[id].bane = null;
         state.heroes[id].ascended = null;
+        state.heroes[id].flowers = 0;
         state.heroes[id].merges = 0;
         state.heroes[id].resplendent = false;
         state.heroes[id].resplendentStats = false;
@@ -57,20 +58,79 @@ const heroSlice = createSlice({
 
       let levels = [0, 0, 0, 0, 0];
       for (let j = 0; j < levels.length; j++) {
-        levels[j] = (tab.merges > 0 && tab.levels[j] === 0) ? 1 : tab.levels[j];
+        levels[j] = tab.merges > 0 && tab.levels[j] === 0 ? 1 : tab.levels[j];
       }
 
       const visible = tab.aSkill?.visibleStats ?? [0, 0, 0, 0, 0];
-      const visibleS = (tab.sSkill?.visibleStats && tab.sSkill.visibleStats.length !== 1) ? tab.sSkill.visibleStats : [0, 0, 0, 0, 0];
+      const visibleS =
+        tab.sSkill?.visibleStats && tab.sSkill.visibleStats.length !== 1
+          ? tab.sSkill.visibleStats
+          : [0, 0, 0, 0, 0];
       const weaponStats = tab.weapon?.visibleStats ?? [0, 0, 0, 0, 0];
       const refineStats = tab.refine?.stats ?? [0, 0, 0, 0, 0];
       const buffStats = tab.buffStats ?? [0, 0, 0, 0];
 
-      tab.hp = tab.hero.hp[3 + levels[0]] + tab.mergedStats[0] + tab.dragonflowerStats[0] + tab.blessingStats[0] + weaponStats[0] + refineStats[0] + visible[0] + visibleS[0] + tab.summonerSupportStats[0] + tab.resStats[0];
-      tab.atk = tab.hero.atk[3 + levels[1]] + tab.mergedStats[1] + tab.dragonflowerStats[1] + tab.blessingStats[1] + tab.weapon.might + weaponStats[1] + refineStats[1] + visible[1] + visibleS[1] + tab.summonerSupportStats[1] + tab.transformed + tab.resStats[1] + tab.buffStats[0];
-      tab.spd = tab.hero.spd[3 + levels[2]] + tab.mergedStats[2] + tab.dragonflowerStats[2] + tab.blessingStats[2] + weaponStats[2] + refineStats[2] + visible[2] + visibleS[2] + tab.summonerSupportStats[2] + tab.resStats[2] + tab.buffStats[1];
-      tab.def = tab.hero.def[3 + levels[3]] + tab.mergedStats[3] + tab.dragonflowerStats[3] + tab.blessingStats[3] + weaponStats[3] + refineStats[3] + visible[3] + visibleS[3] + tab.summonerSupportStats[3] + tab.resStats[3] + tab.buffStats[2];
-      tab.res = tab.hero.res[3 + levels[4]] + tab.mergedStats[4] + tab.dragonflowerStats[4] + tab.blessingStats[4] + weaponStats[4] + refineStats[4] + visible[4] + visibleS[4] + tab.summonerSupportStats[4] + tab.resStats[4] + tab.buffStats[3];
+      tab.hp =
+        tab.hero.hp[3 + levels[0]] +
+        tab.mergedStats[0] +
+        tab.dragonflowerStats[0] +
+        tab.blessingStats[0] +
+        weaponStats[0] +
+        refineStats[0] +
+        visible[0] +
+        visibleS[0] +
+        tab.summonerSupportStats[0] +
+        tab.resStats[0];
+      tab.atk =
+        tab.hero.atk[3 + levels[1]] +
+        tab.mergedStats[1] +
+        tab.dragonflowerStats[1] +
+        tab.blessingStats[1] +
+        tab.weapon.might +
+        weaponStats[1] +
+        refineStats[1] +
+        visible[1] +
+        visibleS[1] +
+        tab.summonerSupportStats[1] +
+        tab.transformed +
+        tab.resStats[1] +
+        tab.buffStats[0];
+      tab.spd =
+        tab.hero.spd[3 + levels[2]] +
+        tab.mergedStats[2] +
+        tab.dragonflowerStats[2] +
+        tab.blessingStats[2] +
+        weaponStats[2] +
+        refineStats[2] +
+        visible[2] +
+        visibleS[2] +
+        tab.summonerSupportStats[2] +
+        tab.resStats[2] +
+        tab.buffStats[1];
+      tab.def =
+        tab.hero.def[3 + levels[3]] +
+        tab.mergedStats[3] +
+        tab.dragonflowerStats[3] +
+        tab.blessingStats[3] +
+        weaponStats[3] +
+        refineStats[3] +
+        visible[3] +
+        visibleS[3] +
+        tab.summonerSupportStats[3] +
+        tab.resStats[3] +
+        tab.buffStats[2];
+      tab.res =
+        tab.hero.res[3 + levels[4]] +
+        tab.mergedStats[4] +
+        tab.dragonflowerStats[4] +
+        tab.blessingStats[4] +
+        weaponStats[4] +
+        refineStats[4] +
+        visible[4] +
+        visibleS[4] +
+        tab.summonerSupportStats[4] +
+        tab.resStats[4] +
+        tab.buffStats[3];
     },
 
     changeWeapon(state, action) {
@@ -115,34 +175,32 @@ const heroSlice = createSlice({
 
     changeMerges(state, action) {
       const { merges, id } = action.payload;
-      state.heroes[id].merges = merges
+      state.heroes[id].merges = merges;
     },
 
-    changeLevels(state, action) {
-      const { levels, id, asset, flaw, ascended } = action.payload;
-      const tab = state.tabList[id];
-      tab.levels = levels;
-      tab.asset = asset;
-      tab.flaw = flaw;
-      tab.ascended = ascended;
+    changeTraits(state, action) {
+      const { trait, value, id } = action.payload;
+      switch (trait) {
+        case "Asset":
+          // ensure another trait isnt already listed.
+          state.heroes[id].boon = value;
+          break;
+        case "Flaw":
+          state.heroes[id].bane = value;
+          break;
+        case "Ascended":
+          state.heroes[id].ascended = value;
+          break;
+        default:
+          console.log("error");
+      }
+      state.heroes[id].calculatedStats = StatCalculation(state.heroes[id]);
     },
 
     changeDragonflowers(state, action) {
       const { dragonflowers, id } = action.payload;
-      const tab = state.tabList[id];
-      tab.dragonflowers = dragonflowers;
-
-      let tempArray = [0, 0, 0, 0, 0];
-      if (dragonflowers !== null) {
-        let index = 0;
-        while (index < dragonflowers) {
-          tempArray[index % 5] += 1;
-          index++;
-        }
-        tab.dragonflowerStats = tempArray;
-      } else {
-        tab.dragonflowerStats = [0, 0, 0, 0, 0];
-      }
+      state.heroes[id].flowers = dragonflowers;
+      state.heroes[id].calculatedStats = StatCalculation(state.heroes[id]);
     },
 
     changeResplendent(state, action) {
@@ -153,7 +211,6 @@ const heroSlice = createSlice({
     changeResplendentStats(state, action) {
       const { r, id } = action.payload;
       state.heroes[id].resplendentStats = r;
-
 
       // let tempArray = [0, 0, 0, 0, 0];
       // if (res) {
@@ -167,7 +224,7 @@ const heroSlice = createSlice({
     changeTransformed(state, action) {
       const { transformed, id } = action.payload;
       const tab = state.tabList[id];
-      if (transformed && tab.hero.weapon_type.includes('Beast')) {
+      if (transformed && tab.hero.weapon_type.includes("Beast")) {
         tab.transformed = 2;
       } else {
         tab.transformed = 0;
@@ -192,10 +249,10 @@ const heroSlice = createSlice({
       tab.summonerSupport = summoner_support;
 
       let summonerSupportStats = [0, 0, 0, 0, 0];
-      if (summoner_support === 'C') summonerSupportStats = [3, 0, 0, 0, 2];
-      else if (summoner_support === 'B') summonerSupportStats = [4, 0, 0, 2, 2];
-      else if (summoner_support === 'A') summonerSupportStats = [4, 0, 2, 2, 2];
-      else if (summoner_support === 'S') summonerSupportStats = [5, 2, 2, 2, 2];
+      if (summoner_support === "C") summonerSupportStats = [3, 0, 0, 0, 2];
+      else if (summoner_support === "B") summonerSupportStats = [4, 0, 0, 2, 2];
+      else if (summoner_support === "A") summonerSupportStats = [4, 0, 2, 2, 2];
+      else if (summoner_support === "S") summonerSupportStats = [5, 2, 2, 2, 2];
 
       tab.summonerSupportStats = summonerSupportStats;
     },
@@ -236,7 +293,7 @@ export const {
   changeCSlot,
   changeSSlot,
   changeMerges,
-  changeLevels,
+  changeTraits,
   changeDragonflowers,
   changeResplendent,
   changeResplendentStats,

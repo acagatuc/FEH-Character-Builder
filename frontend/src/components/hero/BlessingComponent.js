@@ -5,9 +5,9 @@ import { Autocomplete, Box, TextField, Chip } from "@mui/material";
 import { useSelector } from "react-redux";
 
 const BlessingComponent = (props) => {
-//   const reduxBlessing = useSelector((state) => state.hero.heroes[props.id].blessing);
+  //   const reduxBlessing = useSelector((state) => state.hero.heroes[props.id].blessing);
   const [blessing, setBlessing] = useState(null);
-//   const [isDisabled, setIsDisabled] = useState(true);
+  //   const [isDisabled, setIsDisabled] = useState(true);
   const blessingOptions = [
     { value: "water", label: "Water" },
     { value: "wind", label: "Wind" },
@@ -19,27 +19,27 @@ const BlessingComponent = (props) => {
     { value: "anima", label: "Anima" },
   ];
 
-//   useEffect(() => {
-//     if (
-//       props.hero.hero_type === "normal" ||
-//       props.hero.hero_type === "duo" ||
-//       props.hero.hero_type === "harmonic" ||
-//       props.hero.hero_type === "rearmed" ||
-//       props.hero.hero_type === "ascended"
-//     ) {
-//       setIsDisabled(false);
-//     } else {
-//       setIsDisabled(true);
-//     }
-//   }, [props.hero.name, props.hero.hero_type]);
+  //   useEffect(() => {
+  //     if (
+  //       props.hero.hero_type === "normal" ||
+  //       props.hero.hero_type === "duo" ||
+  //       props.hero.hero_type === "harmonic" ||
+  //       props.hero.hero_type === "rearmed" ||
+  //       props.hero.hero_type === "ascended"
+  //     ) {
+  //       setIsDisabled(false);
+  //     } else {
+  //       setIsDisabled(true);
+  //     }
+  //   }, [props.hero.name, props.hero.hero_type]);
 
-//   useEffect(() => {
-//     if (reduxBlessing === "") {
-//       setBlessing({ value: null, label: "" });
-//     } else {
-//       setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
-//     }
-//   }, [reduxBlessing]);
+  //   useEffect(() => {
+  //     if (reduxBlessing === "") {
+  //       setBlessing({ value: null, label: "" });
+  //     } else {
+  //       setBlessing({ value: reduxBlessing, label: reduxBlessing.charAt(0).toUpperCase() + reduxBlessing.slice(1) });
+  //     }
+  //   }, [reduxBlessing]);
 
   const handleBlessing = (value) => {
     setBlessing(value)
@@ -53,7 +53,7 @@ const BlessingComponent = (props) => {
       options={blessingOptions}
       value={blessing}
       onChange={(_, selectedBlessing) => handleBlessing(selectedBlessing)}
-    //   disabled={!props.hero.exists || isDisabled}
+      //   disabled={!props.hero.exists || isDisabled}
       getOptionLabel={(option) => option.label || ""}
       renderOption={(props, option) => <Box {...props}>{option.label}</Box>}
       isOptionEqualToValue={(option, value) => option.value === value.value}

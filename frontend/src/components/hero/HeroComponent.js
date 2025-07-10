@@ -378,20 +378,23 @@ export default function HeroComponent(props) {
   //   dispatch(actions.changeStats(props.id));
   // };
 
-  // const assetChange = (array, a) => {
-  //   dispatch(actions.changeLevels(array, props.id, a, flaw, ascended));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleAsset = (value) => {
+    console.log(value)
+    // dispatch(actions.changeLevels(array, props.id, a, flaw, ascended));
+    // dispatch(actions.changeStats(props.id));
+  };
 
-  // const flawChange = (array, f) => {
-  //   dispatch(actions.changeLevels(array, props.id, asset, f, ascended));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleFlaw = (value) => {
+    console.log(value)
+    // dispatch(actions.changeLevels(array, props.id, asset, f, ascended));
+    // dispatch(actions.changeStats(props.id));
+  };
 
-  // const ascendedChange = (array, a) => {
-  //   dispatch(actions.changeLevels(array, props.id, asset, flaw, a));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleAscended = (value) => {
+    console.log(value)
+    // dispatch(actions.changeLevels(array, props.id, asset, flaw, a));
+    // dispatch(actions.changeStats(props.id));
+  };
 
   // const changeWeapon = (w) => {
   //   dispatch(actions.changeWeapon(w, props.id));
@@ -516,6 +519,26 @@ export default function HeroComponent(props) {
           onChange={heroChange}
           title={"Select Hero"}
           id={props.id}
+        />
+        <Traits
+          hero={hero}
+          traits={hero.superboons}
+          disabled={hero.name === ""}
+          color={"#79ba8e"}
+          label={"+"}
+          onChange={handleAsset}
+          placeholder={"Asset"}
+        />
+        <Traits hero={hero} traits={hero.superbanes}
+          disabled={hero.name === ""} color={"#e68585"} label={"-"} onChange={handleFlaw} placeholder={"Flaw"} />
+        <Traits
+          hero={hero}
+          traits={hero.superboons}
+          disabled={hero.name === ""}
+          color={"#79ba8e"}
+          label={"+"}
+          onChange={handleAscended}
+          placeholder={"Ascended"}
         />
         <BlessingComponent
           placeholder={"Blessing"}

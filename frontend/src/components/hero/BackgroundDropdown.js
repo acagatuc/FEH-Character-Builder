@@ -5,20 +5,21 @@ import { Autocomplete, Box, TextField } from "@mui/material";
 import { useSelector } from "react-redux";
 
 export default function BackgroundDropdown(props) {
+  // load these in from a database with a database call (later)
   const backgroundList = [
     { value: "study", label: "Study" },
     { value: "beach", label: "Beach" },
     { value: "newyear", label: "New Years" },
     { value: "halloween", label: "Halloween" },
   ];
-  const reduxBg = useSelector((state) => state.tabList.tabList[props.id].background);
+  // const reduxBg = useSelector((state) => state.tabList.tabList[props.id].background);
   const [bg, setBg] = useState("");
 
-  useEffect(() => {
-    setBg(reduxBg);
-  }, [reduxBg]);
+  // useEffect(() => {
+  //   setBg(reduxBg);
+  // }, [reduxBg]);
 
-  const handleBackgroundChange = (event, value) => {
+  const handleBackgroundChange = (value) => {
     if (value === null) {
       props.onChange({ value: "normal", label: "" });
     } else {
@@ -31,10 +32,10 @@ export default function BackgroundDropdown(props) {
         id="background dropdown"
         options={backgroundList}
         value={bg}
-        onChange={handleBackgroundChange}
-        disabled={!props.hero.exists}
+        onChange={(_, value) => handleBackgroundChange(value)}
+        disabled={props.disabled}
         getOptionLabel={(option) => option.label || ""}
-        renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
+        renderOption={(props, option) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />

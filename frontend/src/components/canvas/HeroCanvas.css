@@ -25,6 +25,13 @@
   }
 }
 
+@media (max-width: 2100px) {
+  .wrapper {
+    width: 700px;
+    height: 100%;
+  }
+}
+
 .wrapper > canvas {
   justify-content: left;
   align-items: flex-start;

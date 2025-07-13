@@ -37,6 +37,7 @@ import {
   changeResplendentStats,
   changeBlessing,
   changeBlessingStats,
+  changeMerges
 } from "../../rtk/heroSlice.js";
 
 // text arrows
@@ -372,7 +373,7 @@ export default function HeroComponent(props) {
     //     tempArray[index] = 0;
     //     i += 1;
     //   }
-    //   dispatch(changeMerges(number, mergeTemp, props.id));
+    dispatch(changeMerges(number, props.id));
     //   dispatch(changeStats(props.id));
   };
 
@@ -436,6 +437,7 @@ export default function HeroComponent(props) {
   // };
 
   const handleBlessing = (b) => {
+    // clear hero list on null call
     dispatch(changeBlessing({ blessing: b, id: props.id }));
   };
 
@@ -444,32 +446,32 @@ export default function HeroComponent(props) {
     // dispatch(changeStats(props.id));
   };
 
-  // const changeSummonerSupport = (event) => {
-  //   dispatch(actions.changeSS(event, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleSummonerSupport = (event) => {
+    // dispatch(actions.changeSS(event, props.id));
+    // dispatch(actions.changeStats(props.id));
+  };
 
-  // const changeAllySupport = (event) => {
-  //   dispatch(actions.changeAS(event, props.id));
-  // };
+  const handleAllySupport = (event) => {
+    // dispatch(actions.changeAS(event, props.id));
+  };
 
   // const handleTransform = (event) => {
   //   dispatch(actions.changeTransformed(event, props.id));
   //   dispatch(actions.changeStats(props.id));
   // };
 
-  // const changeBuffedStats = (statIndex, number) => {
-  //   dispatch(actions.changeBuffedStats(statIndex, number, props.id));
-  //   dispatch(actions.changeStats(props.id));
-  // };
+  const handleBuffedStats = (statIndex, number) => {
+    // dispatch(actions.changeBuffedStats(statIndex, number, props.id));
+    // dispatch(actions.changeStats(props.id));
+  };
 
-  // const changeBackground = (bg) => {
-  //   dispatch(actions.changeBackground(bg, props.id));
-  // };
+  const handleBackground = (bg) => {
+    // dispatch(actions.changeBackground(bg, props.id));
+  };
 
-  // const changeFavorite = (fav) => {
-  //   dispatch(actions.changeFavorite(fav, props.id));
-  // };
+  const handleFavorite = (fav) => {
+    // dispatch(actions.changeFavorite(fav, props.id));
+  };
 
   const toggleResplendent = (r) => {
     dispatch(changeResplendent({ r: r, id: props.id }));
@@ -508,66 +510,88 @@ export default function HeroComponent(props) {
           title={"Select Hero"}
           id={props.id}
         />
-        <Traits
-          hero={hero}
-          traits={hero.superboons}
-          disabled={hero.name === ""}
-          color={"#79ba8e"}
-          label={"+"}
-          onChange={handleTrait}
-          placeholder={"Asset"}
-        />
-        <Traits
-          hero={hero}
-          traits={hero.superbanes}
-          disabled={hero.name === ""}
-          color={"#e68585"}
-          label={"-"}
-          onChange={handleTrait}
-          placeholder={"Flaw"}
-        />
-        <Traits
-          hero={hero}
-          traits={hero.superboons}
-          disabled={hero.name === ""}
-          color={"#79ba8e"}
-          label={"+"}
-          onChange={handleTrait}
-          placeholder={"Ascended"}
-        />
-        <FlowerComponent
-          hero={hero}
-          disabled={hero.name === ""}
-          onChange={handleFlowers}
-          id={props.id}
-        />
-        {/* <Merges
-          hero={hero}
-          onChange={handleMerge}
-          placeholder={"Merges"}
-          id={props.id}
-        /> */}
-        <BlessingComponent
-          placeholder={"Blessing"}
-          onChange={handleBlessing}
-          id={props.id}
-        />
-        <BlessingHeroSelectionComponent
-          onChange={handleBlessingStats}
-          id={props.id}
-        />
-        <SwitchComponent
-          res={resplendent}
-          enabled={hero?.hasResplendent || false}
-          onChange={toggleResplendent}
-          label={"Resplendent Art"}
-        />
-        <SwitchComponent
-          res={resplendentStats}
-          enabled={hero?.hasResplendent || false}
-          onChange={handleResplendentStats}
-          label={"Resplendent Stats"}
-        />
+        <div className="flex-row">
+          <Traits
+            hero={hero}
+            traits={hero.superboons}
+            disabled={hero.name === ""}
+            color={"#79ba8e"}
+            label={"+"}
+            onChange={handleTrait}
+            placeholder={"Asset"}
+          />
+          <Traits
+            hero={hero}
+            traits={hero.superbanes}
+            disabled={hero.name === ""}
+            color={"#e68585"}
+            label={"-"}
+            onChange={handleTrait}
+            placeholder={"Flaw"}
+          />
+          <Traits
+            hero={hero}
+            traits={hero.superboons}
+            disabled={hero.name === ""}
+            color={"#79ba8e"}
+            label={"+"}
+            onChange={handleTrait}
+            placeholder={"Ascended"}
+          />
+        </div>
+        <div className="flex-row">
+          <Merges
+            hero={hero}
+            disabled={hero.name === ""}
+            onChange={handleMerge}
+            id={props.id}
+          />
+          <FlowerComponent
+            hero={hero}
+            disabled={hero.name === ""}
+            onChange={handleFlowers}
+            id={props.id}
+          />
+        </div>
+        <div className="header-row" style={{ marginTop: "10px" }}>
+          <div className="headers">Skills:</div>
+        </div>
+      </div>
+      <div className="screen-divider"></div>
+      <div className="additional-col">
+        <div className="column additional-column-1">
+          <h5 className="additional-columns-title">Additional:</h5>
+          <BlessingComponent
+            placeholder={"Blessing"}
+            disabled={hero.name === ""}
+            onChange={handleBlessing}
+            id={props.id}
+          />
+          <BlessingHeroSelectionComponent
+            onChange={handleBlessingStats}
+            id={props.id}
+          />
+          <ToggleComponent currentState={hero.summonerSupport} disabled={hero.name === ""} label={"Summoner Support:"} onChange={handleSummonerSupport} />
+          <ToggleComponent currentState={hero.allySupport} disabled={hero.name === ""} label={"Ally Support:"} onChange={handleAllySupport} />
+          <SwitchComponent
+            res={resplendent}
+            enabled={hero?.hasResplendent || false}
+            onChange={toggleResplendent}
+            label={"Resplendent Art"}
+          />
+          <SwitchComponent
+            res={resplendentStats}
+            enabled={hero?.hasResplendent || false}
+            onChange={handleResplendentStats}
+            label={"Resplendent Stats"}
+          />
+        </div>
+        <div className="screen-divider-2"></div>
+        <div className="column additional-column-2">
+          <BuffComponent hero={hero} onChange={handleBuffedStats} />
+          <BackgroundDropdown hero={hero} placeholder={"Background"} onChange={handleBackground} id={props.id} />
+          <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={handleFavorite} id={props.id} />
+        </div>
       </div>
     </div>
   );

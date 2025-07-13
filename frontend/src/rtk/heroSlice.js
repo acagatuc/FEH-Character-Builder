@@ -26,6 +26,8 @@ const heroSlice = createSlice({
         state.heroes[id].resplendentStats = false;
         state.heroes[id].blessing = null;
         state.heroes[id].blessingHeroList = [];
+        state.heroes[id].summonerSupport = "No";
+        state.heroes[id].allySupport = "No";
       } else {
         state.heroes[id] = {};
       }

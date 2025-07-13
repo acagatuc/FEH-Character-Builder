@@ -10,7 +10,7 @@ export default function ToggleComponent(props) {
     setSelected(props.currentState);
   }, [props.currentState]);
 
-  const handleChange = (e, value) => {
+  const handleChange = (value) => {
     if (value !== null) {
       props.onChange(value);
     }
@@ -18,7 +18,7 @@ export default function ToggleComponent(props) {
   return (
     <div className="support">
       <label>{props.label} </label>
-      <ToggleButtonGroup value={selected} onChange={handleChange} exclusive color="warning" disabled={!props.exists}>
+      <ToggleButtonGroup value={selected} onChange={(_, value) => handleChange(value)} exclusive color="warning" disabled={props.disabled}>
         <ToggleButton value="No">No</ToggleButton>
         <ToggleButton value="C">C</ToggleButton>
         <ToggleButton value="B">B</ToggleButton>

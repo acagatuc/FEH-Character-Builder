@@ -43,7 +43,12 @@ const BlessingComponent = (props) => {
 
   const handleBlessing = (value) => {
     setBlessing(value)
-    props.onChange(value.label)
+    if (value === null) {
+      props.onChange(null)
+    }
+    else {
+      props.onChange(value.label)
+    }
   };
 
   return (
@@ -53,7 +58,7 @@ const BlessingComponent = (props) => {
       options={blessingOptions}
       value={blessing}
       onChange={(_, selectedBlessing) => handleBlessing(selectedBlessing)}
-      //   disabled={!props.hero.exists || isDisabled}
+      disabled={props.disabled}
       getOptionLabel={(option) => option.label || ""}
       renderOption={(props, option) => <Box {...props}>{option.label}</Box>}
       isOptionEqualToValue={(option, value) => option.value === value.value}

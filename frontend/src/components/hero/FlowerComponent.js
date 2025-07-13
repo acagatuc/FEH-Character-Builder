@@ -32,7 +32,7 @@ export default function FlowerComponent(props) {
   //   }
   // }, [dragonflowers]);
 
-  const handleDragonflowers = (event, value) => {
+  const handleDragonflowers = (value) => {
     if (value !== null) {
       props.onChange(value.value);
     } else {
@@ -46,7 +46,7 @@ export default function FlowerComponent(props) {
       sx={{ width: "48%" }}
       options={flowerList}
       value={dragonflowerSelector}
-      onChange={handleDragonflowers}
+      onChange={(_, value) => handleDragonflowers(value)}
       disabled={props.disabled}
       getOptionLabel={(option) => option.label || ""}
       renderOption={(props, option) => (

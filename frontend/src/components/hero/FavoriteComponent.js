@@ -15,14 +15,14 @@ export default function FavoriteComponent(props) {
     { value: 7, label: "7" },
     { value: 8, label: "8" },
   ];
-  const reduxFav = useSelector((state) => state.tabList.tabList[props.id].favorite);
+  // const reduxFav = useSelector((state) => state.tabList.tabList[props.id].favorite);
   const [fav, setFav] = useState("");
 
-  useEffect(() => {
-    setFav({ value: reduxFav, label: reduxFav.toString() });
-  }, [reduxFav]);
+  // useEffect(() => {
+  //   setFav({ value: reduxFav, label: reduxFav.toString() });
+  // }, [reduxFav]);
 
-  const handleFavoriteChange = (event, value) => {
+  const handleFavoriteChange = (value) => {
     if (value === null) {
       props.onChange(0);
     } else {
@@ -35,10 +35,10 @@ export default function FavoriteComponent(props) {
         id="favorite dropdown"
         options={favoriteList}
         value={fav}
-        onChange={handleFavoriteChange}
+        onChange={(_, value) => handleFavoriteChange(value)}
         disabled={!props.hero.exists}
         getOptionLabel={(option) => option.label || ""}
-        renderOption={(props: object, option: any) => <Box {...props}>{option.label}</Box>}
+        renderOption={(props, option) => <Box {...props}>{option.label}</Box>}
         isOptionEqualToValue={(option, value) => option.label === value.label}
         renderInput={(params) => <TextField {...params} variant="standard" placeholder={props.placeholder}></TextField>}
       />

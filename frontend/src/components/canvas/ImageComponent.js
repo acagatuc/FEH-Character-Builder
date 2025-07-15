@@ -30,8 +30,8 @@ const ImageComponent = ({
     }
   }, [image]);
   const [imgElement] = useImage(imageUrl, "Anonymous");
-
-  if (!image) return null;
+console.log(imageUrl)
+  if (image.name === "") return null;
   return (
     <Image
       image={imgElement}

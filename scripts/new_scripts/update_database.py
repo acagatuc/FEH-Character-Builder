@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 # load in pointers to each character
-with open("character_pointers.json", "r") as f:
+with open("dragonflowers.json", "r") as f:
     pointers_list = json.load(f)
 
 # Connect to both MongoDB databases (can be the same or different servers)
@@ -16,7 +16,7 @@ heros = db['heros']
 
 for pointer in pointers_list:
     query = { "name": pointer["full_name"]}
-    newvalue = { "$set": {"game": [pointer['game']]}}
+    newvalue = { "$set": {"dfCount": pointer['dfCount']}}
     heros.update_one(query, newvalue)
     # try: 
     #     result = collection.find_one({"name": pointer['full_name']})

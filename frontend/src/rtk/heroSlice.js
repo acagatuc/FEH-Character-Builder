@@ -1,16 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { defaultHero } from "./constants";
 import { StatCalculation } from "../utils/StatCalculation";
+import { heroes } from "../assets";
 
 const initialState = {
-  heroes: { 0: defaultHero },
-  canvas: {},
-  skills: {},
+  heroes: [defaultHero],
 };
 const heroSlice = createSlice({
   name: "heroes",
   initialState,
   reducers: {
+    addHero: (state, action) => {
+      const { length } = action.payload;
+      state.heroes.push(defaultHero)
+    },
     changeHero: (state, action) => {
       const { hero, id } = action.payload;
       if (hero != null) {
@@ -282,6 +285,7 @@ const heroSlice = createSlice({
 });
 
 export const {
+  addHero,
   changeHero,
   copyHero,
   loadBuildFromBarracks,

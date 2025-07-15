@@ -15,6 +15,7 @@ import HeroTabContent from "./HeroTabContent.js"
 // redux import
 import { useSelector, useDispatch } from 'react-redux';
 import { addTab, changeTab, deleteTab, resetTab } from '../../rtk/tabsSlice.js';
+import { addHero } from "../../rtk/heroSlice.js"
 import { copyTabWithHero } from "../../rtk/thunk.js";
 
 
@@ -27,6 +28,7 @@ const TabComponent = () => {
   const [activeTabIdForMenu, setActiveTabIdForMenu] = useState(null);
 
   const handleAddTab = () => {
+    dispatch(addHero(length))
     dispatch(addTab())
   };
 

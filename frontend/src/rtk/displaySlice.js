@@ -62,6 +62,9 @@ const displaySlice = createSlice({
       console.log(action.payload)
       state.grouping = action.payload;
     },
+    changeFehnixDisplay(state, action) {
+      state.fehnix = action.payload;
+    }
   },
 });
 

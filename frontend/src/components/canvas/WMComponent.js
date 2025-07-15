@@ -1,96 +1,56 @@
-import React, { useState, useEffect } from "react";
-import { Stage, Layer, Group, Image, Text } from "react-konva";
+import { Group, Image } from "react-konva";
 import useImage from "use-image";
-import "./HeroCanvas.css";
-import "./../../App.css";
+import wmsheet from "./../../assets/wmsheet.png";
+
+export const weaponMap = {
+  "Sword": [0, 0],
+  "Lance": [72, 0],
+  "Axe": [141, 0],
+  "Red Tome": [0, 73],
+  "Blue Tome": [72, 73],
+  "Green Tome": [141, 73],
+  "Colorless Tome": [213, 73],
+  "Red bow": [0, 146],
+  "Blue bow": [72, 146],
+  "Green bow": [141, 146],
+  "Colorless bow": [213, 146],
+  "Red Breath": [0, 219],
+  "Blue Breath": [72, 219],
+  "Green Breath": [141, 219],
+  "Colorless Breath": [213, 219],
+  "Red Dagger": [0, 292],
+  "Blue Dagger": [72, 292],
+  "Green Dagger": [141, 292],
+  "Colorless Dagger": [213, 292],
+  "Staff": [213, 370],
+  "Red Beast": [0, 438],
+  "Blue Beast": [72, 438],
+  "Green Beast": [141, 438],
+  "Colorless Beast": [213, 438],
+  "empty": [-72, -73]
+}
+
+export const moveMap = {
+  "Infantry": 1,
+  "Armored": 53,
+  "Cavalry": 105,
+  "Flying": 157,
+  "empty": -50
+}
 
 
 const WMComponent = ({ weapon, movement }) => {
   // i think something in this method is adding shadows to the ui left of lv.
   // replace all of this for weapon types from the sprite sheet
   const [imgElement] = useImage(wmsheet, "Anonymous");
-  var weaponX = 0;
-  var weaponY = 0;
-  var moveX = 0;
-
-  if (weapon !== undefined) {
-    weapon = weapon.split(" ");
-  } else {
-    weapon = ["", ""];
-  }
-
-  switch (weapon[0]) {
-    case "Red":
-      weaponX = 0;
-      break;
-    case "Blue":
-      weaponX = 72;
-      break;
-    case "Green":
-      weaponX = 141;
-      break;
-    case "Gray":
-      weaponX = 213;
-      break;
-    case "":
-      weaponX = -72;
-      break;
-    default:
-      break;
-  }
-  switch (weapon[1]) {
-    case "Tome":
-      weaponY = 73;
-      break;
-    case "Bow":
-      weaponY = 146;
-      break;
-    case "Dragon":
-      weaponY = 219;
-      break;
-    case "Dagger":
-      weaponY = 292;
-      break;
-    case "Staff":
-      weaponY = 370;
-      break;
-    case "Beast":
-      weaponY = 438;
-      break;
-    case "":
-      weaponY = -73;
-      break;
-    default:
-      weaponY = 0;
-      break;
-  }
-
-  switch (movement) {
-    case "infantry":
-      moveX = 1;
-      break;
-    case "armored":
-      moveX = 53;
-      break;
-    case "cavalry":
-      moveX = 105;
-      break;
-    case "flying":
-      moveX = 157;
-      break;
-    default:
-      moveX = -50;
-      break;
-  }
-
   return (
     <Group>
       <Image
         image={imgElement}
         x={13}
         y={554}
-        cropX={weaponX}
-        cropY={weaponY}
+        cropX={weaponMap[weapon][0]}
+        cropY={weaponMap[weapon][1]}
         cropWidth={75}
         cropHeight={72}
         width={27}
@@ -100,7 +60,7 @@ const WMComponent = ({ weapon, movement }) => {
         image={imgElement}
         x={170}
         y={555}
-        cropX={moveX}
+        cropX={moveMap[movement]}
         cropY={525}
         cropWidth={50}
         cropHeight={50}

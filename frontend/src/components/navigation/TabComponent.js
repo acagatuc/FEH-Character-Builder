@@ -144,10 +144,9 @@ const TabComponent = () => {
       {/* Tab Content Area */}
       <div
         style={{
-          height: "100%",
+          height: "95%",
           borderRadius: 10,
           backgroundColor: "white",
-          maxWidth: "100%",
         }}
       ><Box sx={{ p: 2 }}>
           {tabList.map((tab) => (

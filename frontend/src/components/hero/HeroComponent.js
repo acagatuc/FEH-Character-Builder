@@ -593,6 +593,30 @@ export default function HeroComponent(props) {
           <FavoriteComponent hero={hero} placeholder={"Favorite"} onChange={handleFavorite} id={props.id} />
         </div>
       </div>
+       <div className="column footer-column footer-title">
+        <div className="footer-row">
+          <img src={left} alt="left arrow" className="arrow" />
+          Additional Information
+          <img src={right} alt="right arrow" className="arrow" />
+        </div>
+        <div className="menu-row">
+          <Button variant="contained">UI Changes</Button>
+          <Button variant="contained" onClick={handleShowRecommendedBuilds} disabled={hero.name === ""}>
+            Recommended Builds
+          </Button>
+          <RecommendedBuildsModal
+            show={showRecommendedBuilds}
+            onClose={handleCloseRecommendedBuilds}
+            hero={hero}
+            recommended={""}
+            loadBuild={""}
+          />
+          <Button variant="contained" onClick={handleShowHeroInfo} disabled={hero.name === ""}>
+            Hero info
+          </Button>
+          <HeroInfoModal show={showHeroInfo} onClose={handleCloseHeroInfo} hero={hero} />
+        </div>
+      </div>
     </div>
   );
 }

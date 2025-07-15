@@ -31,6 +31,7 @@ export default function HeroDropdown(props) {
 
   // gets the character and returns the object to the parent and sets the hero name equal to the label
   async function handleChange(value) {
+    console.log(value)
     setSelectedHero(value)
     props.onChange(value)
   }
@@ -44,7 +45,7 @@ export default function HeroDropdown(props) {
       groupBy={(option) => grouping ? option.game : undefined}
       filterOptions={customFilter}
       getOptionLabel={(option) => name_display ? option.full_name : option.common_name}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option._id === value._id}
       value={selectedHero}
       onChange={(_, newHero) => handleChange(newHero)}
       renderGroup={grouping ? (params) => {

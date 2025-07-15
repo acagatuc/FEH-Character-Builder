@@ -31,6 +31,7 @@ import UIComponent from "./UIComponent";
 import BackgroundComponent from "./BackgroundComponent";
 import { LargeTextComponent, TextComponent } from "./TextComponent";
 import StatComponent from "./StatComponent";
+import WMComponent from "./WMComponent";
 
 // an array that declares the x values of all numbers
 const numberArray = [520, 555, 590, 624, 656, 692, 725, 759, 793, 828];
@@ -178,9 +179,9 @@ export default function HeroCanvas(props) {
       >
         <Layer id="hero layer">
           <BackgroundComponent
-              width={540}
-              height={960}
-            />
+            width={540}
+            height={960}
+          />
           <ImageComponent
             image={hero}
             cropX={368}
@@ -194,79 +195,80 @@ export default function HeroCanvas(props) {
         </Layer>
         <Layer id="stat layer">
           <LargeTextComponent
-              text={hero.name.split(":")[1] || ""}
-              color="white"
-              stroke="black"
-              x={58}
-              y={470}
-              width={214}
-            />
-            <LargeTextComponent
-              text={hero.name.split(":")[0] || ""}
-              color="white"
-              x={15}
-              y={412}
-              width={260}
-            />
+            text={hero.name.split(':')[1] || ""}
+            color="white"
+            stroke="black"
+            x={58}
+            y={470}
+            width={214}
+          />
+          <LargeTextComponent
+            text={hero.name.split(":")[0] || ""}
+            color="white"
+            x={15}
+            y={412}
+            width={260}
+          />
+          <WMComponent weapon={hero.weaponType || "empty"} movement={hero.movementType || "empty"} />
           <TextComponent
-              text={"HP"}
-              color={"white"} // change this to a helper function later
-              x={88}
-              y={604}
-            />
-            <TextComponent
-              text={"Atk"}
-              color={"white"}
-              x={87}
-              y={641}
-            />
-            <TextComponent
-              text={"Spd"}
-              color={"white"}
-              x={85}
-              y={678}
-            />
-            <TextComponent
-              text={"Def"}
-              color={"white"}
-              x={86}
-              y={715}
-            />
-            <TextComponent
-              text={"Res"}
-              color={"white"}
-              x={86}
-              y={752}
-            />
-            <StatComponent number={`${hero.calculatedStats[0]}`} x={158} y={603} buff={false} />
-             <StatComponent
-              number={`${hero.calculatedStats[1]}`}
-              x={158}
-              y={640}
-              buff={hero.buffs[0] !== 0}
-              buffColor={hero.buffs[0] < 0}
-            />
-            <StatComponent
-              number={`${hero.calculatedStats[2]}`}
-              x={158}
-              y={677}
-              buff={hero.buffs[1] !== 0}
-              buffColor={hero.buffs[1] < 0}
-            />
-            <StatComponent
-              number={`${hero.calculatedStats[3]}`}
-              x={158}
-              y={714}
-              buff={hero.buffs[2] !== 0}
-              buffColor={hero.buffs[2] < 0}
-            />
-            <StatComponent
-              number={`${hero.calculatedStats[4]}`}
-              x={158}
-              y={751}
-              buff={hero.buffs[3] !== 0}
-              buffColor={hero.buffs[3] < 0}
-            />
+            text={"HP"}
+            color={"white"} // change this to a helper function later
+            x={88}
+            y={604}
+          />
+          <TextComponent
+            text={"Atk"}
+            color={"white"}
+            x={87}
+            y={641}
+          />
+          <TextComponent
+            text={"Spd"}
+            color={"white"}
+            x={85}
+            y={678}
+          />
+          <TextComponent
+            text={"Def"}
+            color={"white"}
+            x={86}
+            y={715}
+          />
+          <TextComponent
+            text={"Res"}
+            color={"white"}
+            x={86}
+            y={752}
+          />
+          <StatComponent number={`${hero.calculatedStats[0]}`} x={158} y={603} buff={false} />
+          <StatComponent
+            number={`${hero.calculatedStats[1]}`}
+            x={158}
+            y={640}
+            buff={hero.buffs[0] !== 0}
+            buffColor={hero.buffs[0] < 0}
+          />
+          <StatComponent
+            number={`${hero.calculatedStats[2]}`}
+            x={158}
+            y={677}
+            buff={hero.buffs[1] !== 0}
+            buffColor={hero.buffs[1] < 0}
+          />
+          <StatComponent
+            number={`${hero.calculatedStats[3]}`}
+            x={158}
+            y={714}
+            buff={hero.buffs[2] !== 0}
+            buffColor={hero.buffs[2] < 0}
+          />
+          <StatComponent
+            number={`${hero.calculatedStats[4]}`}
+            x={158}
+            y={751}
+            buff={hero.buffs[3] !== 0}
+            buffColor={hero.buffs[3] < 0}
+          />
         </Layer>
       </Stage>
     </div>

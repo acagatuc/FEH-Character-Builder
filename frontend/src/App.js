@@ -18,6 +18,8 @@ import { useSelector, useDispatch } from "react-redux";
 import bg from "./background.png";
 import { loadHeroList } from './rtk/displaySlice';
 
+import useWindowDimensions from './utils/WindowDimensions.js'
+
 // store.subscribe(() => {
 //   saveState({
 //     display: store.getState().display,
@@ -34,17 +36,20 @@ const App = (props) => {
   />;
 
   // this is to set the width of the col so the form does not overflow
-  const [canvasWidth, setWidth] = useState(500);
+  const {width, height}= useWindowDimensions();
+  const [canvasWidth, setWidth] = useState(() => {
+    if (width > 2100){
+      return 700;
+    }
+    else if (width < 500) {
+      return width;
+    }
+    else {
+      return 500
+    }
+  });
   const [canvasHeight, setHeight] = useState(900);
   const dispatch = useDispatch();
-  const [heroes, setHeroes] = useState([]);
-
-  // useEffect(() => {
-  //   function handleResize() {
-  //     console.log("resized to: ", window.innerWidth, "x", window.innerHeight);
-  //   }
-  //   window.addEventListener("resize", handleResize);
-  // });
 
   // gets initial hero list with names and character ids
   useEffect(() => {
@@ -53,7 +58,6 @@ const App = (props) => {
       response = await response.json();
       dispatch(loadHeroList(response))
     }
-
     fetchHeroList();
   }, []);
 
@@ -69,7 +73,6 @@ const App = (props) => {
   //     setHeight(height);
   //   }
   // };
-
   return (
     <div className="App">
       <header className="App-header">
@@ -80,7 +83,6 @@ const App = (props) => {
       </header>
       <div className="unit-builder">
         <HeroCanvas stageWidth={canvasWidth} />
-        {/* <HeroTabs /> */}
         <TabComponent />
       </div>
     </div>

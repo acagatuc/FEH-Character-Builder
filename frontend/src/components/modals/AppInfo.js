@@ -45,7 +45,7 @@ const AppInfo = (props) => {
   const changeGrima = (e, value) => {
     dispatch(changeGrimaDisplay(value));
   };
-  const changeFehnix = (e, value) => {
+  const changeFehnix = (value) => {
     dispatch(changeFehnixDisplay(value));
   };
   const changeDuo = (e, value) => {
@@ -110,7 +110,7 @@ const AppInfo = (props) => {
                 <Row style={{ width: "92%" }}>
                   <div style={{ display: "inline-flex", justifyContent: "right" }}>
                     <FormControlLabel
-                      control={<Switch checked={fehnix} onChange={changeFehnix} />}
+                      control={<Switch checked={fehnix} onChange={(_, value) => changeFehnix(value)} />}
                       label={"Display Fehnix?"}
                       labelPlacement="start"
                     />

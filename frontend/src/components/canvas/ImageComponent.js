@@ -17,7 +17,8 @@ const ImageComponent = ({
   useEffect(() => {
     if (!image) return;
     if (image.name?.length > 0 && image.name) {
-      var safeName = image.name.replace(":", "_");
+      var safeName = image.name.replace(":", "_").replace(/"/g, "");
+      console.log(safeName)
       if (image.resplendent) {
         safeName = "Resplendent " + safeName;
         const url = `http://localhost:5000/api/heroes/heroImage/${safeName}.png`;

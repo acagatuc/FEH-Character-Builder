@@ -30,65 +30,36 @@ import {
   right,
 } from "./../../assets";
 
+export const map = {
+  "Heroes": heroes,
+  "Shadow Dragon/(New) Mystery" : shadow_dragon,
+  "Echoes": echoes,
+  "Genealogy of the Holy War": genealogy,
+  "Thracia 776": thracia,
+  "Blazing Blade": blazing_blade,
+  "Binding Blade": binding_blade,
+  "Sacred Stones": sacred_stones,
+  "Path of Radiance": path_of_radiance,
+  "Radiant Dawn": radiant_dawn,
+  "Awakening": awakening,
+  "Fates": fates,
+  "Tokyo Mirage Sessions": tms,
+  "Three Houses": three_houses,
+  "Engage": "",
+}
+
 const HeroInfoModal = (props) => {
   const owl = useSelector((state) => state.display.fehnix);
-  const games = props.hero.origin?.map((element) => {
-    var imgSrc = "";
-    switch (element) {
-      case "Heroes":
-        imgSrc = heroes;
-        break;
-      case "Shadow Dragon / (New) Mystery":
-        imgSrc = shadow_dragon;
-        break;
-      case "Echoes":
-        imgSrc = echoes;
-        break;
-      case "Genealogy of the Holy War":
-        imgSrc = genealogy;
-        break;
-      case "Thracia 776":
-        imgSrc = thracia;
-        break;
-      case "The Binding Blade":
-        imgSrc = binding_blade;
-        break;
-      case "The Blazing Blade":
-        imgSrc = blazing_blade;
-        break;
-      case "The Sacred Stones":
-        imgSrc = sacred_stones;
-        break;
-      case "Path of Radiance":
-        imgSrc = path_of_radiance;
-        break;
-      case "Radiant Dawn":
-        imgSrc = radiant_dawn;
-        break;
-      case "Awakening":
-        imgSrc = awakening;
-        break;
-      case "Fates":
-        imgSrc = fates;
-        break;
-      case "Three Houses":
-        imgSrc = three_houses;
-        break;
-      case "Tokyo Mirage Sessions ♯FE Encore":
-        imgSrc = tms;
-        break;
-      case "Engage":
-        // needs to be updated with alear when i can get the img
-        break;
-      default:
-        break;
-    }
-    return <img style={{ width: "100px", height: "auto" }} src={imgSrc} alt="origin" key={element} />;
+  // TODO: LEAVE THIS FOR HARMONIC HEROES, THE DATABASE DOES NOT REFLECT THIS YET!!!!!!!!!!!!
+  // TODO: MAKE THIS ITS OWN API CALL (UNSURE IF THIS WILL ACTUALLY BE POPULAR OR NOT!!!!!!!!!)
+
+  const games = props.hero.game?.map((element) => {
+    return <img style={{ width: "100px", height: "auto" }} src={map[element]} alt="origin" key={element} />;
   });
 
   var buttonTitle = "No 'Meet the Hero' Page";
   if (props.hero.MeetTheHeroUrl !== "") {
-    buttonTitle = "Visit " + props.hero.single_name + "'s 'Meet the Hero' Page";
+    buttonTitle = "Visit " + props.hero.name.split(":")[0] + "'s 'Meet the Hero' Page";
   }
 
   var wikiaPage = "https://fireemblem.fandom.com/wiki/" + props.hero.single_name;
@@ -155,7 +126,7 @@ const HeroInfoModal = (props) => {
         <Button
           variant="contained"
           onClick={() =>
-            window.open("https://feheroes.fandom.com/wiki/" + props.hero.single_name + ": " + props.hero.title, "_blank", "noopener,noreferrer")
+            window.open("https://feheroes.fandom.com/wiki/" + props.hero.name, "_blank", "noopener,noreferrer")
           }
           style={{ padding: "5px", paddingLeft: "10px", paddingRight: "10px", width: "25%" }}
         >

@@ -3,6 +3,7 @@ import "./HeroCanvas.css";
 import "./../../App.css";
 
 const LargeTextComponent = ({ text, x, y, width }) => {
+  // TODO rennac you motherfucker
   return (
     <Text
       text={text}
